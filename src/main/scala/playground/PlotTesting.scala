@@ -1,6 +1,7 @@
 package playground
 
 import scalafx.application.JFXApp
+import swiftvis2.plotting
 import swiftvis2.plotting.Plot
 import swiftvis2.plotting.renderer.FXRenderer
 

@@ -16,6 +16,12 @@ package object plotting {
     def apply(i: Int) = data(i)
   }
 
+  implicit class SeqIntToDoubleSeries(data: Seq[Int]) extends PlotDoubleSeries {
+    def minIndex: Int = 0
+    def maxIndex: Int = data.size
+    def apply(i: Int): Double = data(i)
+  }
+
   implicit class ArrayIntToDoubleSeries(data: Array[Int]) extends PlotDoubleSeries {
     def minIndex: Int = 0
     def maxIndex: Int = data.size
