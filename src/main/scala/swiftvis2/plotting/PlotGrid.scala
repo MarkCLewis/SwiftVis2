@@ -4,7 +4,7 @@ import swiftvis2.plotting.renderer.Renderer
 import swiftvis2.plotting.styles.PlotStyle
 
 case class PlotGrid(
-    plots: Seq[Seq[Plot2D]],
+    plots: Seq[Seq[Seq[Plot2D]]],
     axes: Map[String, Axis],
     xWeights: Seq[Double],
     yWeights: Seq[Double],
@@ -12,7 +12,7 @@ case class PlotGrid(
 
   // TODO - labels and listeners
 
-  def render(r: Renderer, bounds: Bounds) = {
+  def render(r: Renderer, bounds: Bounds): Unit = {
     val xSum = xWeights.sum
     val ySum = yWeights.sum
     val xStarts = xWeights.scanLeft(0.0)(_ + _).map(_ / xSum)
@@ -43,7 +43,7 @@ case class PlotGrid(
     r.setColor(0xff000000)
     val sizesAndAxisRenderers = (for {
       (row, yStart, yEnd) <- (plots, yStarts, yStarts.tail).zipped
-      (p2d, xStart, xEnd) <- (row, xStarts, xStarts.tail).zipped
+      (p2ds, xStart, xEnd) <- (row, xStarts, xStarts.tail).zipped
     } yield {
       val axisBounds = Seq(
             minXAxisBounds.subX(xStart, xEnd),
@@ -56,10 +56,13 @@ case class PlotGrid(
       r.setStroke(Renderer.StrokeData(1, Nil))
       r.drawRectangle(b)
       r.setClip(b)
-      val (tickFontSizes, nameFontSizes, xAxisRender, yAxisRender) = p2d.style.render(r, b, axes(p2d.xAxisName), axes(p2d.yAxisName), axisBounds)
+      val axisData = for(p2d <- p2ds) yield {
+        val (tickFontSizes, nameFontSizes, xAxisRender, yAxisRender) = p2d.style.render(r, b, axes(p2d.xAxisName), axes(p2d.yAxisName), axisBounds)
+        (tickFontSizes, nameFontSizes, p2d.xAxisName -> xAxisRender, p2d.yAxisName -> yAxisRender)
+      }
       r.restore()
-      (tickFontSizes, nameFontSizes, p2d.xAxisName -> xAxisRender, p2d.yAxisName -> yAxisRender)
-    })
+      axisData
+    }).flatten
     val tickFontSize = sizesAndAxisRenderers.flatMap(_._1).min
     val nameFontSize = sizesAndAxisRenderers.flatMap(_._2).min
     val axisRenderers = sizesAndAxisRenderers.flatMap { case (_, _, xtup, ytup) => Seq(xtup, ytup) }.toMap
@@ -103,13 +106,13 @@ case class PlotGrid(
 
   def collectXAxes(pred: Axis => Boolean): Seq[Seq[String]] = {
     plots.foldLeft(Seq.fill(plots(0).size)(Seq.empty[String])) { (names, row) =>
-      val toAdd = row.map(p2d => axisNameAsListWithCondition(p2d.xAxisName, pred))
+      val toAdd = row.flatMap(_.map(p2d => axisNameAsListWithCondition(p2d.xAxisName, pred)))
       (names, toAdd).zipped.map((a, b) => (b ++: a))
     }
   }
 
   def collectYAxes(pred: Axis => Boolean): Seq[Seq[String]] = {
-    plots.map(row => row.flatMap(p2d => axisNameAsListWithCondition(p2d.yAxisName, pred)))
+    plots.map(row => row.flatMap(_.flatMap(p2d => axisNameAsListWithCondition(p2d.yAxisName, pred))))
   }
 
   def axisNameAsListWithCondition(axisName: String, pred: Axis => Boolean): Seq[String] = {
@@ -118,12 +121,12 @@ case class PlotGrid(
 }
 
 object PlotGrid {
-  def oneByOne(style: PlotStyle): PlotGrid = {
+  def oneByOne(styles: PlotStyle*): PlotGrid = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both, 
-        Some(Axis.TickLabelSettings(90.0, font, "%1.1f")), Some("X axis" -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+        Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some("X axis" -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both, 
-        Some(Axis.TickLabelSettings(0.0, font, "%1.1f")), Some("Y axis" -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
-    PlotGrid(Seq(Seq(Plot2D(style, "x", "y"))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
+        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some("Y axis" -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+    PlotGrid(Seq(Seq(styles.map(s => Plot2D(s, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
   }
 }

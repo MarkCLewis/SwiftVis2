@@ -21,12 +21,13 @@ case class ScatterStyle(
     connectWithLines: Option[(PlotDoubleSeries, Renderer.StrokeData)]
     ) extends PlotStyle {
 
-  def render(r: Renderer, bounds: Bounds, xAxis: Axis, yAxis: Axis, axisBounds: Seq[Bounds]): (Seq[Double], Seq[Double], Axis.AxisRenderer, Axis.AxisRenderer) = {
+  def render(r: Renderer, bounds: Bounds, xAxis: Axis, yAxis: Axis, axisBounds: Seq[Bounds]): 
+      (Seq[Double], Seq[Double], Axis.AxisRenderer, Axis.AxisRenderer) = {
     val xNAxis = xAxis.asInstanceOf[NumericAxis]
     val yNAxis = yAxis.asInstanceOf[NumericAxis]
     val start = Array(xSource, ySource, symbolWidth, symbolHeight, colorFunction, connectWithLines.map(_._1).getOrElse(UnboundDoubleSeries)).map(_.minIndex).max
     val end = Array(xSource, ySource, symbolWidth, symbolHeight, colorFunction, connectWithLines.map(_._1).getOrElse(UnboundDoubleSeries)).map(_.maxIndex).min
-
+    
     val connectMap = connectWithLines.map(_ => collection.mutable.Map[Double, (Double, Double)]())
 
     val (xConv, xtfs, xnfs, xRender) = xNAxis.renderInfo(bounds.x, bounds.x+bounds.width, 
@@ -41,8 +42,12 @@ case class ScatterStyle(
       val width = symbolWidth(i)
       val height = symbolHeight(i)
       // TODO - include sizing code
+      // TODO - add to connect map
       r.setColor(colorFunction(i))
       symbol.drawSymbol(x, y, width, height, r)
+    }
+    (connectWithLines, connectMap).zipped.foreach { case ((_, stroke), cm) =>
+      // TODO - draw connections
     }
     (Seq(xtfs, ytfs), Seq(xnfs, ynfs), xRender, yRender)
   }

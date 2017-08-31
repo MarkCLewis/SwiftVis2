@@ -26,8 +26,18 @@ object FXRenderer {
       import swiftvis2.plotting
 
       plot.render(renderer, Bounds(0, 0, pwidth, pheight))
-      width.onChange { canvas.width = width(); plot.render(renderer, Bounds(0, 0, width(), height())) }
-      height.onChange { canvas.height = height(); plot.render(renderer, Bounds(0, 0, width(), height())) }
+      width.onChange {
+        if (width() != canvas.width() && width()>1.0 && height()>1) {
+          canvas.width = width()
+          plot.render(renderer, Bounds(0, 0, width(), height()))
+        }
+      }
+      height.onChange {
+        if (height() != canvas.height() && width()>1 && height()>1.0) {
+          canvas.height = height()
+          plot.render(renderer, Bounds(0, 0, width(), height()))
+        }
+      }
     }
     stage.showing = true
     renderer
@@ -85,15 +95,15 @@ class FXRenderer(gc: GraphicsContext) extends Renderer {
       case Renderer.HorizontalAlign.Left =>
         gc.translate(x, y)
         gc.rotate(angle)
-        gc.fillText(s, 0, -(fb.minY+fb.maxY)/2)
+        gc.fillText(s, 0, -(fb.minY + fb.maxY) / 2)
       case Renderer.HorizontalAlign.Center =>
         gc.translate(x, y)
         gc.rotate(angle)
-        gc.fillText(s, -fb.width/2, -(fb.minY+fb.maxY)/2)
+        gc.fillText(s, -fb.width / 2, -(fb.minY + fb.maxY) / 2)
       case Renderer.HorizontalAlign.Right =>
         gc.translate(x, y)
         gc.rotate(angle)
-        gc.fillText(s, -fb.width, -(fb.minY+fb.maxY)/2)
+        gc.fillText(s, -fb.width, -(fb.minY + fb.maxY) / 2)
     }
     gc.restore
   }
