@@ -28,7 +28,7 @@ case class ScatterStyle(
     val start = Array(xSource, ySource, symbolWidth, symbolHeight, colorFunction, connectWithLines.map(_._1).getOrElse(UnboundDoubleSeries)).map(_.minIndex).max
     val end = Array(xSource, ySource, symbolWidth, symbolHeight, colorFunction, connectWithLines.map(_._1).getOrElse(UnboundDoubleSeries)).map(_.maxIndex).min
     
-    val connectMap = connectWithLines.map(_ => collection.mutable.Map[Double, (Double, Double)]())
+    val connectMap = connectWithLines.map(_ => collection.mutable.Map[Double, (Double, Double, Int)]())
 
     val (xConv, xtfs, xnfs, xRender) = xNAxis.renderInfo(bounds.x, bounds.x+bounds.width, 
         (start until end).foldLeft(Double.MaxValue)((d, a) => d min xSource(a)), (start until end).foldLeft(Double.MinValue)((d, a) => d max xSource(a)),

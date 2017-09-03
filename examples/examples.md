@@ -6,7 +6,11 @@ This is where you can find various examples of SwiftVis2 usage.
 
 ### Scatter Plots
 
+![colored scatter](colordots.png "Colored Scatter Plot")
+
 ### Bar Charts
+
+![bar chart](bar.png "Simple Bar Chart")
 
 ## Graphical Interface Usage
 

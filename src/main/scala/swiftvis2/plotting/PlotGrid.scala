@@ -63,8 +63,8 @@ case class PlotGrid(
       r.restore()
       axisData
     }).flatten
-    val tickFontSize = sizesAndAxisRenderers.flatMap(_._1).min
     val nameFontSize = sizesAndAxisRenderers.flatMap(_._2).min
+    val tickFontSize = sizesAndAxisRenderers.flatMap(_._1).min min nameFontSize
     val axisRenderers = sizesAndAxisRenderers.flatMap { case (_, _, xtup, ytup) => Seq(xtup, ytup) }.toMap
 
     // Draw X axes
@@ -121,12 +121,12 @@ case class PlotGrid(
 }
 
 object PlotGrid {
-  def oneByOne(styles: PlotStyle*): PlotGrid = {
+  def oneByOne(xLabel: String, yLabel: String, styles: PlotStyle*): PlotGrid = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both, 
-        Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some("X axis" -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+        Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both, 
-        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some("Y axis" -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     PlotGrid(Seq(Seq(styles.map(s => Plot2D(s, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
   }
 }

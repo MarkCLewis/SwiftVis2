@@ -12,6 +12,16 @@ import scalafx.scene.Scene
 import scalafx.scene.text.Font
 import scalafx.scene.text.Text
 import scalafx.scene.SceneAntialiasing
+import scalafx.scene.layout.BorderPane
+import scalafx.scene.control.MenuBar
+import scalafx.scene.control.Menu
+import scalafx.scene.layout.Pane
+import scalafx.scene.control.MenuItem
+import scalafx.event.ActionEvent
+import javax.imageio.ImageIO
+import scalafx.embed.swing.SwingFXUtils
+import java.io.FileOutputStream
+import scalafx.stage.FileChooser
 
 object FXRenderer {
   def apply(plot: Plot, pwidth: Double = 1000, pheight: Double = 1000): FXRenderer = {
@@ -20,22 +30,39 @@ object FXRenderer {
     val canvas = new Canvas(pwidth, pheight)
     val gc = canvas.graphicsContext2D
     val renderer = new FXRenderer(gc)
-    stage.scene = new Scene(pwidth, pheight, false, SceneAntialiasing.Balanced) {
-      content = canvas
+    stage.scene = new Scene(pwidth, pheight + 30, false, SceneAntialiasing.Balanced) {
+      val border = new BorderPane
+      val menuBar = new MenuBar
+      val menu = new Menu("File")
+      val menuItem = new MenuItem("Save Image")
+      menu.items = Seq(menuItem)
+      menuBar.menus = Seq(menu)
+      border.top = menuBar
+      val pane = new Pane
+      pane.children = canvas
+      border.center = pane
+      root = border
+
+      menuItem.onAction = (ae: ActionEvent) => {
+        val img = canvas.snapshot(null, null)
+        val chooser = new FileChooser()
+        val file = chooser.showSaveDialog(stage)
+        if (file != null) ImageIO.write(SwingFXUtils.fromFXImage(img, null), "PNG", new FileOutputStream(file))
+      }
 
       import swiftvis2.plotting
 
       plot.render(renderer, Bounds(0, 0, pwidth, pheight))
-      width.onChange {
-        if (width() != canvas.width() && width()>1.0 && height()>1) {
-          canvas.width = width()
-          plot.render(renderer, Bounds(0, 0, width(), height()))
+      pane.width.onChange {
+        if (pane.width() != canvas.width() && pane.width() > 1.0 && pane.height() > 1) {
+          canvas.width = pane.width()
+          plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
         }
       }
-      height.onChange {
-        if (height() != canvas.height() && width()>1 && height()>1.0) {
-          canvas.height = height()
-          plot.render(renderer, Bounds(0, 0, width(), height()))
+      pane.height.onChange {
+        if (pane.height() != canvas.height() && pane.width() > 1 && pane.height() > 1.0) {
+          canvas.height = pane.height()
+          plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
         }
       }
     }
@@ -82,7 +109,8 @@ class FXRenderer(gc: GraphicsContext) extends Renderer {
     gc.strokeLine(x1, y1, x2, y2)
   }
 
-  def drawLinePath(x: Seq[Double], y: Seq[Double]): Unit = {
+  def drawLinePath(x: Seq[Double], y: Seq[Double], colors: Seq[Int]): Unit = {
+    // TODO - Figure out how to include colors in an efficient way
     gc.strokePolyline(x.toArray, y.toArray, x.length min y.length)
   }
 

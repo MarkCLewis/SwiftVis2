@@ -20,7 +20,7 @@ object Plot {
   def scatterPlot(x: PlotDoubleSeries, y: PlotDoubleSeries, title: String, xLabel: String, yLabel: String, symbolSize: PlotDoubleSeries = 10): Plot = {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
     val style = ScatterStyle(x, y, Ellipse, symbolSize, symbolSize, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, BlackARGB, None)
-    val grid = PlotGrid.oneByOne(style)
+    val grid = PlotGrid.oneByOne(xLabel, yLabel, style)
     Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
@@ -30,7 +30,7 @@ object Plot {
     val styles = for((x, y, argb, size) <- pdata) yield {
       ScatterStyle(x, y, Ellipse, size, size, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, argb, None)
     }
-    val grid = PlotGrid.oneByOne(styles:_*)
+    val grid = PlotGrid.oneByOne(xLabel, yLabel, styles:_*)
     Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
@@ -42,9 +42,9 @@ object Plot {
       (xs: PlotDoubleSeries, c)
     }
     val style = BarStyle(categories, vac, stacked, fracWidth)
-    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some("X axis" -> font), Axis.DisplaySide.Min)
+    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
     val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both, 
-        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some("Y axis" -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
     Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
@@ -56,9 +56,9 @@ object Plot {
     val categories = data.keySet.toSeq
     val vac = categories.map(k => (Seq(data(k)):PlotDoubleSeries, color))
     val style = BarStyle(categories, vac, stacked, fracWidth)
-    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some("X axis" -> font), Axis.DisplaySide.Min)
+    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
     val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both, 
-        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some("Y axis" -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
     Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
