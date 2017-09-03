@@ -24,7 +24,7 @@ object PlotTesting extends JFXApp {
   FXRenderer(plot3, 1200, 700)
   
   // Short form bar plot
-  val plot4 = Plot.barPlot(Seq("red", "green", "blue"), Seq(Seq(3.0, 7.0, 4.0) -> 0xffeeff00), true, 0.8, "Bar Plot", "Colors", "Measure")
+  val plot4 = Plot.barPlot(Seq("red", "green", "blue"), Seq(Seq(3.0, 7.0, 4.0) -> 0xffeeff00, Seq(2.0, 1.0, 3.0) -> 0xffee00ff), false, 0.8, "Bar Plot", "Colors", "Measure")
   FXRenderer(plot4, 500, 300)
   
   // Long form

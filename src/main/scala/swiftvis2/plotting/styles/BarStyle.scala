@@ -38,7 +38,7 @@ case class BarStyle(
         var lasty = yConv(0.0)
         for(j <- ys.indices) {
           r.setColor(valSourceColor(j)._2)
-          val y = yConv(ys(j))
+          val y = ys(j)
           r.fillRectangle(sx, lasty min ys(j), ex-sx, (lasty-y).abs)
           lasty = y
         }
@@ -47,7 +47,7 @@ case class BarStyle(
         val barWidth = (ex-sx)/ys.length
         for(j <- ys.indices) {
           r.setColor(valSourceColor(j)._2)
-          val y = yConv(ys(j))
+          val y = ys(j)
           r.fillRectangle(sx+barWidth*j, y min zeroy, barWidth, (y-zeroy).abs)
         }
       }
