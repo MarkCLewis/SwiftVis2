@@ -34,6 +34,12 @@ package object plotting {
     def apply(i: Int) = data(i)
   }
 
+  implicit class ArrayToIntSeries(data: Array[Int]) extends PlotIntSeries {
+    def minIndex: Int = 0
+    def maxIndex: Int = data.size
+    def apply(i: Int) = data(i)
+  }
+
   implicit class SeqToStringSeries(data: Seq[String]) extends PlotStringSeries {
     def minIndex: Int = 0
     def maxIndex: Int = data.size
@@ -50,6 +56,18 @@ package object plotting {
     def minIndex: Int = Int.MinValue
     def maxIndex: Int = Int.MaxValue
     def apply(i: Int) = j
+  }
+  
+  implicit class DoubleFuncToDoubleSeries(f: Int => Double) extends PlotDoubleSeries {
+    def minIndex: Int = Int.MinValue
+    def maxIndex: Int = Int.MaxValue
+    def apply(i: Int) = f(i)
+  }
+  
+  implicit class IntFuncToIntSeries(f: Int => Int) extends PlotIntSeries {
+    def minIndex: Int = Int.MinValue
+    def maxIndex: Int = Int.MaxValue
+    def apply(i: Int) = f(i)
   }
   
   // TODO - other implicits
