@@ -1,7 +1,7 @@
 # SwiftVis 2 Examples
 
 This is where you can find various examples of SwiftVis2 usage. Until this is finished, you'll find code to produce the testings plots
-in playground.PlotTesting.
+in [playground.PlotTesting](https://github.com/MarkCLewis/SwiftVis2/blob/master/src/main/scala/playground/PlotTesting.scala).
 
 ## Programmatic Usage
 

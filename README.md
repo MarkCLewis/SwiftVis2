@@ -25,4 +25,5 @@ object PlotTesting extends JFXApp {
 }
 ```
 
-Currently scatter plots are the only plotting style that is implemented.
+Currently scatter plots and bar charts are the only plotting styles that are implemented. I'm building up (some examples)[examples/examples.md] 
+that can help you see how to do things. 
