@@ -14,22 +14,19 @@ case class HistogramStyle(
     binValues: PlotDoubleSeries,
     valSourceColor: Seq[(PlotDoubleSeries, Int)]) extends PlotStyle {
 
-  def render(r: Renderer, bounds: Bounds, xAxis: Axis, yAxis: Axis, axisBounds: Seq[Bounds]): (Seq[Double], Seq[Double], Axis.AxisRenderer, Axis.AxisRenderer) = {
+  def render(r: Renderer, bounds: Bounds, xAxis: Axis, xminFunc: Axis => Double, xmaxFunc: Axis => Double,
+      yAxis: Axis, yminFunc: Axis => Double, ymaxFunc: Axis => Double, axisBounds: Seq[Bounds]): 
+      (Seq[Double], Seq[Double], Axis.AxisRenderer, Axis.AxisRenderer) = {
     val xNAxis = xAxis.asInstanceOf[NumericAxis]
     val yNAxis = yAxis.asInstanceOf[NumericAxis]
-    val start = (valSourceColor.map(_._1) :+ binValues).map(_.minIndex).max
-    val end = (valSourceColor.map(_._1) :+ binValues).map(_.maxIndex).min
+    val (start, end) = calcStartEnd()
     
     require(end - start > 1)
 
     val (xConv, xtfs, xnfs, xRender) = xNAxis.renderInfo(bounds.x, bounds.x + bounds.width,
-      binValues(start) - (binValues(start + 1) - binValues(start)) / 2,
-      binValues(end - 1) + (binValues(end - 1) - binValues(end - 2)) / 2,
-      Axis.RenderOrientation.XAxis, r, axisBounds)
+      xdMin(start, end), xdMax(start, end), Axis.RenderOrientation.XAxis, r, axisBounds)
     val (yConv, ytfs, ynfs, yRender) = yNAxis.renderInfo(bounds.y + bounds.height, bounds.y,
-      (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_._1(a)).sum),
-      (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_._1(a)).sum),
-      Axis.RenderOrientation.YAxis, r, axisBounds)
+      ydMin(start, end), ydMax(start, end), Axis.RenderOrientation.YAxis, r, axisBounds)
     for (i <- start until end) {
       val ys = valSourceColor.map(vs => vs._1(i))
       val (sx, ex) = if (i == start) {
@@ -51,4 +48,33 @@ case class HistogramStyle(
     }
     (Seq(xtfs, ytfs), Seq(xnfs, ynfs), xRender, yRender)
   }
+
+  def calcStartEnd(): (Int, Int) = {
+    ((valSourceColor.map(_._1) :+ binValues).map(_.minIndex).max,
+     (valSourceColor.map(_._1) :+ binValues).map(_.maxIndex).min)
+  }
+
+  def xDataMin(): Option[Double] = {
+    val (start, end) = calcStartEnd()
+    Some(xdMin(start, end))
+  }
+  def xdMin(start: Int, end: Int): Double = binValues(start) - (binValues(start + 1) - binValues(start)) / 2
+  
+  def xDataMax(): Option[Double] = {
+    val (start, end) = calcStartEnd()
+    Some(xdMax(start, end))
+  }
+  def xdMax(start: Int, end: Int): Double = binValues(end - 1) + (binValues(end - 1) - binValues(end - 2)) / 2
+    
+  def yDataMin(): Option[Double] = {
+    val (start, end) = calcStartEnd()
+    Some(ydMin(start, end))
+  }
+  def ydMin(start: Int, end: Int): Double = (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_._1(a)).sum)
+  
+  def yDataMax(): Option[Double] = {
+    val (start, end) = calcStartEnd()
+    Some(ydMax(start, end))
+  }
+  def ydMax(start: Int, end: Int): Double = (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_._1(a)).sum)
 }

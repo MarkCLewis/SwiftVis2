@@ -9,6 +9,10 @@ in [playground.PlotTesting](https://github.com/MarkCLewis/SwiftVis2/blob/master/
 
 ![colored scatter](colordots.png "Colored Scatter Plot")
 
+### Histogram
+
+![histogram](histogram.png "Simple Histogram")
+
 ### Bar Charts
 
 ![bar chart](bar.png "Simple Bar Chart")

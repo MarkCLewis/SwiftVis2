@@ -2,6 +2,7 @@ package swiftvis2.plotting
 
 import swiftvis2.plotting.renderer.Renderer
 import swiftvis2.plotting.styles.PlotStyle
+import java.util.concurrent.ConcurrentHashMap
 
 case class PlotGrid(
     plots: Seq[Seq[Seq[Plot2D]]],
@@ -38,6 +39,12 @@ case class PlotGrid(
     val minYAxisBounds = Bounds(bounds.x, bounds.y+drawXAxisSizeMax, drawYAxisSizeMin, bounds.height-drawXAxisSizeMin-drawXAxisSizeMax)
     val maxYAxisBounds = Bounds(bounds.x+bounds.width-drawYAxisSizeMax, bounds.y+drawXAxisSizeMax, drawXAxisSizeMax, bounds.height-drawXAxisSizeMin-drawXAxisSizeMax)
     val fullGridBounds = bounds.subXYBorder(drawYAxisSizeMin, drawYAxisSizeMax, drawXAxisSizeMax, drawXAxisSizeMin)
+    
+    import scala.collection.JavaConverters._
+    val xminhm = new ConcurrentHashMap[Axis, Double]()
+    val xmaxhm = new ConcurrentHashMap[Axis, Double]()
+    val yminhm = new ConcurrentHashMap[Axis, Double]()
+    val ymaxhm = new ConcurrentHashMap[Axis, Double]()
 
     // Draw grid of plots
     r.setColor(0xff000000)
@@ -57,7 +64,12 @@ case class PlotGrid(
       r.drawRectangle(b)
       r.setClip(b)
       val axisData = for(p2d <- p2ds) yield {
-        val (tickFontSizes, nameFontSizes, xAxisRender, yAxisRender) = p2d.style.render(r, b, axes(p2d.xAxisName), axes(p2d.yAxisName), axisBounds)
+        val (tickFontSizes, nameFontSizes, xAxisRender, yAxisRender) = p2d.style.render(r, b, 
+            axes(p2d.xAxisName), axis => extremeAxisFunction(xminhm, p => p.xAxisName, st => st.xDataMin(), _.min)(axis), 
+            axis => extremeAxisFunction(xmaxhm, p => p.xAxisName, st => st.xDataMax(), _.max)(axis), 
+            axes(p2d.yAxisName), axis => extremeAxisFunction(yminhm, p => p.yAxisName, st => st.yDataMin(), _.min)(axis), 
+            axis => extremeAxisFunction(ymaxhm, p => p.yAxisName, st => st.yDataMax(), _.max)(axis),
+            axisBounds)
         (tickFontSizes, nameFontSizes, p2d.xAxisName -> xAxisRender, p2d.yAxisName -> yAxisRender)
       }
       r.restore()
@@ -117,6 +129,24 @@ case class PlotGrid(
 
   def axisNameAsListWithCondition(axisName: String, pred: Axis => Boolean): Seq[String] = {
     if (axes.contains(axisName) && axes(axisName).isDrawn && pred(axes(axisName))) Seq(axisName) else Seq.empty[String]
+  }
+  
+  def extremeAxisFunction(hm: ConcurrentHashMap[Axis, Double], nameFunc: Plot2D => String, styleFunc: PlotStyle => Option[Double], combine: Seq[Double] => Double)(axis: Axis): Double = {
+    if(hm.contains(axis)) hm.get(axis) else {
+      val extr = for {
+        row <- plots
+        cell <- row
+        p <- cell
+        if axes(nameFunc(p)) == axis
+        ex = styleFunc(p.style)
+        x <- ex
+      } yield {
+        x
+      }
+      val ret = if(extr.isEmpty) 0.0 else combine(extr)
+      hm.put(axis, ret)
+      ret
+    }
   }
 }
 

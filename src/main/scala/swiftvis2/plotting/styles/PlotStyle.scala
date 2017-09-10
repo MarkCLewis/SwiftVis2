@@ -14,6 +14,27 @@ trait PlotStyle {
    * @param axisBounds These are passed in by the grid and used by the axes. You shouldn't use them for other purposes.
    * @return This is all information provided by the renderInfo methods of the axes that is returned to the grid.
    */
-  def render(r: Renderer, bounds: Bounds, xAxis: Axis, yAxis: Axis, axisBounds: Seq[Bounds]): 
+  def render(r: Renderer, bounds: Bounds, xAxis: Axis, xminFunc: Axis => Double, xmaxFunc: Axis => Double, 
+      yAxis: Axis, yminFunc: Axis => Double, ymaxFunc: Axis => Double, axisBounds: Seq[Bounds]): 
       (Seq[Double], Seq[Double], Axis.AxisRenderer, Axis.AxisRenderer)
+      
+  /**
+   * Returns the minimum numeric value for the x-axis for this plot if applicable.
+   */
+  def xDataMin(): Option[Double]
+  
+  /**
+   * Returns the maximum numeric value for the x-axis for this plot if applicable.
+   */
+  def xDataMax(): Option[Double]
+    
+  /**
+   * Returns the minimum numeric value for the y-axis for this plot if applicable.
+   */
+  def yDataMin(): Option[Double]
+  
+  /**
+   * Returns the maximum numeric value for the y-axis for this plot if applicable.
+   */
+  def yDataMax(): Option[Double]
 }

@@ -17,18 +17,16 @@ case class BarStyle(
     barWidthFrac: Double
     ) extends PlotStyle {
   
-  def render(r: Renderer, bounds: Bounds, xAxis: Axis, yAxis: Axis, axisBounds: Seq[Bounds]): 
+  def render(r: Renderer, bounds: Bounds, xAxis: Axis, xminFunc: Axis => Double, xmaxFunc: Axis => Double,
+      yAxis: Axis, yminFunc: Axis => Double, ymaxFunc: Axis => Double, axisBounds: Seq[Bounds]): 
       (Seq[Double], Seq[Double], Axis.AxisRenderer, Axis.AxisRenderer) = {
     val xNAxis = xAxis.asInstanceOf[CategoryAxis]
     val yNAxis = yAxis.asInstanceOf[NumericAxis]
-    val start = (valSourceColor.map(_._1) :+ categories).map(_.minIndex).max
-    val end = (valSourceColor.map(_._1) :+ categories).map(_.maxIndex).min
+    val (start, end) = calcStartEnd()
     
     val (catConv, xtfs, xnfs, xRender) = xNAxis.renderInfo((start until end).map(categories), Axis.RenderOrientation.XAxis, r, axisBounds)
     val (yConv, ytfs, ynfs, yRender) = yNAxis.renderInfo(bounds.y+bounds.height, bounds.y,
-        minData(start, end), 
-        maxData(start, end),
-        Axis.RenderOrientation.YAxis, r, axisBounds)
+        ydMin(start, end), ydMax(start, end), Axis.RenderOrientation.YAxis, r, axisBounds)
     for(i <- start until end) {
       val (scatx, ecatx) = catConv(categories(i))
       val ys = valSourceColor.map(vs => vs._1(i))
@@ -57,15 +55,32 @@ case class BarStyle(
     (Seq(xtfs, ytfs), Seq(xnfs, ynfs), xRender, yRender)
   }
   
-  def minData(start: Int, end: Int): Double = {
+  def calcStartEnd(): (Int, Int) = {
+    ((valSourceColor.map(_._1) :+ categories).map(_.minIndex).max,
+     (valSourceColor.map(_._1) :+ categories).map(_.maxIndex).min)
+  }
+
+  def xDataMin(): Option[Double] = None
+  
+  def xDataMax(): Option[Double] = None
+    
+  def yDataMin(): Option[Double] = {
+    val (start, end) = calcStartEnd()
+    Some(ydMin(start, end))
+  }
+  def ydMin(start: Int, end: Int): Double = {
     if(stacked) {
       (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_._1(a)).sum)
     } else {
       (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_._1(a)).min)
     }
   }
-
-  def maxData(start: Int, end: Int): Double = {
+  
+  def yDataMax(): Option[Double] = {
+    val (start, end) = calcStartEnd()
+    Some(ydMax(start, end))
+  }
+  def ydMax(start: Int, end: Int): Double = {
     if(stacked) {
       (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_._1(a)).sum)
     } else {
