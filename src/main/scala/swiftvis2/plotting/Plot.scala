@@ -65,12 +65,9 @@ object Plot {
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
 
-  def histogramPlot(bins: Seq[Double], valsAndColors: Seq[(Seq[Double], Int)], title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
+  def histogramPlot(bins: PlotDoubleSeries, vals: PlotDoubleSeries, color: Int, centerOnBins: Boolean, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
-    val vac = valsAndColors.map { case (xs, c) =>
-      (xs: PlotDoubleSeries, c)
-    }
-    val style = HistogramStyle(bins, vac)
+    val style = HistogramStyle(bins, Seq(vals -> color), centerOnBins)
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both, 
         Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
@@ -81,19 +78,22 @@ object Plot {
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
   
-//  def stackedHistogramPlot(data: Seq[(Double, Seq[Double])], color: Int = 0xffff0000, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
-//    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-//    val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
-//    val categories = data.keySet.toSeq
-//    val vac = categories.map(k => (Seq(data(k)):PlotDoubleSeries, color))
-//    val style = BarStyle(categories, vac, stacked, fracWidth)
-//    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
-//    val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both, 
-//        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
-//    val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
-//    Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
-//        Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
-//  }
+  def stackedHistogramPlot(bins: Seq[Double], valsAndColors: Seq[(Seq[Double], Int)], centerOnBins: Boolean, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
+    val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
+    val vac = valsAndColors.map { case (xs, c) =>
+      (xs: PlotDoubleSeries, c)
+    }
+    val style = HistogramStyle(bins, vac, centerOnBins)
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both, 
+        Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+    val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both, 
+        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+    val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
+    Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
+        Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+  }
+  
 
 
 }

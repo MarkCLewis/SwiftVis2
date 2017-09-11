@@ -12,7 +12,7 @@ import swiftvis2.plotting.PlotIntSeries
 
 case class HistogramStyle(
     binValues: PlotDoubleSeries,
-    valSourceColor: Seq[(PlotDoubleSeries, Int)]) extends PlotStyle {
+    valSourceColor: Seq[(PlotDoubleSeries, Int)], centerOnBins: Boolean = false) extends PlotStyle {
 
   def render(r: Renderer, bounds: Bounds, xAxis: Axis, xminFunc: Axis => Double, xmaxFunc: Axis => Double,
       yAxis: Axis, yminFunc: Axis => Double, ymaxFunc: Axis => Double, axisBounds: Seq[Bounds]): 
@@ -29,12 +29,16 @@ case class HistogramStyle(
       ydMin(start, end), ydMax(start, end), Axis.RenderOrientation.YAxis, r, axisBounds)
     for (i <- start until end) {
       val ys = valSourceColor.map(vs => vs._1(i))
-      val (sx, ex) = if (i == start) {
-        (xConv(binValues(i) - (binValues(i + 1) - binValues(i)) / 2), xConv((binValues(i) + binValues(i + 1)) / 2))
-      } else if (i == end - 1) {
-        (xConv((binValues(i) + binValues(i - 1)) / 2), xConv(binValues(i) + (binValues(i) - binValues(i - 1)) / 2))
+      val (sx, ex) = if(centerOnBins) { 
+        if (i == start) {
+          (xConv(binValues(i) - (binValues(i + 1) - binValues(i)) / 2), xConv((binValues(i) + binValues(i + 1)) / 2))
+        } else if (i == end - 1) {
+          (xConv((binValues(i) + binValues(i - 1)) / 2), xConv(binValues(i) + (binValues(i) - binValues(i - 1)) / 2))
+        } else {
+          (xConv((binValues(i) + binValues(i - 1)) / 2), xConv((binValues(i) + binValues(i + 1)) / 2))
+        }
       } else {
-        (xConv((binValues(i) + binValues(i - 1)) / 2), xConv((binValues(i) + binValues(i + 1)) / 2))
+        (xConv(binValues(i)), xConv(binValues(i+1)))
       }
       var lasty = 0.0
       for (j <- ys.indices) {
@@ -58,13 +62,13 @@ case class HistogramStyle(
     val (start, end) = calcStartEnd()
     Some(xdMin(start, end))
   }
-  def xdMin(start: Int, end: Int): Double = binValues(start) - (binValues(start + 1) - binValues(start)) / 2
+  def xdMin(start: Int, end: Int): Double = if(centerOnBins) binValues(start) - (binValues(start + 1) - binValues(start)) / 2 else binValues(start)
   
   def xDataMax(): Option[Double] = {
     val (start, end) = calcStartEnd()
     Some(xdMax(start, end))
   }
-  def xdMax(start: Int, end: Int): Double = binValues(end - 1) + (binValues(end - 1) - binValues(end - 2)) / 2
+  def xdMax(start: Int, end: Int): Double = if(centerOnBins) binValues(end - 1) + (binValues(end - 1) - binValues(end - 2)) / 2 else binValues(end)
     
   def yDataMin(): Option[Double] = {
     val (start, end) = calcStartEnd()

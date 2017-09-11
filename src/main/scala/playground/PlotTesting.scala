@@ -45,15 +45,15 @@ object PlotTesting extends JFXApp {
 
   // Short form histogram plot
   def histogram(): Unit = {
-    val bins = 1.0 to 10.1 by 1.0
-    val plot = Plot.histogramPlot(bins, Seq(bins.map(12 - _) -> 0xff0000FF), "Histogram Plot", "Colors", "Measure")
+    val bins = 0.0 to 10.0 by 1.0
+    val plot = Plot.histogramPlot(bins, bins.map(12 - _).init, 0xff0000FF, false, "Histogram Plot", "Value", "Count")
     FXRenderer(plot, 500, 300)
   }
 
   // Short form histogram plot
   def histogram2(): Unit = {
     val bins = 1.0 to 10.1 by 1.0
-    val plot = Plot.histogramPlot(bins, Seq(bins.map(12 - _) -> 0xff0000ff, bins.map(x => 5*(math.cos(x)+2)) -> 0xffff0000), "Histogram Plot", "Colors", "Measure")
+    val plot = Plot.stackedHistogramPlot(bins, Seq(bins.map(12 - _) -> 0xff0000ff, bins.map(x => 5*(math.cos(x)+2)) -> 0xffff0000), true, "Histogram Plot", "Value", "Count")
     FXRenderer(plot, 500, 300)
   }
 
@@ -64,5 +64,6 @@ object PlotTesting extends JFXApp {
 
 //  scatterMultidata()
 //  barChart()
+  histogram()
   histogram2()
 }
