@@ -14,11 +14,20 @@ case class Plot(texts: Map[String, Plot.PlotTextData], grids: Map[String, Plot.P
   }
 }
 
+/**
+ * This contains helper methods that will set up simple 1x1 plot grids with various plot types. Make sure that you import swiftvis2.plotting to
+ * get implicit conversions. These implicit conversions allow you to pass Scala sequences, arrays, or plain literals in places where the
+ * functions require some type of PlotSeries. Importing swiftvis2.plotting._ also brings is color ARGB declarations. 
+ */
 object Plot {
   case class PlotTextData(text: PlotText, bounds: Bounds)
   case class PlotGridData(grid: PlotGrid, bounds: Bounds)
   
-  def scatterPlot(x: PlotDoubleSeries, y: PlotDoubleSeries, title: String = "", xLabel: String = "", yLabel: String = "", symbolSize: PlotDoubleSeries = 10, symbolColor: PlotIntSeries = BlackARGB): Plot = {
+  /**
+   * Make a basic scatter plot with a single set of data.
+   */
+  def scatterPlot(x: PlotDoubleSeries, y: PlotDoubleSeries, title: String = "", xLabel: String = "", yLabel: String = "", 
+      symbolSize: PlotDoubleSeries = 10, symbolColor: PlotIntSeries = BlackARGB): Plot = {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
     val style = ScatterStyle(x, y, Ellipse, symbolSize, symbolSize, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, symbolColor, None)
     val grid = PlotGrid.oneByOne(xLabel, yLabel, style)
@@ -26,6 +35,24 @@ object Plot {
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
   
+  /**
+   * This makes a scatter plot where certain points are connected by lines. If you pass a constant for the line grouping, all
+   * the points will be connected. If you pass a Int => Double or a Seq[Double], then dots whose indices in x and y evaluated to the
+   * same value will be connected.
+   */
+  def scatterPlotWithLines(x: PlotDoubleSeries, y: PlotDoubleSeries, title: String = "", xLabel: String = "", yLabel: String = "", 
+      symbolSize: PlotDoubleSeries = 10, symbolColor: PlotIntSeries = BlackARGB, lineGrouping: PlotDoubleSeries): Plot = {
+    val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
+    val style = ScatterStyle(x, y, Ellipse, symbolSize, symbolSize, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, symbolColor, 
+        Some(lineGrouping -> Renderer.StrokeData(1, Nil)))
+    val grid = PlotGrid.oneByOne(xLabel, yLabel, style)
+    Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
+        Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+  }
+
+  /**
+   * Make a scatter plot with multiple data sets that all share the same x and y axis.
+   */
   def scatterPlots(pdata: Seq[(PlotDoubleSeries, PlotDoubleSeries, PlotIntSeries, PlotDoubleSeries)], title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
     val styles = for((x, y, argb, size) <- pdata) yield {
@@ -36,7 +63,11 @@ object Plot {
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
   
-  def barPlot(categories: Seq[String], valsAndColors: Seq[(Seq[Double], Int)], stacked: Boolean = false, fracWidth: Double = 0.8, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
+  /**
+   * Make a bar plot with the specified categories using the provides values and colors. The number of elements in the sequences of the first
+   * element of the tuples for valsAndColors should match the number of elements in the categories sequence.
+   */
+  def barPlot(categories: PlotStringSeries, valsAndColors: Seq[(Seq[Double], Int)], stacked: Boolean = false, fracWidth: Double = 0.8, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
     val vac = valsAndColors.map { case (xs, c) =>
@@ -51,6 +82,9 @@ object Plot {
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
   
+  /**
+   * Make a simple bar plot with one set of bars where values are associated with categories in a Map.
+   */
   def barPlotMap(data: Map[String, Double], color: Int = 0xffff0000, stacked: Boolean = false, fracWidth: Double = 0.8, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
@@ -65,6 +99,9 @@ object Plot {
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
 
+  /**
+   * Make a simple histogram. If not centered on bins, the bins series should be one element longer than the values.
+   */
   def histogramPlot(bins: PlotDoubleSeries, vals: PlotDoubleSeries, color: Int, centerOnBins: Boolean, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
     val style = HistogramStyle(bins, Seq(vals -> color), centerOnBins)
@@ -78,6 +115,9 @@ object Plot {
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
   
+  /**
+   * Make a stacked histogram. If not centered on bins, the bins series should be one element longer than the values.
+   */
   def stackedHistogramPlot(bins: Seq[Double], valsAndColors: Seq[(Seq[Double], Int)], centerOnBins: Boolean, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
     val vac = valsAndColors.map { case (xs, c) =>

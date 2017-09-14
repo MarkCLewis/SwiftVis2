@@ -1,8 +1,17 @@
 package swiftvis2
 
+/**
+ * Helpful constants and implicit conversions.
+ */
 package object plotting {
   val BlackARGB = 0xff000000
   val WhiteARGB = 0xffffffff
+  val RedARGB = 0xffff0000
+  val GreenARGB = 0xff00ff00
+  val BlueARGB = 0xff0000ff
+  val YellowARGB = 0xffffff00
+  val CyanARGB = 0xff00ffff
+  val MagentaARGB = 0xffff00ff
   
   implicit class SeqToDoubleSeries(data: Seq[Double]) extends PlotDoubleSeries {
     def minIndex: Int = 0

@@ -22,6 +22,7 @@ import javax.imageio.ImageIO
 import scalafx.embed.swing.SwingFXUtils
 import java.io.FileOutputStream
 import scalafx.stage.FileChooser
+import scalafx.application.Platform
 
 object FXRenderer {
   def apply(plot: Plot, pwidth: Double = 1000, pheight: Double = 1000): FXRenderer = {
@@ -109,8 +110,7 @@ class FXRenderer(gc: GraphicsContext) extends Renderer {
     gc.strokeLine(x1, y1, x2, y2)
   }
 
-  def drawLinePath(x: Seq[Double], y: Seq[Double], colors: Seq[Int]): Unit = {
-    // TODO - Figure out how to include colors in an efficient way
+  def drawLinePath(x: Seq[Double], y: Seq[Double]): Unit = {
     gc.strokePolyline(x.toArray, y.toArray, x.length min y.length)
   }
 

@@ -13,7 +13,7 @@ trait Renderer {
   def fillPolygon(pnts: Seq[(Double, Double)]): Unit
   
   def drawLine(x1: Double, y1: Double, x2: Double, y2: Double): Unit
-  def drawLinePath(x: Seq[Double], y: Seq[Double], colors: Seq[Int]): Unit
+  def drawLinePath(x: Seq[Double], y: Seq[Double]): Unit
   def drawText(s: String, x: Double, y: Double, align: Renderer.HorizontalAlign.Value, angle: Double): Unit
   
   def setColor(argb: Int): Unit
