@@ -101,7 +101,8 @@ case class NumericAxis(
           Axis.TickStyle.drawTick(r, tickStyle, orient, cx, py, displaySide, tickLen)
           tickLabelInfo.foreach { tli =>
             // TODO
-            val textAlign = if((tli.angle+90) % 180.0 == 0) Renderer.HorizontalAlign.Center else Renderer.HorizontalAlign.Right
+            val textAlign = if((tli.angle+90) % 180.0 == 0) Renderer.HorizontalAlign.Center else 
+              if(displaySide == Axis.DisplaySide.Min) Renderer.HorizontalAlign.Right else Renderer.HorizontalAlign.Left
             r.drawText(tli.numberFormat.format(y), labelX, py, textAlign, tli.angle)
           }
         }

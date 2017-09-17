@@ -49,8 +49,8 @@ case class PlotGrid(
     // Draw grid of plots
     r.setColor(0xff000000)
     val sizesAndAxisRenderers = (for {
-      (row, yStart, yEnd) <- (plots, yStarts, yStarts.tail).zipped
-      (p2ds, xStart, xEnd) <- (row, xStarts, xStarts.tail).zipped
+      ((row, i), yStart, yEnd) <- (plots.zipWithIndex, yStarts, yStarts.tail).zipped
+      ((p2ds, j), xStart, xEnd) <- (row.zipWithIndex, xStarts, xStarts.tail).zipped
     } yield {
       val axisBounds = Seq(
             minXAxisBounds.subX(xStart, xEnd),
@@ -70,7 +70,7 @@ case class PlotGrid(
             axes(p2d.yAxisName), axis => extremeAxisFunction(yminhm, p => p.yAxisName, st => st.yDataMin(), _.min)(axis), 
             axis => extremeAxisFunction(ymaxhm, p => p.yAxisName, st => st.yDataMax(), _.max)(axis),
             axisBounds)
-        (tickFontSizes, nameFontSizes, p2d.xAxisName -> xAxisRender, p2d.yAxisName -> yAxisRender)
+        (tickFontSizes, nameFontSizes, (p2d.xAxisName, j) -> xAxisRender, (p2d.yAxisName, i) -> yAxisRender)
       }
       r.restore()
       axisData
@@ -82,43 +82,43 @@ case class PlotGrid(
     // Draw X axes
     val minXAxisCount = minXAxes.maxBy(_.size).size
     val minXAxisFracHeight = 1.0 / minXAxisCount
-    for ((axisSeq, xStart, xEnd) <- (minXAxes, xStarts, xStarts.tail).zipped) {
+    for ((axisSeq, xStart, xEnd) <- (minXAxes.zipWithIndex, xStarts, xStarts.tail).zipped) {
       val b = minXAxisBounds.subX(xStart, xEnd)
-      for (i <- 0 until minXAxisCount; if i < axisSeq.size) {
-        axisRenderers(axisSeq(i))(tickFontSize, nameFontSize)
+      for (i <- 0 until minXAxisCount; if i < axisSeq._1.size) {
+        axisRenderers(axisSeq._1(i) -> axisSeq._2)(tickFontSize, nameFontSize)
       }
     }
     val maxXAxisCount = minXAxes.maxBy(_.size).size
     val maxXAxisFracHeight = 1.0 / minXAxisCount
-    for ((axisSeq, xStart, xEnd) <- (maxXAxes, xStarts, xStarts.tail).zipped) {
+    for ((axisSeq, xStart, xEnd) <- (maxXAxes.zipWithIndex, xStarts, xStarts.tail).zipped) {
       val b = minXAxisBounds.subX(xStart, xEnd)
-      for (i <- 0 until maxXAxisCount; if i < axisSeq.size) {
-        axisRenderers(axisSeq(i))(tickFontSize, nameFontSize)
+      for (i <- 0 until maxXAxisCount; if i < axisSeq._1.size) {
+        axisRenderers(axisSeq._1(i) -> axisSeq._2)(tickFontSize, nameFontSize)
       }
     }
 
     // Draw Y Axes
     val minYAxisCount = minYAxes.maxBy(_.size).size
     val minYAxisFracHeight = 1.0 / minYAxisCount
-    for ((axisSeq, yStart, yEnd) <- (minYAxes, yStarts, yStarts.tail).zipped) {
+    for ((axisSeq, yStart, yEnd) <- (minYAxes.zipWithIndex, yStarts, yStarts.tail).zipped) {
       val b = minYAxisBounds.subY(yStart, yEnd)
-      for (i <- 0 until minYAxisCount; if i < axisSeq.size) {
-        axisRenderers(axisSeq(i))(tickFontSize, nameFontSize)
+      for (i <- 0 until minYAxisCount; if i < axisSeq._1.size) {
+        axisRenderers(axisSeq._1(i) -> axisSeq._2)(tickFontSize, nameFontSize)
       }
     }
     val maxYAxisCount = minYAxes.maxBy(_.size).size
     val maxYAxisFracHeight = 1.0 / minYAxisCount
-    for ((axisSeq, yStart, yEnd) <- (maxYAxes, yStarts, yStarts.tail).zipped) {
+    for ((axisSeq, yStart, yEnd) <- (maxYAxes.zipWithIndex, yStarts, yStarts.tail).zipped) {
       val b = minYAxisBounds.subY(yStart, yEnd)
-      for (i <- 0 until maxYAxisCount; if i < axisSeq.size) {
-        axisRenderers(axisSeq(i))(tickFontSize, nameFontSize)
+      for (i <- 0 until maxYAxisCount; if i < axisSeq._1.size) {
+        axisRenderers(axisSeq._1(i) -> axisSeq._2)(tickFontSize, nameFontSize)
       }
     }
   }
 
   def collectXAxes(pred: Axis => Boolean): Seq[Seq[String]] = {
     plots.foldLeft(Seq.fill(plots(0).size)(Seq.empty[String])) { (names, row) =>
-      val toAdd = row.flatMap(_.map(p2d => axisNameAsListWithCondition(p2d.xAxisName, pred)))
+      val toAdd = row.map(_.flatMap(p2d => axisNameAsListWithCondition(p2d.xAxisName, pred)))
       (names, toAdd).zipped.map((a, b) => (b ++: a))
     }
   }

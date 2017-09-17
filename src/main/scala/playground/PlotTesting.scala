@@ -4,6 +4,9 @@ import scalafx.application.JFXApp
 import swiftvis2.plotting
 import swiftvis2.plotting._
 import swiftvis2.plotting.renderer._
+import swiftvis2.plotting.styles.ScatterStyle
+import swiftvis2.plotting.styles.HistogramStyle
+import swiftvis2.plotting.styles.BarStyle
 
 
 object PlotTesting extends JFXApp {
@@ -98,15 +101,69 @@ object PlotTesting extends JFXApp {
   def longForm(): Unit = {
     val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val xAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, "%1.1f")), Some("X1" -> font))
+    val xAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, "%1.1f")), Some("X2" -> font))
+    val xAxisCat = new CategoryAxis(Axis.TickStyle.Both, 0, font, Some("Categories" -> font), Axis.DisplaySide.Max)
+    val yAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.1f")), Some("Y1" -> font))
+    val yAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")), Some("Y2" -> font))
+    val yAxis3 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")), Some("Y3" -> font), Axis.DisplaySide.Max)
+    
+    // Main Scatter plot
+    val (mainX, mainY) = (for(_ <- 1 to 1000) yield {
+      val r = math.random*math.random*math.random
+      val theta = math.random*2*math.Pi
+      (r*math.cos(theta), r*math.sin(theta))
+    }).unzip
+    val mainScatter = ScatterStyle(mainX, mainY, Ellipse, 5, 5, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, BlueARGB)
+    val mainScatterPlot = Plot2D(mainScatter, "x1", "y1")
+    
+    // Function overplot
+    val (funcX, funcY) = (-1.0 to 1.0 by 0.002).map(x => x -> math.sin(20*x*x)*0.4).unzip 
+    val funcScatter = ScatterStyle(funcX, funcY, NoSymbol, 5, 5, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, BlackARGB, 
+        Some((1:PlotSeries) -> Renderer.StrokeData(2, Seq.empty)))
+    val funcScatterPlot = Plot2D(funcScatter, "x1", "y1")
+    
+    // Histogram
+    val binSize = 0.02
+    val bins = (-1.0 to 1.0 by binSize).toArray
+    val counts = Array.fill(bins.length-1)(0)
+    for(x <- mainX) counts(((x+1)/binSize).toInt min counts.length) += 1
+    val histogram = HistogramStyle(bins, Seq((counts:PlotDoubleSeries) -> RedARGB), false)
+    val histogramPlot = Plot2D(histogram, "x1", "y2")
+    
+    // Bar Chart
+    val barChart = BarStyle(Seq("FY", "Sophomore", "Junior", "Senior"), Seq((Seq(70, 25, 15, 5):PlotDoubleSeries) -> CyanARGB, 
+        (Seq(3, 25, 5, 1):PlotDoubleSeries) -> MagentaARGB, (Seq(0, 5, 35, 2):PlotDoubleSeries) -> YellowARGB, (Seq(0, 0, 5, 40):PlotDoubleSeries) -> GreenARGB),
+        false, 0.8)
+    val barChartPlot = Plot2D(barChart, "xcat", "y3")
+    
+    // Second Scatter
+    val x2 = Array.fill(100)(math.random)
+    val y2 = x2.map(x => math.cos(x*3)+0.2*math.random)
+    val ex2 = x2.map(x => 0.1*math.random)
+    val ey2 = x2.map(x => 0.2*math.random)
+    val cg = ColorGradient(-1.0 -> BlackARGB, 0.0 -> BlueARGB, 1.0 -> GreenARGB)
+    val errorScatter = ScatterStyle(x2, y2, Rectangle, 5, ey2, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Scaled, y2.map(cg), 
+        None, Some(ex2), Some(ey2))
+    val errorScatterPlot = Plot2D(errorScatter, "x2", "y1")
+    
+    // Combine in a plot
+    val title = new PlotText("Complex Plot", BlackARGB, font, Renderer.HorizontalAlign.Center, 0)
+    val grid1 = PlotGrid(Seq(Seq(Seq(histogramPlot), Seq(barChartPlot)), Seq(Seq(mainScatterPlot, funcScatterPlot), Seq(errorScatterPlot))),
+        Map("x1" -> xAxis1, "x2" -> xAxis2, "xcat" -> xAxisCat, "y1" -> yAxis1, "y2" -> yAxis2, "y3" -> yAxis3),
+        Seq(0.7, 0.3), Seq(0.3, 0.7), 0.1)
+    
+    val plot = Plot(Map("title" -> Plot.PlotTextData(title, Bounds(0, 0, 1.0, 0.1))), Map("grid1" -> Plot.PlotGridData(grid1, Bounds(0, 0.1, 1.0, 0.9))))
+    FXRenderer(plot, 1200, 800)
   }
 
-  scatter1()
-  scatter2()
-  scatterLines()
-  scatterWithErrorBars()
-  scatterMultidata()
-  scatterWithSizeandColor()
+//  scatter1()
+//  scatter2()
+//  scatterLines()
+//  scatterWithErrorBars()
+//  scatterMultidata()
+//  scatterWithSizeandColor()
 //  barChart()
 //  histogram()
 //  histogram2()
+  longForm()
 }

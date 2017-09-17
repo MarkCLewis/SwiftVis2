@@ -26,7 +26,7 @@ case class BarStyle(
     
     val (catConv, xtfs, xnfs, xRender) = xNAxis.renderInfo((start until end).map(categories), Axis.RenderOrientation.XAxis, r, axisBounds)
     val (yConv, ytfs, ynfs, yRender) = yNAxis.renderInfo(bounds.y+bounds.height, bounds.y,
-        ydMin(start, end), ydMax(start, end), Axis.RenderOrientation.YAxis, r, axisBounds)
+        yminFunc(yNAxis), ymaxFunc(yNAxis), Axis.RenderOrientation.YAxis, r, axisBounds)
     for(i <- start until end) {
       val (scatx, ecatx) = catConv(categories(i))
       val ys = valSourceColor.map(vs => vs._1(i))

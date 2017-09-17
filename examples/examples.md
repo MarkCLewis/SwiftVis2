@@ -17,6 +17,10 @@ in [playground.PlotTesting](https://github.com/MarkCLewis/SwiftVis2/blob/master/
 
 ![bar chart](bar.png "Simple Bar Chart")
 
+### Full Plotting Capabilities
+
+![complex plot](complexPlot.png "Complex Plot")
+
 ## Graphical Interface Usage
 
 The graphical interface isn't currently implemented.
