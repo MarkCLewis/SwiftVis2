@@ -1,6 +1,6 @@
 package swiftvis2.plotting
 
-trait PlotSeries {
+trait PlotSeries extends (Int => Any) {
   def minIndex: Int
   def maxIndex: Int
 }

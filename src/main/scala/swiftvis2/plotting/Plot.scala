@@ -50,6 +50,16 @@ object Plot {
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
 
+  def scatterPlotWithErrorBars(x: PlotDoubleSeries, y: PlotDoubleSeries, title: String = "", xLabel: String = "", yLabel: String = "", 
+      symbolSize: PlotDoubleSeries = 10, symbolColor: PlotIntSeries = BlackARGB, xError: PlotDoubleSeries, yError: PlotDoubleSeries): Plot = {
+    val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
+    val style = ScatterStyle(x, y, Ellipse, symbolSize, symbolSize, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, symbolColor, 
+        None, Some(xError), Some(yError))
+    val grid = PlotGrid.oneByOne(xLabel, yLabel, style)
+    Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
+        Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+  }
+
   /**
    * Make a scatter plot with multiple data sets that all share the same x and y axis.
    */

@@ -8,14 +8,14 @@ sealed trait Axis {
 }
 
 case class NumericAxis(
-    min: Option[Double],
-    max: Option[Double],
-    tickSpacing: Option[Double],
-    tickStyle: Axis.TickStyle.Value,
-    tickLabelInfo: Option[Axis.LabelSettings], // Angle in degrees, None if no labels shown
-    name: Option[(String, Renderer.FontData)],
-    displaySide: Axis.DisplaySide.Value,
-    style: Axis.ScaleStyle.Value) extends Axis {
+    min: Option[Double] = None,
+    max: Option[Double] = None,
+    tickSpacing: Option[Double] = None,
+    tickStyle: Axis.TickStyle.Value = Axis.TickStyle.Both,
+    tickLabelInfo: Option[Axis.LabelSettings] = None, // Angle in degrees, None if no labels shown
+    name: Option[(String, Renderer.FontData)] = None,
+    displaySide: Axis.DisplaySide.Value = Axis.DisplaySide.Min,
+    style: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear) extends Axis {
 
   def isDrawn: Boolean = {
     tickStyle != Axis.TickStyle.Neither || name.nonEmpty

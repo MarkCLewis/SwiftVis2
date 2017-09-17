@@ -25,5 +25,19 @@ object PlotTesting extends JFXApp {
 }
 ```
 
-Currently scatter plots and bar charts are the only plotting styles that are implemented. I'm building up [some examples](examples/examples.md) 
-that can help you see how to do things. 
+Currently scatter plots, bar charts, and histograms are the only plotting styles that are implemented. I'm building up [some examples](examples/examples.md) 
+that can help you see how to do things.
+
+If you want to use SwiftVis2 in a shell/REPL, including the spark-shell, you can specify the SwiftVis2 JAR file on the command line with the -cp option. Once in the shell you need to import a few things and then run `FXRenderer.startShell()`. This is shown in the following example. You can then repeatedly call `FXRenderer` on various plots as long as you don't close the small window that comes up with `startShell`. 
+
+```scala
+import swiftvis2.plotting
+import swiftvis2.plotting.Plot
+import swiftvis2.plotting.renderer.FXRenderer
+
+FXRenderer.shellStart()
+val xPnt = (1.0 to 10.0 by 1.0).toSeq
+val yPnt = xPnt.map(a => a * a)
+val plot = Plot.scatterPlot(xPnt, yPnt, "Quadratic", "x", "y")
+FXRenderer(plot)
+```

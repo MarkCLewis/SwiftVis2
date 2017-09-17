@@ -6,6 +6,14 @@ object PlotSymbol {
   object Sizing extends Enumeration {
     val Pixels, Fraction, Scaled = Value
   }
+  
+  def sizing(sizeStyle: Sizing.Value, value: Double, size: Double, conv: Axis.UnitConverter, displaySize: Double): (Double, Double) = {
+    sizeStyle match {
+      case Sizing.Pixels => (conv(value)-size/2, conv(value)+size/2)
+      case Sizing.Fraction => (conv(value)-size*displaySize/2, conv(value)+size*displaySize/2)
+      case Sizing.Scaled => (conv(value-size/2), conv(value+size/2))
+    }
+  }
 }
 
 sealed trait PlotSymbol {

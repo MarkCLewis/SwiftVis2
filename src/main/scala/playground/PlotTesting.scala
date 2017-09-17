@@ -3,12 +3,13 @@ package playground
 import scalafx.application.JFXApp
 import swiftvis2.plotting
 import swiftvis2.plotting._
-import swiftvis2.plotting.Plot
-import swiftvis2.plotting.renderer.FXRenderer
-import swiftvis2.plotting.ColorGradient
+import swiftvis2.plotting.renderer._
+
 
 object PlotTesting extends JFXApp {
-  // Short form, single data examples
+  /**
+   * Short form, single data examples
+   */
   def scatter1(): Unit = {
     val xPnt = 1 to 10
     val yPnt = xPnt.map(a => a * a)
@@ -16,19 +17,38 @@ object PlotTesting extends JFXApp {
     FXRenderer(plot)
   }
 
+  /**
+   * Basic scatter plot with a large number of random points.
+   */
   def scatter2(): Unit = {
     val plot = Plot.scatterPlot((1 to 1000).map(_ => math.random * math.random), (1 to 1000).map(_ => math.random * math.random),
       "Random Points", "Independent", "Dependent", 2)
     FXRenderer(plot, 1500, 500)
   }
 
+  /**
+   * Scatter plots with points connected by lines.
+   */
   def scatterLines(): Unit = {
     val xPnt = 1 to 10
     val yPnt = xPnt.map(a => a * a)
     val plot = Plot.scatterPlotWithLines(xPnt, yPnt, "Quadratic", "x", "y", lineGrouping = 1)
     FXRenderer(plot)
   }
-  // Short form, multiple data example
+  
+  /**
+   * Scatter plot with error bars on the points.
+   */
+  def scatterWithErrorBars(): Unit = {
+    val xPnt = 1 to 10
+    val yPnt = xPnt.map(a => a * a)
+    val plot = Plot.scatterPlotWithErrorBars(xPnt, yPnt, "Quadratic", "x", "y", 5, BlackARGB, xPnt.map(_ * 0.2), yPnt.map(_ * 0.3))
+    FXRenderer(plot)
+  }
+  
+  /**
+   * Short form, multiple data example
+   */
   def scatterMultidata(): Unit = {
     val plot = Plot.scatterPlots(Seq(
       ((1 to 1000).map(_ => math.random * math.random), (1 to 1000).map(_ => math.random * math.random*0.5), RedARGB, 5),
@@ -36,7 +56,9 @@ object PlotTesting extends JFXApp {
     FXRenderer(plot, 1200, 700)
   }
 
-  // Short form, function with color and size
+  /**
+   * Short form, function with color and size
+   */
   def scatterWithSizeandColor(): Unit = {
     val xs = 0.0 to 10.0 by 0.01
     val cg = ColorGradient((0.0, RedARGB), (5.0, GreenARGB), (10.0, BlueARGB))
@@ -44,32 +66,46 @@ object PlotTesting extends JFXApp {
     FXRenderer(plot, 1500, 500)
   }
 
-  // Short form bar plot
+  /**
+   * Short form bar plot
+   */
   def barChart(): Unit = {
     val plot = Plot.barPlot(Seq("red", "green", "blue"), Seq(Seq(3.0, 7.0, 4.0) -> YellowARGB, Seq(2.0, 1.0, 3.0) -> MagentaARGB), true, 0.8, "Bar Plot", "Colors", "Measure")
     FXRenderer(plot, 500, 300)
   }
 
-  // Short form histogram plot
+  /**
+   * Short form histogram plot
+   */
   def histogram(): Unit = {
     val bins = 0.0 to 10.0 by 1.0
     val plot = Plot.histogramPlot(bins, bins.map(12 - _).init, BlueARGB, false, "Histogram Plot", "Value", "Count")
     FXRenderer(plot, 500, 300)
   }
 
-  // Short form histogram plot
+  /**
+   * Short form histogram plot
+   */
   def histogram2(): Unit = {
     val bins = 1.0 to 10.1 by 1.0
     val plot = Plot.stackedHistogramPlot(bins, Seq(bins.map(12 - _) -> BlueARGB, bins.map(x => 5*(math.cos(x)+2)) -> 0xffff0000), true, "Histogram Plot", "Value", "Count")
     FXRenderer(plot, 500, 300)
   }
 
-  // Long form
+  /**
+   * Long form - this example shows the general capabilities of the plot grid and adding multiple plots 
+   */
   def longForm(): Unit = {
-    
+    val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    val xAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, "%1.1f")), Some("X1" -> font))
   }
 
+  scatter1()
+  scatter2()
   scatterLines()
+  scatterWithErrorBars()
+  scatterMultidata()
+  scatterWithSizeandColor()
 //  barChart()
 //  histogram()
 //  histogram2()

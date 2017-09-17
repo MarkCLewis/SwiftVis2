@@ -12,7 +12,7 @@ case class ScatterStyle(
     xSizing: PlotSymbol.Sizing.Value,
     ySizing: PlotSymbol.Sizing.Value,
     colorFunction: PlotIntSeries,
-    connectWithLines: Option[(PlotDoubleSeries, Renderer.StrokeData)] = None,
+    connectWithLines: Option[(PlotSeries, Renderer.StrokeData)] = None,
     xErrorBars: Option[PlotDoubleSeries] = None,
     yErrorBars: Option[PlotDoubleSeries] = None) extends PlotStyle {
 
@@ -22,7 +22,7 @@ case class ScatterStyle(
     val yNAxis = yAxis.asInstanceOf[NumericAxis]
     val (start, end) = calcStartEnd()
 
-    val connectMap = connectWithLines.map(_ => collection.mutable.Map[Double, List[(Double, Double, Int)]]())
+    val connectMap = connectWithLines.map(_ => collection.mutable.Map[Any, List[(Double, Double, Int)]]())
 
     val (xConv, xtfs, xnfs, xRender) = xNAxis.renderInfo(bounds.x, bounds.x + bounds.width,
       xminFunc(xNAxis), xmaxFunc(xNAxis), Axis.RenderOrientation.XAxis, r, axisBounds)
@@ -30,27 +30,29 @@ case class ScatterStyle(
       yminFunc(yNAxis), ymaxFunc(yNAxis), Axis.RenderOrientation.YAxis, r, axisBounds)
     for (i <- start until end) {
       val x = xSource(i)
-      val px = xConv(x)
       val y = ySource(i)
-      val py = yConv(y)
-      // TODO - include sizing code
       val width = symbolWidth(i)
       val height = symbolHeight(i)
-      // TODO - add to connect map
+      val (pminx, pmaxx) = PlotSymbol.sizing(xSizing, x, width, xConv, bounds.width)
+      val (pminy, pmaxy) = PlotSymbol.sizing(ySizing, y, height, yConv, bounds.height)
+      val px = (pminx+pmaxx)/2
+      val py = (pminy+pmaxy)/2
+      val pwidth = pmaxx-pminx
+      val pheight = pmaxy-pminy
       val color = colorFunction(i)
-      r.setColor(color)
       xErrorBars.foreach { ex =>
         val error = ex(i)
         r.setStroke(Renderer.StrokeData(1, Nil))
         r.setColor(BlackARGB)
-        r.drawLine(xConv(x - error), y, xConv(x + error), y)
+        r.drawLine(xConv(x - error), py, xConv(x + error), py)
       }
       yErrorBars.foreach { ey =>
         val error = ey(i)
         r.setStroke(Renderer.StrokeData(1, Nil))
         r.setColor(BlackARGB)
-        r.drawLine(x, yConv(y - error), x, yConv(y + error))
+        r.drawLine(px, yConv(y - error), px, yConv(y + error))
       }
+      r.setColor(color)
       (connectWithLines, connectMap).zipped.foreach {
         case ((groupFunc, stroke), cm) =>
           val group = groupFunc(i)
@@ -69,7 +71,7 @@ case class ScatterStyle(
               cm(group) = (px, py, color) :: Nil
           }
       }
-      symbol.drawSymbol(px, py, width, height, r)
+      symbol.drawSymbol(px, py, pwidth, pheight, r)
     }
     (connectWithLines, connectMap).zipped.foreach {
       case ((groupFunc, stroke), cm) =>
@@ -91,23 +93,23 @@ case class ScatterStyle(
     val (start, end) = calcStartEnd()
     Some(xdMin(start, end))
   }
-  def xdMin(start: Int, end: Int): Double = (start until end).foldLeft(Double.MaxValue)((d, a) => d min xSource(a))
+  def xdMin(start: Int, end: Int): Double = (start until end).foldLeft(Double.MaxValue)((d, a) => d min xSource(a)-xErrorBars.map(_(a)).getOrElse(0.0))
 
   def xDataMax(): Option[Double] = {
     val (start, end) = calcStartEnd()
     Some(xdMax(start, end))
   }
-  def xdMax(start: Int, end: Int): Double = (start until end).foldLeft(Double.MinValue)((d, a) => d max xSource(a))
+  def xdMax(start: Int, end: Int): Double = (start until end).foldLeft(Double.MinValue)((d, a) => d max xSource(a)+xErrorBars.map(_(a)).getOrElse(0.0))
 
   def yDataMin(): Option[Double] = {
     val (start, end) = calcStartEnd()
     Some(ydMin(start, end))
   }
-  def ydMin(start: Int, end: Int): Double = (start until end).foldLeft(Double.MaxValue)((d, a) => d min ySource(a))
+  def ydMin(start: Int, end: Int): Double = (start until end).foldLeft(Double.MaxValue)((d, a) => d min ySource(a)-yErrorBars.map(_(a)).getOrElse(0.0))
 
   def yDataMax(): Option[Double] = {
     val (start, end) = calcStartEnd()
     Some(ydMax(start, end))
   }
-  def ydMax(start: Int, end: Int): Double = (start until end).foldLeft(Double.MinValue)((d, a) => d max ySource(a))
+  def ydMax(start: Int, end: Int): Double = (start until end).foldLeft(Double.MinValue)((d, a) => d max ySource(a)+yErrorBars.map(_(a)).getOrElse(0.0))
 }
