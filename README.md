@@ -4,6 +4,9 @@ and a programming interface.
 SwiftVis2 is still in the early stages. I am focusing on adding basic plotting capability with the programming interface currently.
 The graphical dataflow interface and other features will follow.
 
+SwiftVis2 is not yet at the point where it belongs in a Maven repository. Until SwiftVis2 is stable enough to put in a Maven repository 
+you can use it by compiling and packaging this project and putting the JAR file in the `lib` directory of your sbt project. 
+
 While it is possible to build plots piece by piece, the fact that SwiftVis2 supports a lot of plotting options can make that tedious.
 To help with that, facade methods are added that construct frequently used structures. The following code shows how you can use
 two facade methods to generate a scatter plot and display it. Note that you need to do this in a class that extends JFXApp.
@@ -15,7 +18,7 @@ import swiftvis2.plotting.Plot
 import swiftvis2.plotting.renderer.FXRenderer
 
 object PlotTesting extends JFXApp {
-  val xPnt = (1.0 to 10.0 by 1.0).toSeq
+  val xPnt = 1 to 10
   val yPnt = xPnt.map(a => a * a)
   val plot = Plot.scatterPlot(xPnt, yPnt, "Quadratic", "x", "y")
   FXRenderer(plot)
@@ -36,7 +39,7 @@ import swiftvis2.plotting.Plot
 import swiftvis2.plotting.renderer.FXRenderer
 
 FXRenderer.shellStart()
-val xPnt = (1.0 to 10.0 by 1.0).toSeq
+val xPnt = 1 to 10
 val yPnt = xPnt.map(a => a * a)
 val plot = Plot.scatterPlot(xPnt, yPnt, "Quadratic", "x", "y")
 FXRenderer(plot)

@@ -36,13 +36,13 @@ object FXRenderer {
     }
   }
 
-  def apply(plot: Plot, pwidth: Double = 1000, pheight: Double = 1000): Unit = {
+  def apply(plot: Plot, pwidth: Double = 1000, pheight: Double = 1000): FXRenderer = {
+    val canvas = new Canvas(pwidth, pheight)
+    val gc = canvas.graphicsContext2D
+    val renderer = new FXRenderer(gc)
     Platform.runLater {
       val stage = new Stage(StageStyle.Decorated)
       stage.title = "Plotting Test"
-      val canvas = new Canvas(pwidth, pheight)
-      val gc = canvas.graphicsContext2D
-      val renderer = new FXRenderer(gc)
       stage.scene = new Scene(pwidth, pheight + 30, false, SceneAntialiasing.Balanced) {
         val border = new BorderPane
         val menuBar = new MenuBar
@@ -81,6 +81,7 @@ object FXRenderer {
       }
       stage.showing = true
     }
+    renderer
   }
 }
 

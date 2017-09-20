@@ -7,6 +7,8 @@ import swiftvis2.plotting.renderer._
 import swiftvis2.plotting.styles.ScatterStyle
 import swiftvis2.plotting.styles.HistogramStyle
 import swiftvis2.plotting.styles.BarStyle
+import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 
 object PlotTesting extends JFXApp {
@@ -156,14 +158,17 @@ object PlotTesting extends JFXApp {
     FXRenderer(plot, 1200, 800)
   }
 
-//  scatter1()
-//  scatter2()
-//  scatterLines()
-//  scatterWithErrorBars()
-//  scatterMultidata()
-//  scatterWithSizeandColor()
-//  barChart()
-//  histogram()
-//  histogram2()
-  longForm()
+  
+  Future {
+    scatter1()
+    //  scatter2()
+    //  scatterLines()
+    scatterWithErrorBars()
+    //  scatterMultidata()
+    //  scatterWithSizeandColor()
+    //  barChart()
+    histogram()
+    //  histogram2()
+    longForm()
+  }
 }
