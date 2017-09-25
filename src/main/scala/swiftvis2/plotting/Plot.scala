@@ -50,6 +50,9 @@ object Plot {
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
 
+  /**
+   * Makes a scatter plot where each point has error bars associated with it.
+   */
   def scatterPlotWithErrorBars(x: PlotDoubleSeries, y: PlotDoubleSeries, title: String = "", xLabel: String = "", yLabel: String = "", 
       symbolSize: PlotDoubleSeries = 10, symbolColor: PlotIntSeries = BlackARGB, xError: PlotDoubleSeries, yError: PlotDoubleSeries): Plot = {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
@@ -61,7 +64,7 @@ object Plot {
   }
 
   /**
-   * Make a scatter plot with multiple data sets that all share the same x and y axis.
+   * Make a 1x1 grid with with multiple scatter plots that all share the same x and y axis.
    */
   def scatterPlots(pdata: Seq[(PlotDoubleSeries, PlotDoubleSeries, PlotIntSeries, PlotDoubleSeries)], title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
@@ -69,6 +72,26 @@ object Plot {
       ScatterStyle(x, y, Ellipse, size, size, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, argb, None)
     }
     val grid = PlotGrid.oneByOne(xLabel, yLabel, styles:_*)
+    Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
+        Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+  }
+  
+  /**
+   * This makes an MxN grid of scatter plots that all share the same axes.
+   */
+  def scatterPlotGrid(pdata: Seq[Seq[(PlotDoubleSeries, PlotDoubleSeries, PlotIntSeries, PlotDoubleSeries)]], title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
+    val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both, 
+        Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+    val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both, 
+        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+    val plots = pdata.map { row =>
+      row.map { case (x, y, argb, size) =>
+        Seq(Plot2D(ScatterStyle(x, y, Ellipse, size, size, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, argb, None), "x", "y"))
+      }
+    }
+    val grid = PlotGrid(plots, Map("x" -> xAxis, "y" -> yAxis), (0 until pdata.map(_.length).max).map(_ => 1.0), pdata.map(_ => 1.0), 0.15)
     Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
