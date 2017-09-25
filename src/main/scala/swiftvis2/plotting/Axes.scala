@@ -7,14 +7,14 @@ sealed trait Axis {
   def isDrawn: Boolean
 }
 
-case class NumericAxis(
+class NumericAxis(
     min: Option[Double] = None,
     max: Option[Double] = None,
     tickSpacing: Option[Double] = None,
     tickStyle: Axis.TickStyle.Value = Axis.TickStyle.Both,
     tickLabelInfo: Option[Axis.LabelSettings] = None, // Angle in degrees, None if no labels shown
     name: Option[(String, Renderer.FontData)] = None,
-    displaySide: Axis.DisplaySide.Value = Axis.DisplaySide.Min,
+    val displaySide: Axis.DisplaySide.Value = Axis.DisplaySide.Min,
     style: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear) extends Axis {
 
   def isDrawn: Boolean = {
@@ -122,12 +122,23 @@ case class NumericAxis(
   }
 }
 
-case class CategoryAxis(
+object NumericAxis {
+  def apply(min: Option[Double] = None,
+    max: Option[Double] = None,
+    tickSpacing: Option[Double] = None,
+    tickStyle: Axis.TickStyle.Value = Axis.TickStyle.Both,
+    tickLabelInfo: Option[Axis.LabelSettings] = None, // Angle in degrees, None if no labels shown
+    name: Option[(String, Renderer.FontData)] = None,
+    displaySide: Axis.DisplaySide.Value = Axis.DisplaySide.Min,
+    style: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear) = new NumericAxis(min, max, tickSpacing, tickStyle, tickLabelInfo, name, displaySide, style)
+}
+
+class CategoryAxis(
     tickStyle: Axis.TickStyle.Value,
     labelOrientation: Double, // angle in degrees
     labelFont: Renderer.FontData,
     name: Option[(String, Renderer.FontData)],
-    displaySide: Axis.DisplaySide.Value) extends Axis {
+    val displaySide: Axis.DisplaySide.Value) extends Axis {
 
   def isDrawn: Boolean = true
 
@@ -196,6 +207,14 @@ case class CategoryAxis(
         }
     }
   }
+}
+
+object CategoryAxis {
+  def apply(tickStyle: Axis.TickStyle.Value,
+    labelOrientation: Double, // angle in degrees
+    labelFont: Renderer.FontData,
+    name: Option[(String, Renderer.FontData)],
+    displaySide: Axis.DisplaySide.Value) = new CategoryAxis(tickStyle, labelOrientation, labelFont, name, displaySide)
 }
 
 object Axis {

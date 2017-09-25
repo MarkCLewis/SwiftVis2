@@ -24,9 +24,9 @@ case class HistogramStyle(
     require(end - start > 1)
 
     val (xConv, xtfs, xnfs, xRender) = xNAxis.renderInfo(bounds.x, bounds.x + bounds.width,
-      xdMin(start, end), xdMax(start, end), Axis.RenderOrientation.XAxis, r, axisBounds)
+      xminFunc(xNAxis), xmaxFunc(xNAxis), Axis.RenderOrientation.XAxis, r, axisBounds)
     val (yConv, ytfs, ynfs, yRender) = yNAxis.renderInfo(bounds.y + bounds.height, bounds.y,
-      ydMin(start, end), ydMax(start, end), Axis.RenderOrientation.YAxis, r, axisBounds)
+      yminFunc(yNAxis), ymaxFunc(yNAxis), Axis.RenderOrientation.YAxis, r, axisBounds)
     for (i <- start until end) {
       val ys = valSourceColor.map(vs => vs._1(i))
       val (sx, ex) = if(centerOnBins) { 

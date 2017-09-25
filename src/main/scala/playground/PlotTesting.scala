@@ -117,6 +117,18 @@ object PlotTesting extends JFXApp {
   }
 
   /**
+   * Short form grid of histogram plots
+   */
+  def histogramGrid(): Unit = {
+    val bins = 0.0 to 10.0 by 1.0
+    val plot = Plot.histogramGrid(bins, Seq(
+        Seq((bins.map(12 - _).init:PlotDoubleSeries) -> RedARGB, (bins.map(1 + _).init:PlotDoubleSeries) -> GreenARGB),
+        Seq((bins.map(c => c*c/6).tail:PlotDoubleSeries) -> BlueARGB, (bins.map(c => 10*math.random).init:PlotDoubleSeries) -> CyanARGB)), 
+        false, false, "Histogram Grid", "Values", "Counts")
+    FXRenderer(plot, 1000, 600)
+  }
+
+  /**
    * Long form - this example shows the general capabilities of the plot grid and adding multiple plots 
    */
   def longForm(): Unit = {
@@ -180,15 +192,16 @@ object PlotTesting extends JFXApp {
   
   Future {
 //    scatter1()
-//      scatter2()
-//      scatterLines()
-    scatterGrid()
+//    scatter2()
+//    scatterLines()
+//    scatterGrid()
 //    scatterWithErrorBars()
-//      scatterMultidata()
-//      scatterWithSizeandColor()
-//      barChart()
+//    scatterMultidata()
+//    scatterWithSizeandColor()
+//    barChart()
 //    histogram()
-//      histogram2()
+//    histogram2()
+    histogramGrid()
 //    longForm()
   }
 }

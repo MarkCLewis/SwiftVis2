@@ -149,6 +149,29 @@ object Plot {
   }
   
   /**
+   * Make a grid of histograms. If not centered on bins, the bins series should be one element longer than the values.
+   * All histograms share the same bins and the same x axis. You can determine if they share the Y axis or if each row gets its own.
+   */
+  def histogramGrid(bins: PlotDoubleSeries, vals: Seq[Seq[(PlotDoubleSeries, Int)]], centerOnBins: Boolean, sharedYAxis: Boolean, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
+    val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
+    val plots = vals.zipWithIndex.map { case (row, r) =>
+      row.map { t => Seq(Plot2D(HistogramStyle(bins, Seq(t), centerOnBins), "x", if(sharedYAxis) "y" else "y"+r)) }
+    }
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both, 
+        Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+    val yAxes = if(sharedYAxis) { 
+      Seq("y" -> NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both, 
+        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear))
+    } else {
+      vals.indices.map(r => "y"+r -> NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both, 
+        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear))
+    }
+    val grid = PlotGrid(plots, (("x" -> xAxis) +: yAxes).toMap, (0 until vals.map(_.length).max).map(_ => 1.0), vals.map(_ => 1.0), 0.15)
+    Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
+        Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+  }
+  /**
    * Make a stacked histogram. If not centered on bins, the bins series should be one element longer than the values.
    */
   def stackedHistogramPlot(bins: Seq[Double], valsAndColors: Seq[(Seq[Double], Int)], centerOnBins: Boolean, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
