@@ -86,7 +86,6 @@ class NumericAxis(
           val px = toPixels(x)
           Axis.TickStyle.drawTick(r, tickStyle, orient, px, cy, displaySide, tickLen)
           tickLabelInfo.foreach { tli =>
-            // TODO
             val textAlign = if(tli.angle % 180.0 == 0) Renderer.HorizontalAlign.Center else Renderer.HorizontalAlign.Left
             r.drawText(tli.numberFormat.format(x), px, labelY, textAlign, tli.angle)
           }
@@ -100,7 +99,6 @@ class NumericAxis(
           val py = toPixels(y)
           Axis.TickStyle.drawTick(r, tickStyle, orient, cx, py, displaySide, tickLen)
           tickLabelInfo.foreach { tli =>
-            // TODO
             val textAlign = if((tli.angle+90) % 180.0 == 0) Renderer.HorizontalAlign.Center else 
               if(displaySide == Axis.DisplaySide.Min) Renderer.HorizontalAlign.Right else Renderer.HorizontalAlign.Left
             r.drawText(tli.numberFormat.format(y), labelX, py, textAlign, tli.angle)
@@ -113,6 +111,7 @@ class NumericAxis(
     if (tickSpacing.nonEmpty || tickLabelInfo.nonEmpty) {
       val majorSep = tickSpacing.getOrElse {
         val str = "%e".format((amax - amin) / 6)
+        println("SwiftVis2 autosep string = " + str)
         (str.take(str.indexOf('.') + 2).toDouble.round + str.drop(str.indexOf('e'))).toDouble // TODO - consider BigDecimal here if display gets unhappy
       }
       val firstTickApprox = (amin / majorSep).toInt * majorSep

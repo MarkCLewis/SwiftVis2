@@ -9,6 +9,7 @@ import swiftvis2.plotting.styles.HistogramStyle
 import swiftvis2.plotting.styles.BarStyle
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import java.io.File
 
 
 object PlotTesting extends JFXApp {
@@ -188,6 +189,13 @@ object PlotTesting extends JFXApp {
     val plot = Plot(Map("title" -> Plot.PlotTextData(title, Bounds(0, 0, 1.0, 0.1))), Map("grid1" -> Plot.PlotGridData(grid1, Bounds(0, 0.1, 1.0, 0.9))))
     FXRenderer(plot, 1200, 800)
   }
+  
+  def saveToFile(): Unit = {
+    val plot = Plot.scatterPlots(Seq(
+      ((1 to 10000).map(_ => math.random * math.random), (1 to 10000).map(_ => math.random * math.random*0.5), RedARGB, 5),
+      ((1 to 10000).map(_ => 1.0 - math.random * math.random), (1 to 10000).map(_ => 1.0 - math.random * math.random*0.5), GreenARGB, 5)), "Colored Points", "Horizontal", "Vertical")
+    FXRenderer.saveToImage(plot, 1200, 700, new File("sample.png"))
+  }
 
   
   Future {
@@ -201,7 +209,8 @@ object PlotTesting extends JFXApp {
 //    barChart()
 //    histogram()
 //    histogram2()
-    histogramGrid()
+//    histogramGrid()
 //    longForm()
+    saveToFile()
   }
 }

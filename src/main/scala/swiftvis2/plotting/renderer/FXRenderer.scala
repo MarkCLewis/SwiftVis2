@@ -26,6 +26,8 @@ import scalafx.application.Platform
 import scalafx.application.JFXApp
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import java.io.File
+import java.awt.image.BufferedImage
 
 object FXRenderer {
   def shellStart(args: Array[String] = Array()): Future[JFXApp] = {
@@ -82,6 +84,76 @@ object FXRenderer {
       stage.showing = true
     }
     renderer
+  }
+
+  // TODO - Quick fix for 3D issue on Pandoras
+  def aliased(plot: Plot, pwidth: Double = 1000, pheight: Double = 1000): FXRenderer = {
+    val canvas = new Canvas(pwidth, pheight)
+    val gc = canvas.graphicsContext2D
+    val renderer = new FXRenderer(gc)
+    Platform.runLater {
+      val stage = new Stage(StageStyle.Decorated)
+      stage.title = "Plotting Test"
+      stage.scene = new Scene(pwidth, pheight + 30) {
+        val border = new BorderPane
+        val menuBar = new MenuBar
+        val menu = new Menu("File")
+        val menuItem = new MenuItem("Save Image")
+        menu.items = Seq(menuItem)
+        menuBar.menus = Seq(menu)
+        border.top = menuBar
+        val pane = new Pane
+        pane.children = canvas
+        border.center = pane
+        root = border
+
+        menuItem.onAction = (ae: ActionEvent) => {
+          val img = canvas.snapshot(null, null)
+          val chooser = new FileChooser()
+          val file = chooser.showSaveDialog(stage)
+          if (file != null) ImageIO.write(SwingFXUtils.fromFXImage(img, null), "PNG", new FileOutputStream(file))
+        }
+
+        import swiftvis2.plotting
+
+        plot.render(renderer, Bounds(0, 0, pwidth, pheight))
+        pane.width.onChange {
+          if (pane.width() != canvas.width() && pane.width() > 1.0 && pane.height() > 1) {
+            canvas.width = pane.width()
+            plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
+          }
+        }
+        pane.height.onChange {
+          if (pane.height() != canvas.height() && pane.width() > 1 && pane.height() > 1.0) {
+            canvas.height = pane.height()
+            plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
+          }
+        }
+      }
+      stage.showing = true
+    }
+    renderer
+  }
+
+  /**
+   * Pops up a stage with a Canvas and renders the plot to it, then saves the resulting snapshot if applicable and closes the window.
+   */
+  def saveToImage(plot: Plot, pwidth: Double, pheight: Double, file: File): Unit = {
+    val canvas = new Canvas(pwidth, pheight)
+    val gc = canvas.graphicsContext2D
+    val renderer = new FXRenderer(gc)
+    Platform.runLater {
+      val stage = new Stage(StageStyle.Decorated)
+      stage.scene = new Scene(pwidth, pheight + 30, false, SceneAntialiasing.Balanced)
+      stage.scene().content = canvas
+      import swiftvis2.plotting
+      plot.render(renderer, Bounds(0, 0, pwidth, pheight))
+      stage.showing = true
+
+      val img = SwingFXUtils.fromFXImage(canvas.snapshot(null, null), null)
+      ImageIO.write(img, "PNG", new FileOutputStream(file))
+      stage.showing = false
+    }
   }
 }
 
