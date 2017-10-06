@@ -4,6 +4,9 @@ import swiftvis2.plotting.Bounds
 import swiftvis2.plotting.renderer.Renderer
 import swiftvis2.plotting.Axis
 
+/**
+ * This is the trait to be implemented by the various different styles of plots.
+ */
 trait PlotStyle {
   /**
    * This method will render the plot to the specified region using the provided renderer with the given axes and bounds for the axes.

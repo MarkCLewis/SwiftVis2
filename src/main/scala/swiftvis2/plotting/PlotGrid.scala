@@ -4,6 +4,20 @@ import swiftvis2.plotting.renderer.Renderer
 import swiftvis2.plotting.styles.PlotStyle
 import java.util.concurrent.ConcurrentHashMap
 
+/**
+ * This is the primary plotting element in SwiftVis2. It represents a grid of plots with axes that can surround the edges.
+ * Each region in the PlotGrid can hold multiple plots so the data for the plots is given by a Seq[Seq[Seq[Plot2D]]]. The
+ * first index is for the row, the second is the column, and the third is a stack of plots drawn at that location. The axes
+ * associated with plots are in the Plot2D type by name, which should match up with the Map[String, Axis] passed into this.
+ * 
+ * Each row and column can be a different size. The sizes are determined by the xWeights and yWeights arguments. Larger values
+ * get more space. The amount of space given to each row/column is determined by its contribution to the sum of the weights. If
+ * all the weights are the same, the rows/columns will be uniform in size.
+ * 
+ * The axisFrac argument tells what fraction of the plotting region should be given to the axes. The actual space given to the
+ * axes is this fraction times the smaller value of the width or height. Font sizes for axis labels are adjusted to fit whatever
+ * size is given here.
+ */
 case class PlotGrid(
     plots: Seq[Seq[Seq[Plot2D]]],
     axes: Map[String, Axis],
@@ -13,6 +27,11 @@ case class PlotGrid(
 
   // TODO - labels and listeners
 
+  /**
+   * Renders this grid to the specified Renderer inside of the specified bounds.
+   * @param r The renderer to draw the plot to.
+   * @param bounds The bounds the grid should be rendered to.
+   */
   def render(r: Renderer, bounds: Bounds): Unit = {
     val xSum = xWeights.sum
     val ySum = yWeights.sum
@@ -116,22 +135,22 @@ case class PlotGrid(
     }
   }
 
-  def collectXAxes(pred: Axis => Boolean): Seq[Seq[String]] = {
+  private def collectXAxes(pred: Axis => Boolean): Seq[Seq[String]] = {
     plots.foldLeft(Seq.fill(plots(0).size)(Seq.empty[String])) { (names, row) =>
       val toAdd = row.map(_.flatMap(p2d => axisNameAsListWithCondition(p2d.xAxisName, pred)))
       (names, toAdd).zipped.map((a, b) => (b ++: a))
     }
   }
 
-  def collectYAxes(pred: Axis => Boolean): Seq[Seq[String]] = {
+  private def collectYAxes(pred: Axis => Boolean): Seq[Seq[String]] = {
     plots.map(row => row.flatMap(_.flatMap(p2d => axisNameAsListWithCondition(p2d.yAxisName, pred))))
   }
 
-  def axisNameAsListWithCondition(axisName: String, pred: Axis => Boolean): Seq[String] = {
+  private def axisNameAsListWithCondition(axisName: String, pred: Axis => Boolean): Seq[String] = {
     if (axes.contains(axisName) && axes(axisName).isDrawn && pred(axes(axisName))) Seq(axisName) else Seq.empty[String]
   }
   
-  def extremeAxisFunction(hm: ConcurrentHashMap[Axis, Double], nameFunc: Plot2D => String, styleFunc: PlotStyle => Option[Double], combine: Seq[Double] => Double)(axis: Axis): Double = {
+  private def extremeAxisFunction(hm: ConcurrentHashMap[Axis, Double], nameFunc: Plot2D => String, styleFunc: PlotStyle => Option[Double], combine: Seq[Double] => Double)(axis: Axis): Double = {
     if(hm.contains(axis)) hm.get(axis) else {
       val extr = for {
         row <- plots
@@ -150,7 +169,13 @@ case class PlotGrid(
   }
 }
 
+/**
+ * Contains helper methods for building different types of grids with default properties.
+ */
 object PlotGrid {
+  /**
+   * This creates a 1x1 grid with the provided axis labels that has a stack of plot styles.
+   */
   def oneByOne(xLabel: String, yLabel: String, styles: PlotStyle*): PlotGrid = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both, 

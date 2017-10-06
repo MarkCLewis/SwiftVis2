@@ -2,6 +2,10 @@ package swiftvis2.plotting.renderer
 
 import swiftvis2.plotting.Bounds
 
+/**
+ * This is the interface that all renderers need to implement. It provides basic drawing methods that are used for
+ * all plotting. By going through this interface, SwiftVis2 can render plots in different ways using the same plotting code.
+ */
 trait Renderer {
   def drawEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit
   def drawRectangle(x: Double, y: Double, width: Double, height: Double): Unit
@@ -34,16 +38,32 @@ trait Renderer {
   def fillRectangleP(x1: Double, y1: Double, x2: Double, y2: Double): Unit = fillRectangle(x1 min x2, y1 min y2, (x1-x2).abs, (y1-y2).abs)
 }
 
+/**
+ * Holds enumerations and classes used for the rendering.
+ */
 object Renderer {
+  /**
+   * Options for horizontal alignment of text.
+   */
   object HorizontalAlign extends Enumeration {
     val Left, Center, Right = Value
   }
   
+  /**
+   * Styles for fonts.
+   */
   object FontStyle extends Enumeration {
     val Plain, Bold, Italic, Both = Value
   }
   
+  /**
+   * Information needed to set the font for a string. Note that this does not contain a size because font sizes
+   * are calculated to scale with the size allotted for different plot elements.
+   */
   case class FontData(font: String, style: FontStyle.Value)
   
+  /**
+   * Information needed to set the stroke style for lines.
+   */
   case class StrokeData(width: Double, dashing: Seq[Double])
 }

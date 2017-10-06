@@ -5,7 +5,20 @@ import swiftvis2.plotting.styles.ScatterStyle
 import swiftvis2.plotting.styles.BarStyle
 import swiftvis2.plotting.styles.HistogramStyle
 
+/**
+ * This class represents the full concept of a plot in SwiftVis2. It contains maps of the various
+ * types of elements that can go into plots with unique identifying names.
+ * 
+ * Note that both PlotTextData and PlotGridData include Bounds for where the elements should appear.
+ * This allows the user to place multiple plots with separate axes or multiple labels. Text is drawn
+ * after all plot grids so it will appear on top of them.
+ */
 case class Plot(texts: Map[String, Plot.PlotTextData], grids: Map[String, Plot.PlotGridData]) {
+  /**
+   * Draws this plot to a renderer scaled to the specified Bounds.
+   * @param r The Renderer to draw to.
+   * @param bounds The fractional bounding box in that Renderer to draw this plot to.
+   */
   def render(r: Renderer, bounds: Bounds) = {
     r.setColor(0xffffffff)
     r.fillRectangle(bounds)
@@ -20,7 +33,14 @@ case class Plot(texts: Map[String, Plot.PlotTextData], grids: Map[String, Plot.P
  * functions require some type of PlotSeries. Importing swiftvis2.plotting._ also brings is color ARGB declarations. 
  */
 object Plot {
+  /**
+   * Combines textual information with a fractional bounds for rendering.
+   */
   case class PlotTextData(text: PlotText, bounds: Bounds)
+  
+  /**
+   * Combines a plot grid with fractional bounds for rendering.
+   */
   case class PlotGridData(grid: PlotGrid, bounds: Bounds)
   
   /**
