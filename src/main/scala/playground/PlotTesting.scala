@@ -16,53 +16,48 @@ object PlotTesting extends JFXApp {
   /**
    * Short form, single data examples
    */
-  def scatter1(): Unit = {
+  def scatter1(): Plot = {
     val xPnt = 1 to 10
     val yPnt = xPnt.map(a => a * a)
-    val plot = Plot.scatterPlot(xPnt, yPnt, "Quadratic", "x", "y")
-    FXRenderer(plot)
+    Plot.scatterPlot(xPnt, yPnt, "Quadratic", "x", "y")
   }
 
   /**
    * Basic scatter plot with a large number of random points.
    */
-  def scatter2(): Unit = {
-    val plot = Plot.scatterPlot((1 to 1000).map(_ => math.random * math.random), (1 to 1000).map(_ => math.random * math.random),
+  def scatter2(): Plot = {
+    Plot.scatterPlot((1 to 1000).map(_ => math.random * math.random), (1 to 1000).map(_ => math.random * math.random),
       "Random Points", "Independent", "Dependent", 2)
-    FXRenderer(plot, 1500, 500)
   }
 
   /**
    * Scatter plots with points connected by lines.
    */
-  def scatterLines(): Unit = {
+  def scatterLines(): Plot = {
     val xPnt = 1 to 10
     val yPnt = xPnt.map(a => a * a)
-    val plot = Plot.scatterPlotWithLines(xPnt, yPnt, "Quadratic", "x", "y", lineGrouping = 1)
-    FXRenderer(plot)
+    Plot.scatterPlotWithLines(xPnt, yPnt, "Quadratic", "x", "y", lineGrouping = 1)
   }
   
   /**
    * Scatter plot with error bars on the points.
    */
-  def scatterWithErrorBars(): Unit = {
+  def scatterWithErrorBars(): Plot = {
     val xPnt = 1 to 10
     val yPnt = xPnt.map(a => a * a)
-    val plot = Plot.scatterPlotWithErrorBars(xPnt, yPnt, "Quadratic", "x", "y", 5, BlackARGB, xPnt.map(_ * 0.2), yPnt.map(_ * 0.3))
-    FXRenderer(plot)
+    Plot.scatterPlotWithErrorBars(xPnt, yPnt, "Quadratic", "x", "y", 5, BlackARGB, xPnt.map(_ * 0.2), yPnt.map(_ * 0.3))
   }
   
   /**
    * Short form, multiple data example
    */
-  def scatterMultidata(): Unit = {
-    val plot = Plot.scatterPlots(Seq(
+  def scatterMultidata(): Plot = {
+    Plot.scatterPlots(Seq(
       ((1 to 1000).map(_ => math.random * math.random), (1 to 1000).map(_ => math.random * math.random*0.5), RedARGB, 5),
       ((1 to 1000).map(_ => 1.0 - math.random * math.random), (1 to 1000).map(_ => 1.0 - math.random * math.random*0.5), GreenARGB, 5)), "Colored Points", "Horizontal", "Vertical")
-    FXRenderer(plot, 1200, 700)
   }
   
-  def scatterGrid(): Unit = {
+  def scatterGrid(): Plot = {
     val x1 = (1 to 1000).map(_ => math.random)
     val y1 = x1.map(_ * math.random)
     val x2 = 0.0 to 1.1 by 0.01
@@ -74,65 +69,59 @@ object PlotTesting extends JFXApp {
     val y4 = x4.map(x => 0.01/x)
     val cg = ColorGradient(0.0 -> BlackARGB, 0.5 -> RedARGB, 1.0 -> WhiteARGB)
     
-    val plot = Plot.scatterPlotGrid(
+    Plot.scatterPlotGrid(
         Seq(Seq((x1, y1, BlackARGB, 5), (x2, y2, BlueARGB, 5)),
             Seq((x3, y3, c3.map(cg), 10), (x4, y4, GreenARGB, 5))),
         "Plot Grid", "Shared X", "Shared Y")
-    FXRenderer(plot, 800, 800)
   }
 
   /**
    * Short form, function with color and size
    */
-  def scatterWithSizeandColor(): Unit = {
+  def scatterWithSizeandColor(): Plot = {
     val xs = 0.0 to 10.0 by 0.01
     val cg = ColorGradient((0.0, RedARGB), (5.0, GreenARGB), (10.0, BlueARGB))
-    val plot = Plot.scatterPlot(xs, xs.map(math.cos), "Cosine", "Theta", "Value", xs.map(x => math.sin(x) + 2), xs.map(cg))
-    FXRenderer(plot, 1500, 500)
+    Plot.scatterPlot(xs, xs.map(math.cos), "Cosine", "Theta", "Value", xs.map(x => math.sin(x) + 2), xs.map(cg))
   }
 
   /**
    * Short form bar plot
    */
-  def barChart(): Unit = {
-    val plot = Plot.barPlot(Seq("red", "green", "blue"), Seq(Seq(3.0, 7.0, 4.0) -> YellowARGB, Seq(2.0, 1.0, 3.0) -> MagentaARGB), true, 0.8, "Bar Plot", "Colors", "Measure")
-    FXRenderer(plot, 500, 300)
+  def barChart(): Plot = {
+    Plot.barPlot(Seq("red", "green", "blue"), Seq(Seq(3.0, 7.0, 4.0) -> YellowARGB, Seq(2.0, 1.0, 3.0) -> MagentaARGB), true, 0.8, "Bar Plot", "Colors", "Measure")
   }
 
   /**
    * Short form histogram plot
    */
-  def histogram(): Unit = {
+  def histogram(): Plot = {
     val bins = 0.0 to 10.0 by 1.0
-    val plot = Plot.histogramPlot(bins, bins.map(12 - _).init, BlueARGB, false, "Histogram Plot", "Value", "Count")
-    FXRenderer(plot, 500, 300)
+    Plot.histogramPlot(bins, bins.map(12 - _).init, BlueARGB, false, "Histogram Plot", "Value", "Count")
   }
 
   /**
    * Short form histogram plot
    */
-  def histogram2(): Unit = {
+  def histogram2(): Plot = {
     val bins = 1.0 to 10.1 by 1.0
-    val plot = Plot.stackedHistogramPlot(bins, Seq(bins.map(12 - _) -> BlueARGB, bins.map(x => 5*(math.cos(x)+2)) -> 0xffff0000), true, "Histogram Plot", "Value", "Count")
-    FXRenderer(plot, 500, 300)
+    Plot.stackedHistogramPlot(bins, Seq(bins.map(12 - _) -> BlueARGB, bins.map(x => 5*(math.cos(x)+2)) -> 0xffff0000), true, "Histogram Plot", "Value", "Count")
   }
 
   /**
    * Short form grid of histogram plots
    */
-  def histogramGrid(): Unit = {
+  def histogramGrid(): Plot = {
     val bins = 0.0 to 10.0 by 1.0
-    val plot = Plot.histogramGrid(bins, Seq(
+    Plot.histogramGrid(bins, Seq(
         Seq((bins.map(12 - _).init:PlotDoubleSeries) -> RedARGB, (bins.map(1 + _).init:PlotDoubleSeries) -> GreenARGB),
         Seq((bins.map(c => c*c/6).tail:PlotDoubleSeries) -> BlueARGB, (bins.map(c => 10*math.random).init:PlotDoubleSeries) -> CyanARGB)), 
         false, false, "Histogram Grid", "Values", "Counts")
-    FXRenderer(plot, 1000, 600)
   }
 
   /**
    * Long form - this example shows the general capabilities of the plot grid and adding multiple plots 
    */
-  def longForm(): Unit = {
+  def longForm(): Plot = {
     val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val xAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, "%1.1f")), Some("X1" -> font))
     val xAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, "%1.1f")), Some("X2" -> font))
@@ -186,8 +175,7 @@ object PlotTesting extends JFXApp {
         Map("x1" -> xAxis1, "x2" -> xAxis2, "xcat" -> xAxisCat, "y1" -> yAxis1, "y2" -> yAxis2, "y3" -> yAxis3),
         Seq(0.7, 0.3), Seq(0.3, 0.7), 0.1)
     
-    val plot = Plot(Map("title" -> Plot.PlotTextData(title, Bounds(0, 0, 1.0, 0.1))), Map("grid1" -> Plot.PlotGridData(grid1, Bounds(0, 0.1, 1.0, 0.9))))
-    FXRenderer(plot, 1200, 800)
+    Plot(Map("title" -> Plot.PlotTextData(title, Bounds(0, 0, 1.0, 0.1))), Map("grid1" -> Plot.PlotGridData(grid1, Bounds(0, 0.1, 1.0, 0.9))))
   }
   
   def saveToFile(): Unit = {
@@ -210,7 +198,8 @@ object PlotTesting extends JFXApp {
 //    histogram()
 //    histogram2()
 //    histogramGrid()
-//    longForm()
-    saveToFile()
+    SVGRenderer(longForm(), "plot.svg", 1200, 1000)
+    FXRenderer(longForm(), 1200, 1000)
+//    saveToFile()
   }
 }
