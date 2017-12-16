@@ -15,6 +15,8 @@ import scalafx.scene.SceneAntialiasing
 import scalafx.scene.layout.BorderPane
 import scalafx.scene.control.MenuBar
 import scalafx.scene.control.Menu
+import scalafx.scene.control.Dialog
+import scalafx.scene.control.ChoiceDialog
 import scalafx.scene.layout.Pane
 import scalafx.scene.control.MenuItem
 import scalafx.event.ActionEvent
@@ -50,7 +52,8 @@ object FXRenderer {
         val menuBar = new MenuBar
         val menu = new Menu("File")
         val menuItem = new MenuItem("Save Image")
-        menu.items = Seq(menuItem)
+        val svgMenuItem = new MenuItem("Save as SVG")
+        menu.items = Seq(menuItem,svgMenuItem)
         menuBar.menus = Seq(menu)
         border.top = menuBar
         val pane = new Pane
@@ -58,11 +61,29 @@ object FXRenderer {
         border.center = pane
         root = border
 
+        val choices = Seq("1000,1000", "1280,720", "1280,800", "1000,750")
+        val svgDialog = new ChoiceDialog(defaultChoice = "1000x1000", choices = choices) {
+          title = "SVG Size"
+          headerText = "Select prefered width and height for the SVG"
+          contentText = "Choose your resolution:"
+        }
+
         menuItem.onAction = (ae: ActionEvent) => {
           val img = canvas.snapshot(null, null)
           val chooser = new FileChooser()
           val file = chooser.showSaveDialog(stage)
           if (file != null) ImageIO.write(SwingFXUtils.fromFXImage(img, null), "PNG", new FileOutputStream(file))
+        }
+
+        svgMenuItem.onAction = (ae: ActionEvent) => {
+          val chooser = new FileChooser()
+          val file = chooser.showSaveDialog(stage)
+          if(file != null) {}
+          val result = svgDialog.showAndWait()
+          result match {
+            case Some(choice) => SVGRenderer(plot,file.getPath(),choice.split(",")(0).toDouble,choice.split(",")(1).toDouble)
+            case None       => println("Save as SVG cancelled")
+          }
         }
 
         import swiftvis2.plotting
