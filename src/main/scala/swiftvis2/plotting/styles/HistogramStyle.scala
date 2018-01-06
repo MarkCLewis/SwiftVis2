@@ -21,7 +21,7 @@ case class HistogramStyle(
     val yNAxis = yAxis.asInstanceOf[NumericAxis]
     val (start, end) = calcStartEnd()
     
-    require(end - start > 1)
+    require(end - start > 1, s"Empty data sent to histogram. start = $start, end = $end")
 
     val (xConv, xtfs, xnfs, xRender) = xNAxis.renderInfo(bounds.x, bounds.x + bounds.width,
       xminFunc(xNAxis), xmaxFunc(xNAxis), Axis.RenderOrientation.XAxis, r, axisBounds)

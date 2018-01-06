@@ -30,7 +30,7 @@ below.
 ### Histogram
 
 The histogram style can be drawn with values stacked or not. It can also draw the bins either centered on the bin value or spanning the bin values.
-Note that the histogram method in Spark produces the latter option. This is significant as when you don't center, the bin data needs ot have one more
+Note that the histogram method in Spark produces the latter option. This is significant as when you don't center, the bin data needs to have one more
 element than the counts.
 
 ![histogram](histogram.png "Simple Histogram")
@@ -40,6 +40,14 @@ element than the counts.
 The bar chart utilizes a categorical axis. The bars can be drawn side-by-side or stacked.
 
 ![bar chart](bar.png "Simple Bar Chart")
+
+### Box Plots
+
+The box plot has a categorical X-axis and a numeric Y-axis. The user can provide whatever values desired for the data on the boxes, but a convenience
+method in the companion object calculates the quartiles and puts the min and max values no more than 1.5 IRQs above or below the quartiles, then draws
+outliers beyond those values. 
+
+![box plot](boxPlot.png "Simple Box Plot")
 
 ### Full Plotting Capabilities
 

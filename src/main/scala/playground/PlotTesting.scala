@@ -184,6 +184,17 @@ object PlotTesting extends JFXApp {
       ((1 to 10000).map(_ => 1.0 - math.random * math.random), (1 to 10000).map(_ => 1.0 - math.random * math.random*0.5), GreenARGB, 5)), "Colored Points", "Horizontal", "Vertical")
     FXRenderer.saveToImage(plot, 1200, 700, new File("sample.png"))
   }
+  
+  def colorTest(): Plot = {
+    val cg = ColorGradient(0.0 -> BlueARGB, 1.0 -> RedARGB, 2.0 -> GreenARGB)
+    Plot.scatterPlot(Seq(-1, 0, 1), Seq(-1, 0, 1), "Title", "x", "y", 10, Array(0.0, 1.0, 2.0).map(cg))
+  }
+  
+  def boxPlot(): Plot = {
+    val categories = Array("Random 1", "Random 2", "Random 3")
+    val data = categories.map(_ => Array.fill(1000)((math.random+0.5)*(math.random+0.5)))
+    Plot.boxPlot(categories, data, title = "Box Plot", yLabel = "Random values")
+  }
 
   
   Future {
@@ -194,12 +205,13 @@ object PlotTesting extends JFXApp {
 //    scatterWithErrorBars()
 //    scatterMultidata()
 //    scatterWithSizeandColor()
-//    barChart()
+//    FXRenderer(barChart(), 1200, 1000)
 //    histogram()
 //    histogram2()
 //    histogramGrid()
-    SVGRenderer(longForm(), "plot.svg", 1200, 1000)
-    FXRenderer(longForm(), 1200, 1000)
+//    SVGRenderer(longForm(), "plot.svg", 1200, 1000)
+    FXRenderer(boxPlot(), 1200, 1000)
+//    FXRenderer(colorTest(), 1200, 1000)
 //    saveToFile()
   }
 }

@@ -68,6 +68,7 @@ case class BarStyle(
     val (start, end) = calcStartEnd()
     Some(ydMin(start, end))
   }
+  
   def ydMin(start: Int, end: Int): Double = {
     if(stacked) {
       (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_._1(a)).sum)
@@ -80,6 +81,7 @@ case class BarStyle(
     val (start, end) = calcStartEnd()
     Some(ydMax(start, end))
   }
+  
   def ydMax(start: Int, end: Int): Double = {
     if(stacked) {
       (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_._1(a)).sum)

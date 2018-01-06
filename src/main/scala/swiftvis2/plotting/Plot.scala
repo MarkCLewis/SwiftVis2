@@ -4,6 +4,7 @@ import swiftvis2.plotting.renderer.Renderer
 import swiftvis2.plotting.styles.ScatterStyle
 import swiftvis2.plotting.styles.BarStyle
 import swiftvis2.plotting.styles.HistogramStyle
+import swiftvis2.plotting.styles.BoxPlotStyle
 
 /**
  * This class represents the full concept of a plot in SwiftVis2. It contains maps of the various
@@ -191,6 +192,7 @@ object Plot {
     Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
+  
   /**
    * Make a stacked histogram. If not centered on bins, the bins series should be one element longer than the values.
    */
@@ -210,6 +212,20 @@ object Plot {
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
   
-
+  /**
+   * Makes a box plot using the specified categories and corresponding data values. 
+   */
+  def boxPlot(categories: Array[String], plotData: Array[Array[Double]], barWidthFrac: Double = 0.8, symbol: PlotSymbol = Ellipse, symbolSize: Double = 5, 
+      color: Int = BlackARGB, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
+    val style = BoxPlotStyle(categories, plotData, barWidthFrac, symbol, symbolSize, color, Renderer.StrokeData(1.0, Nil))
+    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+    val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both, 
+        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+    val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
+    Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
+        Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+  }
 
 }

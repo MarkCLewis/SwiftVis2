@@ -41,16 +41,13 @@ class SVGRenderer(ps: PrintStream) extends Renderer {
     // TODO - dashing
   }
   def drawText(s: String, x: Double, y: Double, align: Renderer.HorizontalAlign.Value, angle: Double): Unit = {
-    val (dx, dy, anchor) = align match {
-      case Renderer.HorizontalAlign.Left => 
-        (0, fontSize/3, "start")
-      case Renderer.HorizontalAlign.Center => 
-        (0, fontSize/3, "middle")
-      case Renderer.HorizontalAlign.Right => 
-        (-0.06*s.length*fontSize, fontSize/3, "end")
+    val anchor = align match {
+      case Renderer.HorizontalAlign.Left => "start"
+      case Renderer.HorizontalAlign.Center => "middle"
+      case Renderer.HorizontalAlign.Right => "end"
     }
 
-    ps.println(s"""<text x="$dx" y="$dy" font-family="$fontFamily" font-size="${fontSize}px" text-anchor="$anchor" transform="translate($x, $y) rotate($angle)">$s</text>""")
+    ps.println(s"""<text x="0.0" y="${fontSize/3}" font-family="$fontFamily" font-size="${fontSize}px" text-anchor="$anchor" transform="translate($x, $y) rotate($angle)">$s</text>""")
   }
   
   def setColor(argb: Int): Unit = copt = copt.copy(color = {

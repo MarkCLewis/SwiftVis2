@@ -14,7 +14,7 @@ class ColorGradient private (colorValues: Seq[(Double, Int)]) extends (Double =>
         val (a2, r2, g2, b2) = (c2 >> 24, (c2 >> 16) & 0xff, (c2 >> 8) & 0xff, c2 & 0xff)
         val f2 = (x - x1) / (x2 - x1)
         val f1 = 1.0 - f2
-        ((a1*f1+a2*f2).toInt << 24) | ((r1*f1 + r2+f2).toInt << 16) | ((g1*f1 + g2*f2).toInt << 8) | (b1*f1 + b2*f2).toInt
+        ((a1*f1+a2*f2).toInt << 24) | ((r1*f1 + r2*f2).toInt << 16) | ((g1*f1 + g2*f2).toInt << 8) | (b1*f1 + b2*f2).toInt
       }.getOrElse(colorValues.last._2)
     }
   }
