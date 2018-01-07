@@ -196,6 +196,11 @@ object PlotTesting extends JFXApp {
     Plot.boxPlot(categories, data, title = "Box Plot", yLabel = "Random values")
   }
 
+  def violinPlot(): Plot = {
+    val categories = Array("Random 1", "Random 2", "Random 3")
+    val data = categories.map(_ => Array.fill(1000)((math.random+0.5)*(math.random+0.5)))
+    Plot.violinPlot(categories, data, title = "Violin Plot", yLabel = "Random values")
+  }
   
   Future {
 //    scatter1()
@@ -210,7 +215,8 @@ object PlotTesting extends JFXApp {
 //    histogram2()
 //    histogramGrid()
 //    SVGRenderer(longForm(), "plot.svg", 1200, 1000)
-    FXRenderer(boxPlot(), 1200, 1000)
+//    FXRenderer(boxPlot(), 1200, 1000)
+    FXRenderer(violinPlot(), 1200, 1000)
 //    FXRenderer(colorTest(), 1200, 1000)
 //    saveToFile()
   }

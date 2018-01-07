@@ -49,6 +49,13 @@ outliers beyond those values.
 
 ![box plot](boxPlot.png "Simple Box Plot")
 
+### Violin Plots
+
+The violin plot has a categorical X-axis and a numeric Y-axis. The user provides the data and an option bandwith. The density function is approximated
+using normal kernels and lines are drawn for the quartiles.
+
+![violin plot](violinPlot.png "Simple Violin Plot")
+
 ### Full Plotting Capabilities
 
 All the plots above were made using facade methods that provide a shortcut syntax. However, you can also construct your own plot grids with whatever

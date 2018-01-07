@@ -12,7 +12,7 @@ import swiftvis2.plotting.PlotSymbol
 /**
  * This holds the data for rendering a box for a single category.
  */
-case class BoxPlotData(category: String, min: Double, firstQuartile: Double, median: Double, thirdQuartile: Double, max: Double, outliers: Array[Double])
+final case class BoxPlotData(category: String, min: Double, firstQuartile: Double, median: Double, thirdQuartile: Double, max: Double, outliers: Array[Double])
 
 /**
  * This is the style for drawing a box plot.
