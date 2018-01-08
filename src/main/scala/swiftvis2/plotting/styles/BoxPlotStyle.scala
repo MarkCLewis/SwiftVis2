@@ -12,14 +12,14 @@ import swiftvis2.plotting.PlotSymbol
 /**
  * This holds the data for rendering a box for a single category.
  */
-final case class BoxPlotData(category: String, min: Double, firstQuartile: Double, median: Double, thirdQuartile: Double, max: Double, outliers: Array[Double])
+final case class BoxPlotData(category: String, min: Double, firstQuartile: Double, median: Double, thirdQuartile: Double, max: Double, outliers: IndexedSeq[Double])
 
 /**
  * This is the style for drawing a box plot.
  */
-case class BoxPlotStyle(
+final case class BoxPlotStyle(
   boxData:      Seq[BoxPlotData],
-  barWidthFrac: Double,
+  boxWidthFrac: Double,
   symbol:       PlotSymbol,
   symbolSize:   Double,
   color:        Int,
@@ -47,8 +47,8 @@ case class BoxPlotStyle(
     r.setStroke(stroke)
     for (i <- start until end) {
       val (scatx, ecatx) = catConv(categories(i))
-      val sx = scatx + (1.0 - barWidthFrac) / 2 * (ecatx - scatx)
-      val ex = ecatx - (1.0 - barWidthFrac) / 2 * (ecatx - scatx)
+      val sx = scatx + (1.0 - boxWidthFrac) / 2 * (ecatx - scatx)
+      val ex = ecatx - (1.0 - boxWidthFrac) / 2 * (ecatx - scatx)
       val zeroy = yConv(0.0)
       val bd = boxData(i)
       val ymin = yConv(bd.min)
@@ -81,10 +81,10 @@ case class BoxPlotStyle(
 }
 
 object BoxPlotStyle {
-  def apply(categories: Array[String], plotData: Array[Array[Double]], barWidthFrac: Double, symbol: PlotSymbol, symbolSize: Double,
+  def apply(categories: Array[String], plotData: Array[PlotDoubleSeries], boxWidthFrac: Double, symbol: PlotSymbol, symbolSize: Double,
             color: Int, stroke: Renderer.StrokeData): BoxPlotStyle = {
     val boxData = for ((cat, data) <- categories zip plotData) yield {
-      val d = data.sorted
+      val d = (data.minIndex until data.maxIndex).map(data).sorted
       val median = if (d.length % 2 == 1) d(d.length / 2) else 0.5 * (d(d.length / 2) + d(d.length / 2 - 1))
       val firstQuartile = d(d.length / 4)
       val thirdQuartile = d(3 * d.length / 4)
@@ -94,6 +94,6 @@ object BoxPlotStyle {
       val outliers = d.filter(x => x < min || x > max)
       BoxPlotData(cat, min, firstQuartile, median, thirdQuartile, max, outliers)
     }
-    new BoxPlotStyle(boxData, barWidthFrac, symbol, symbolSize, color, stroke)
+    new BoxPlotStyle(boxData, boxWidthFrac, symbol, symbolSize, color, stroke)
   }
 }

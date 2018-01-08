@@ -10,7 +10,12 @@ import swiftvis2.plotting.PlotStringSeries
 import swiftvis2.plotting.PlotDoubleSeries
 import swiftvis2.plotting.PlotIntSeries
 
-case class HistogramStyle(
+// TODO : Add the ability to swap axes. This will allow a histogram that is comparable to a box plot or a violin plot
+
+/**
+ * This style will draw out a histogram.
+ */
+final case class HistogramStyle(
     binValues: PlotDoubleSeries,
     valSourceColor: Seq[(PlotDoubleSeries, Int)], centerOnBins: Boolean = false) extends PlotStyle {
 

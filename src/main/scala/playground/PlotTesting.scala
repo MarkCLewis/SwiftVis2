@@ -192,31 +192,31 @@ object PlotTesting extends JFXApp {
   
   def boxPlot(): Plot = {
     val categories = Array("Random 1", "Random 2", "Random 3")
-    val data = categories.map(_ => Array.fill(1000)((math.random+0.5)*(math.random+0.5)))
+    val data = categories.map(_ => Array.fill(1000)((math.random+0.5)*(math.random+0.5)): PlotDoubleSeries)
     Plot.boxPlot(categories, data, title = "Box Plot", yLabel = "Random values")
   }
 
   def violinPlot(): Plot = {
     val categories = Array("Random 1", "Random 2", "Random 3")
-    val data = categories.map(_ => Array.fill(1000)((math.random+0.5)*(math.random+0.5)))
+    val data = categories.map(_ => Array.fill(1000)((math.random+0.5)*(math.random+0.5)): PlotDoubleSeries)
     Plot.violinPlot(categories, data, title = "Violin Plot", yLabel = "Random values")
   }
   
   Future {
-//    scatter1()
-//    scatter2()
-//    scatterLines()
-//    scatterGrid()
-//    scatterWithErrorBars()
-//    scatterMultidata()
-//    scatterWithSizeandColor()
+//    FXRenderer(scatter1(), 800, 800)
+//    FXRenderer(scatter2(), 800, 800)
+//    FXRenderer(scatterLines(), 800, 800)
+//    FXRenderer(scatterGrid(), 800, 800)
+//    FXRenderer(scatterWithErrorBars(), 800, 800)
+//    FXRenderer(scatterMultidata(), 800, 800)
+//    FXRenderer(scatterWithSizeandColor(), 800, 800)
 //    FXRenderer(barChart(), 1200, 1000)
 //    histogram()
 //    histogram2()
 //    histogramGrid()
 //    SVGRenderer(longForm(), "plot.svg", 1200, 1000)
-//    FXRenderer(boxPlot(), 1200, 1000)
-    FXRenderer(violinPlot(), 1200, 1000)
+//    FXRenderer(boxPlot(), 600, 600)
+//    FXRenderer(violinPlot(), 600, 600)
 //    FXRenderer(colorTest(), 1200, 1000)
 //    saveToFile()
   }

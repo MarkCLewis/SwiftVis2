@@ -6,6 +6,7 @@ import swiftvis2.plotting.CategoryAxis
 import swiftvis2.plotting.Axis
 import swiftvis2.plotting.Bounds
 import swiftvis2.plotting.renderer.Renderer
+import swiftvis2.plotting.PlotDoubleSeries
 
 sealed trait DensityTreeNode {
   def density(x: Double, bandwidth: Double): Double
@@ -20,7 +21,7 @@ final case class InternalDTN(min: Double, max: Double, mean: Double, cnt: Int, l
     }
   }
 }
-final case class LeafDTN(values: Array[Double], mean: Double) extends DensityTreeNode {
+final case class LeafDTN(values: IndexedSeq[Double], mean: Double) extends DensityTreeNode {
   def density(x: Double, bandwidth: Double): Double = {
     if (values.last - values.head < bandwidth / 4) {
       val dx = mean - x
@@ -42,7 +43,7 @@ final case class ViolinPlotData(category: String, min: Double, firstQuartile: Do
 /**
  * A plot style of drawing violin plots.
  */
-class ViolinPlotStyle private (
+final case class ViolinPlotStyle private (
   violinData:   Seq[ViolinPlotData],
   maxWidthFrac: Double,
   color:        Int,
@@ -104,11 +105,11 @@ class ViolinPlotStyle private (
 }
 
 object ViolinPlotStyle {
-  def apply(categories: Array[String], plotData: Array[Array[Double]], maxWidthFrac: Double,
+  def apply(categories: Array[String], plotData: Array[PlotDoubleSeries], maxWidthFrac: Double,
             color: Int, stroke: Renderer.StrokeData, bandwidth: Option[Double]): ViolinPlotStyle = {
     var maxDensity = 0.0
     val violinData = for ((cat, data) <- categories zip plotData) yield {
-      val d = data.sorted
+      val d = (data.minIndex until data.maxIndex).map(data).sorted
       val min = d.head
       val max = d.last
       val median = if (d.length % 2 == 1) d(d.length / 2) else 0.5 * (d(d.length / 2) + d(d.length / 2 - 1))
@@ -130,7 +131,7 @@ object ViolinPlotStyle {
     new ViolinPlotStyle(violinData, maxWidthFrac, color, stroke, maxDensity)
   }
 
-  private def buildTree(xs: Array[Double], bandwidth: Double, start: Int, end: Int): DensityTreeNode = {
+  private def buildTree(xs: IndexedSeq[Double], bandwidth: Double, start: Int, end: Int): DensityTreeNode = {
     if (end - start < 3 || xs(end - 1) - xs(start) < bandwidth / 4) {
       val d = xs.slice(start, end)
       LeafDTN(d, d.sum / d.length)

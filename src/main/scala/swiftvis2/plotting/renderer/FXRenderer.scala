@@ -45,64 +45,68 @@ object FXRenderer {
     val gc = canvas.graphicsContext2D
     val renderer = new FXRenderer(gc)
     Platform.runLater {
-      val stage = new Stage(StageStyle.Decorated)
-      stage.title = "Plotting Test"
-      stage.scene = new Scene(pwidth, pheight + 30, false, SceneAntialiasing.Balanced) {
-        val border = new BorderPane
-        val menuBar = new MenuBar
-        val menu = new Menu("File")
-        val menuItem = new MenuItem("Save Image")
-        val svgMenuItem = new MenuItem("Save as SVG")
-        menu.items = Seq(menuItem,svgMenuItem)
-        menuBar.menus = Seq(menu)
-        border.top = menuBar
-        val pane = new Pane
-        pane.children = canvas
-        border.center = pane
-        root = border
+      try {
+        val stage = new Stage(StageStyle.Decorated)
+        stage.title = "Plotting Test"
+        stage.scene = new Scene(pwidth, pheight + 30, false, SceneAntialiasing.Balanced) {
+          val border = new BorderPane
+          val menuBar = new MenuBar
+          val menu = new Menu("File")
+          val menuItem = new MenuItem("Save Image")
+          val svgMenuItem = new MenuItem("Save as SVG")
+          menu.items = Seq(menuItem, svgMenuItem)
+          menuBar.menus = Seq(menu)
+          border.top = menuBar
+          val pane = new Pane
+          pane.children = canvas
+          border.center = pane
+          root = border
 
-        val choices = Seq("1000,1000", "1280,720", "1280,800", "1000,750")
-        val svgDialog = new ChoiceDialog(defaultChoice = "1000x1000", choices = choices) {
-          title = "SVG Size"
-          headerText = "Select prefered width and height for the SVG"
-          contentText = "Choose your resolution:"
-        }
+          val choices = Seq("1000,1000", "1280,720", "1280,800", "1000,750")
+          val svgDialog = new ChoiceDialog(defaultChoice = "1000x1000", choices = choices) {
+            title = "SVG Size"
+            headerText = "Select prefered width and height for the SVG"
+            contentText = "Choose your resolution:"
+          }
 
-        menuItem.onAction = (ae: ActionEvent) => {
-          val img = canvas.snapshot(null, null)
-          val chooser = new FileChooser()
-          val file = chooser.showSaveDialog(stage)
-          if (file != null) ImageIO.write(SwingFXUtils.fromFXImage(img, null), "PNG", new FileOutputStream(file))
-        }
+          menuItem.onAction = (ae: ActionEvent) => {
+            val img = canvas.snapshot(null, null)
+            val chooser = new FileChooser()
+            val file = chooser.showSaveDialog(stage)
+            if (file != null) ImageIO.write(SwingFXUtils.fromFXImage(img, null), "PNG", new FileOutputStream(file))
+          }
 
-        svgMenuItem.onAction = (ae: ActionEvent) => {
-          val chooser = new FileChooser()
-          val file = chooser.showSaveDialog(stage)
-          if(file != null) {}
-          val result = svgDialog.showAndWait()
-          result match {
-            case Some(choice) => SVGRenderer(plot,file.getPath(),choice.split(",")(0).toDouble,choice.split(",")(1).toDouble)
-            case None       => println("Save as SVG cancelled")
+          svgMenuItem.onAction = (ae: ActionEvent) => {
+            val chooser = new FileChooser()
+            val file = chooser.showSaveDialog(stage)
+            if (file != null) {}
+            val result = svgDialog.showAndWait()
+            result match {
+              case Some(choice) => SVGRenderer(plot, file.getPath(), choice.split(",")(0).toDouble, choice.split(",")(1).toDouble)
+              case None => println("Save as SVG cancelled")
+            }
+          }
+
+          import swiftvis2.plotting
+
+          plot.render(renderer, Bounds(0, 0, pwidth, pheight))
+          pane.width.onChange {
+            if (pane.width() != canvas.width() && pane.width() > 1.0 && pane.height() > 1) {
+              canvas.width = pane.width()
+              plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
+            }
+          }
+          pane.height.onChange {
+            if (pane.height() != canvas.height() && pane.width() > 1 && pane.height() > 1.0) {
+              canvas.height = pane.height()
+              plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
+            }
           }
         }
-
-        import swiftvis2.plotting
-
-        plot.render(renderer, Bounds(0, 0, pwidth, pheight))
-        pane.width.onChange {
-          if (pane.width() != canvas.width() && pane.width() > 1.0 && pane.height() > 1) {
-            canvas.width = pane.width()
-            plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
-          }
-        }
-        pane.height.onChange {
-          if (pane.height() != canvas.height() && pane.width() > 1 && pane.height() > 1.0) {
-            canvas.height = pane.height()
-            plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
-          }
-        }
+        stage.showing = true
+      } catch {
+        case ex: Exception => ex.printStackTrace
       }
-      stage.showing = true
     }
     renderer
   }

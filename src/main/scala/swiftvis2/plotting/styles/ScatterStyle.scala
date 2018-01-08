@@ -3,7 +3,12 @@ package swiftvis2.plotting.styles
 import swiftvis2.plotting._
 import swiftvis2.plotting.renderer.Renderer
 
-case class ScatterStyle(
+/**
+ * This class represents a highly functional scatter plot. The points can use different symbols that are scaled/sized in different ways
+ * in both the X and Y direction. Each point can have a different color associated with it. They can also be connected with lines and
+ * have error bars on them.
+ */
+final case class ScatterStyle(
     xSource: PlotDoubleSeries,
     ySource: PlotDoubleSeries,
     symbol: PlotSymbol,
