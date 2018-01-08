@@ -176,12 +176,12 @@ object PlotGrid {
   /**
    * This creates a 1x1 grid with the provided axis labels that has a stack of plot styles.
    */
-  def oneByOne(xLabel: String, yLabel: String, styles: PlotStyle*): PlotGrid = {
+  def oneByOne(xLabel: String, xType: Axis.ScaleStyle.Value, yLabel: String, yType: Axis.ScaleStyle.Value, styles: PlotStyle*): PlotGrid = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both, 
-        Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+        Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xLabel -> font), Axis.DisplaySide.Min, xType)
     val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both, 
-        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, yType)
     PlotGrid(Seq(Seq(styles.map(s => Plot2D(s, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
   }
 }

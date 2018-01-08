@@ -59,12 +59,13 @@ object Plot {
    * @param xSizing The style of sizing for the symbols in the x direction.
    * @param ySizing The style of sizing for the symbols in the y direction.
    */
-  def scatterPlot(x: PlotDoubleSeries, y: PlotDoubleSeries, title: String = "", xLabel: String = "", yLabel: String = "", 
+  def scatterPlot(x: PlotDoubleSeries, y: PlotDoubleSeries, title: String = "", 
+      xLabel: String = "", xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yLabel: String = "", yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, 
       symbolSize: PlotDoubleSeries = 10, symbolColor: PlotIntSeries = BlackARGB, 
       xSizing: PlotSymbol.Sizing.Value = PlotSymbol.Sizing.Pixels, ySizing: PlotSymbol.Sizing.Value = PlotSymbol.Sizing.Pixels): Plot = {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
     val style = ScatterStyle(x, y, Ellipse, symbolSize, symbolSize, xSizing, ySizing, symbolColor, None)
-    val grid = PlotGrid.oneByOne(xLabel, yLabel, style)
+    val grid = PlotGrid.oneByOne(xLabel, xType, yLabel, yType, style)
     Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
@@ -83,13 +84,14 @@ object Plot {
    * @param lineGrouping This series tells what subsets to connect the values to.
    * @param lineStyle The style of lines to connect the points with.
    */
-  def scatterPlotWithLines(x: PlotDoubleSeries, y: PlotDoubleSeries, title: String = "", xLabel: String = "", yLabel: String = "", 
+  def scatterPlotWithLines(x: PlotDoubleSeries, y: PlotDoubleSeries, title: String = "", 
+      xLabel: String = "", xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yLabel: String = "", yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear,
       symbolSize: PlotDoubleSeries = 10, symbolColor: PlotIntSeries = BlackARGB, 
       lineGrouping: PlotSeries = 0, lineStyle: Renderer.StrokeData = Renderer.StrokeData(1, Nil)): Plot = {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
     val style = ScatterStyle(x, y, Ellipse, symbolSize, symbolSize, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, symbolColor, 
         Some(lineGrouping -> lineStyle))
-    val grid = PlotGrid.oneByOne(xLabel, yLabel, style)
+    val grid = PlotGrid.oneByOne(xLabel, xType, yLabel, yType, style)
     Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
@@ -106,12 +108,13 @@ object Plot {
    * @param xError The size of the error bars in the x direction.
    * @param yError The size of the error bars in the y direction.
    */
-  def scatterPlotWithErrorBars(x: PlotDoubleSeries, y: PlotDoubleSeries, title: String = "", xLabel: String = "", yLabel: String = "", 
+  def scatterPlotWithErrorBars(x: PlotDoubleSeries, y: PlotDoubleSeries, title: String = "", 
+      xLabel: String = "", xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yLabel: String = "", yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear,
       symbolSize: PlotDoubleSeries = 10, symbolColor: PlotIntSeries = BlackARGB, xError: PlotDoubleSeries, yError: PlotDoubleSeries): Plot = {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
     val style = ScatterStyle(x, y, Ellipse, symbolSize, symbolSize, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, symbolColor, 
         None, Some(xError), Some(yError))
-    val grid = PlotGrid.oneByOne(xLabel, yLabel, style)
+    val grid = PlotGrid.oneByOne(xLabel, xType, yLabel, yType, style)
     Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
@@ -123,8 +126,9 @@ object Plot {
    * @param xLabel The label drawn on the x-axis.
    * @param yLabel The label drawn on the y-axis. 
    */
-  def scatterPlots(pdata: Seq[(PlotDoubleSeries, PlotDoubleSeries, PlotIntSeries, PlotDoubleSeries)], title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
-    scatterPlotsFull(pdata.map(t => (t._1, t._2, t._3, t._4, None, None, None)), title, xLabel, yLabel)
+  def scatterPlots(pdata: Seq[(PlotDoubleSeries, PlotDoubleSeries, PlotIntSeries, PlotDoubleSeries)], title: String = "", 
+      xLabel: String = "", xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yLabel: String = "", yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
+    scatterPlotsFull(pdata.map(t => (t._1, t._2, t._3, t._4, None, None, None)), title, xLabel, xType, yLabel, yType)
   }
   
   /**
@@ -136,12 +140,12 @@ object Plot {
    * @param yLabel The label drawn on the y-axis. 
    */
   def scatterPlotsFull(pdata: Seq[(PlotDoubleSeries, PlotDoubleSeries, PlotIntSeries, PlotDoubleSeries, Option[(PlotSeries, Renderer.StrokeData)], Option[PlotDoubleSeries], Option[PlotDoubleSeries])], 
-      title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
+      title: String = "", xLabel: String = "", xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yLabel: String = "", yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
     val styles = for((x, y, argb, size, lines, xerr, yerr) <- pdata) yield {
       ScatterStyle(x, y, Ellipse, size, size, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, argb, lines, xerr, yerr)
     }
-    val grid = PlotGrid.oneByOne(xLabel, yLabel, styles:_*)
+    val grid = PlotGrid.oneByOne(xLabel, xType, yLabel, yType, styles:_*)
     Plot(Map("Title" -> PlotTextData(text, Bounds(0, 0, 1.0, 0.1))), 
         Map("Main" -> PlotGridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }

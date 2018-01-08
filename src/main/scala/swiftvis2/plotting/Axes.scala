@@ -40,23 +40,29 @@ class NumericAxis(
     (toPixels, tickSize, nameSize, (tfs, nfs) => render(r, tickBounds, tfs, nameBounds, nfs, orient, tickLocs, toPixels))
   }
 
-  private def toPixelFunc(pmin: Double, pmax: Double, amin: Double, amax: Double): Double => Double = {
+  def toPixelFunc(pmin: Double, pmax: Double, amin: Double, amax: Double): Double => Double = {
     style match {
       case Axis.ScaleStyle.Linear =>
-        x => pmin + (x - amin) * (pmax - pmin) / (amax - amin)
-      case Axis.ScaleStyle.Log => x =>
-        ???
+        val scale = (pmax - pmin) / (amax - amin)
+        x => pmin + (x - amin) * scale
+      case Axis.ScaleStyle.Log =>
+        val scale = (pmax - pmin) / (math.log10(amax / amin))
+        val logmin = math.log10(amin)
+        x => pmin + (math.log10(x) - logmin) * scale
     }
   }
 
-  private def fromPixelFunc(pmin: Double, pmax: Double, dataMin: => Double, dataMax: => Double): Double => Double = {
+  def fromPixelFunc(pmin: Double, pmax: Double, dataMin: => Double, dataMax: => Double): Double => Double = {
     val amin = min.getOrElse(dataMin)
     val amax = max.getOrElse(dataMax)
     style match {
       case Axis.ScaleStyle.Linear =>
-        p => amin + (p - pmin) * (amax - amin) / (pmax - pmin)
-      case Axis.ScaleStyle.Log => x =>
-        ???
+        val scale = (amax - amin) / (pmax - pmin)
+        p => amin + (p - pmin) * scale
+      case Axis.ScaleStyle.Log =>
+        val scale = (math.log10(amax / amin)) / (pmax - pmin)
+        val logmin = math.log10(amin)
+        p => math.pow(10, (p - pmin) * scale + logmin)
     }
   }
 
@@ -79,7 +85,7 @@ class NumericAxis(
   }
 
   private def render(r: Renderer, tickBounds: Bounds, tickFontSize: Double, nameBounds: Bounds, nameFontSize: Double,
-             orient: Axis.RenderOrientation.Value, tickLocs: Seq[Double], toPixels: Axis.UnitConverter): Unit = {
+                     orient: Axis.RenderOrientation.Value, tickLocs: Seq[Double], toPixels: Axis.UnitConverter): Unit = {
 
     // Draw name
     name.foreach { case (nameStr, fd) => Axis.drawName(nameStr, fd, nameFontSize, nameBounds, orient, r) }
@@ -128,7 +134,20 @@ class NumericAxis(
           val firstTick = firstTickApprox + (if ((amax - amin).abs < (amax - firstTickApprox).abs) majorSep else 0)
           firstTick to amax by majorSep
         case Axis.ScaleStyle.Log =>
-          ???
+          var pos = Math.pow(10, Math.floor(Math.log10(Math.min(amin, amax))))
+          var ret = List[Double]()
+          while (pos <= Math.max(amin, amax)) {
+            if (pos >= Math.min(amin, amax)) {
+              ret ::= pos
+            }
+            // Code for minor ticks in case they are added later.
+            //                for(int i=2; i<10; ++i) {
+            //                    if(pos*i>=Math.min(min.getValue(),max.getValue()) && pos*i<=Math.max(min.getValue(),max.getValue()))
+            //                        worker.handleMark(pos*i,null,true);
+            //                }
+            pos *= 10
+          }
+          ret.reverse
       }
     } else Seq.empty
   }
@@ -236,7 +255,7 @@ object CategoryAxis {
 }
 
 /**
- * Types, enumerations, and classes used for the axes. Also contains code shared by the different types of axes. 
+ * Types, enumerations, and classes used for the axes. Also contains code shared by the different types of axes.
  */
 object Axis {
   type UnitConverter = Double => Double
@@ -284,7 +303,7 @@ object Axis {
   }
 
   private[plotting] def calcBounds(bounds: Bounds, orient: Axis.RenderOrientation.Value, showLabels: Boolean,
-                 name: Option[(String, Renderer.FontData)], displaySide: Axis.DisplaySide.Value): (Bounds, Bounds) = {
+                                   name: Option[(String, Renderer.FontData)], displaySide: Axis.DisplaySide.Value): (Bounds, Bounds) = {
     val tickFrac = 0.7 * (if (showLabels) 1.0 else 0.0)
     val nameFrac = 0.3 * (if (name.nonEmpty) 1.0 else 0.0)
     val fracSum = tickFrac + nameFrac
@@ -318,7 +337,7 @@ object Axis {
   }
 
   private[plotting] def calcLabelFontSize(labels: Seq[String], angle: Double, font: Renderer.FontData, orient: Axis.RenderOrientation.Value,
-                        tickBounds: Bounds, r: Renderer): Double = {
+                                          tickBounds: Bounds, r: Renderer): Double = {
     val tickNum = labels.length max 1
     val labelWidth = Axis.RenderOrientation.axisWidth(orient, tickBounds, tickNum)
     val labelHeight = Axis.RenderOrientation.axisHeight(orient, tickBounds, tickNum)

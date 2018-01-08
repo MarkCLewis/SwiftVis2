@@ -19,7 +19,16 @@ object PlotTesting extends JFXApp {
   def scatter1(): Plot = {
     val xPnt = 1 to 10
     val yPnt = xPnt.map(a => a * a)
-    Plot.scatterPlot(xPnt, yPnt, "Quadratic", "x", "y")
+    Plot.scatterPlot(xPnt, yPnt, title = "Quadratic", xLabel = "x", yLabel = "y")
+  }
+
+  /**
+   * Short form, single data with two log axes
+   */
+  def scatterLogLog(): Plot = {
+    val xPnt = 1 to 100
+    val yPnt = xPnt.map(a => a * a)
+    Plot.scatterPlot(xPnt, yPnt, title = "Quadratic", xLabel = "x", xType = Axis.ScaleStyle.Log, yLabel = "y", yType = Axis.ScaleStyle.Log)
   }
 
   /**
@@ -27,7 +36,7 @@ object PlotTesting extends JFXApp {
    */
   def scatter2(): Plot = {
     Plot.scatterPlot((1 to 1000).map(_ => math.random * math.random), (1 to 1000).map(_ => math.random * math.random),
-      "Random Points", "Independent", "Dependent", 2)
+      title = "Random Points", xLabel = "Independent", yLabel = "Dependent", symbolSize = 2)
   }
 
   /**
@@ -36,7 +45,7 @@ object PlotTesting extends JFXApp {
   def scatterLines(): Plot = {
     val xPnt = 1 to 10
     val yPnt = xPnt.map(a => a * a)
-    Plot.scatterPlotWithLines(xPnt, yPnt, "Quadratic", "x", "y", lineGrouping = 1)
+    Plot.scatterPlotWithLines(xPnt, yPnt, title = "Quadratic", xLabel = "x", yLabel = "y", lineGrouping = 1)
   }
   
   /**
@@ -45,7 +54,8 @@ object PlotTesting extends JFXApp {
   def scatterWithErrorBars(): Plot = {
     val xPnt = 1 to 10
     val yPnt = xPnt.map(a => a * a)
-    Plot.scatterPlotWithErrorBars(xPnt, yPnt, "Quadratic", "x", "y", 5, BlackARGB, xPnt.map(_ * 0.2), yPnt.map(_ * 0.3))
+    Plot.scatterPlotWithErrorBars(xPnt, yPnt, title = "Quadratic", xLabel = "x", yLabel = "y", symbolSize = 5, symbolColor = BlackARGB, 
+        xError = xPnt.map(_ * 0.2), yError = yPnt.map(_ * 0.3))
   }
   
   /**
@@ -54,7 +64,8 @@ object PlotTesting extends JFXApp {
   def scatterMultidata(): Plot = {
     Plot.scatterPlots(Seq(
       ((1 to 1000).map(_ => math.random * math.random), (1 to 1000).map(_ => math.random * math.random*0.5), RedARGB, 5),
-      ((1 to 1000).map(_ => 1.0 - math.random * math.random), (1 to 1000).map(_ => 1.0 - math.random * math.random*0.5), GreenARGB, 5)), "Colored Points", "Horizontal", "Vertical")
+      ((1 to 1000).map(_ => 1.0 - math.random * math.random), (1 to 1000).map(_ => 1.0 - math.random * math.random*0.5), GreenARGB, 5)), 
+      title = "Colored Points", xLabel = "Horizontal", yLabel = "Vertical")
   }
   
   def scatterGrid(): Plot = {
@@ -81,7 +92,7 @@ object PlotTesting extends JFXApp {
   def scatterWithSizeandColor(): Plot = {
     val xs = 0.0 to 10.0 by 0.01
     val cg = ColorGradient((0.0, RedARGB), (5.0, GreenARGB), (10.0, BlueARGB))
-    Plot.scatterPlot(xs, xs.map(math.cos), "Cosine", "Theta", "Value", xs.map(x => math.sin(x) + 2), xs.map(cg))
+    Plot.scatterPlot(xs, xs.map(math.cos), title = "Cosine", xLabel = "Theta", yLabel = "Value", symbolSize = xs.map(x => math.sin(x) + 2), symbolColor = xs.map(cg))
   }
 
   /**
@@ -181,13 +192,14 @@ object PlotTesting extends JFXApp {
   def saveToFile(): Unit = {
     val plot = Plot.scatterPlots(Seq(
       ((1 to 10000).map(_ => math.random * math.random), (1 to 10000).map(_ => math.random * math.random*0.5), RedARGB, 5),
-      ((1 to 10000).map(_ => 1.0 - math.random * math.random), (1 to 10000).map(_ => 1.0 - math.random * math.random*0.5), GreenARGB, 5)), "Colored Points", "Horizontal", "Vertical")
+      ((1 to 10000).map(_ => 1.0 - math.random * math.random), (1 to 10000).map(_ => 1.0 - math.random * math.random*0.5), GreenARGB, 5)), 
+      title = "Colored Points", xLabel = "Horizontal", yLabel = "Vertical")
     FXRenderer.saveToImage(plot, 1200, 700, new File("sample.png"))
   }
   
   def colorTest(): Plot = {
     val cg = ColorGradient(0.0 -> BlueARGB, 1.0 -> RedARGB, 2.0 -> GreenARGB)
-    Plot.scatterPlot(Seq(-1, 0, 1), Seq(-1, 0, 1), "Title", "x", "y", 10, Array(0.0, 1.0, 2.0).map(cg))
+    Plot.scatterPlot(Seq(-1, 0, 1), Seq(-1, 0, 1), title = "Title", xLabel = "x", yLabel = "y", symbolSize = 10, symbolColor = Array(0.0, 1.0, 2.0).map(cg))
   }
   
   def boxPlot(): Plot = {
@@ -210,6 +222,7 @@ object PlotTesting extends JFXApp {
 //    FXRenderer(scatterWithErrorBars(), 800, 800)
 //    FXRenderer(scatterMultidata(), 800, 800)
 //    FXRenderer(scatterWithSizeandColor(), 800, 800)
+    FXRenderer(scatterLogLog(), 800, 800)
 //    FXRenderer(barChart(), 1200, 1000)
 //    histogram()
 //    histogram2()
