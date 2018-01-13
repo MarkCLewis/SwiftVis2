@@ -94,6 +94,19 @@ object PlotTesting extends JFXApp {
     val cg = ColorGradient((0.0, RedARGB), (5.0, GreenARGB), (10.0, BlueARGB))
     Plot.scatterPlot(xs, xs.map(math.cos), title = "Cosine", xLabel = "Theta", yLabel = "Value", symbolSize = xs.map(x => math.sin(x) + 2), symbolColor = xs.map(cg))
   }
+  
+  def fullScatter(): Plot = {
+    val x = 1.0 to 10.0 by 0.1
+    val y1 = x.map(_+math.random-0.5)
+    val y2 = x
+    val color = BlackARGB: PlotIntSeries
+    val size1 = 5: PlotDoubleSeries
+    val size2 = 0: PlotDoubleSeries
+    val stroke = Renderer.StrokeData(1, Nil)
+    val xerr = x.map(_ => 0.2*math.random)
+    val yerr = x.map(_ => 0.2*math.random)
+    Plot.scatterPlotsFull(Seq((x, y1, color, size1, None, Some(xerr), Some(yerr)), (x, y2, color, size2, Some((0: PlotIntSeries) -> stroke), None, None)))
+  }
 
   /**
    * Short form bar plot
@@ -109,7 +122,7 @@ object PlotTesting extends JFXApp {
     val bins = 0.0 to 10.0 by 1.0
     Plot.histogramPlot(bins, bins.map(12 - _).init, BlueARGB, false, "Histogram Plot", "Value", "Count")
   }
-
+  
   /**
    * Short form histogram plot
    */
@@ -222,7 +235,8 @@ object PlotTesting extends JFXApp {
 //    FXRenderer(scatterWithErrorBars(), 800, 800)
 //    FXRenderer(scatterMultidata(), 800, 800)
 //    FXRenderer(scatterWithSizeandColor(), 800, 800)
-    FXRenderer(scatterLogLog(), 800, 800)
+//    FXRenderer(scatterLogLog(), 800, 800)
+    FXRenderer(fullScatter(), 800, 800)
 //    FXRenderer(barChart(), 1200, 1000)
 //    histogram()
 //    histogram2()

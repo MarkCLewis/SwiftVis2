@@ -45,6 +45,11 @@ object Plot {
    */
   case class PlotGridData(grid: PlotGrid, bounds: Bounds)
   
+  // TODO - Put in plot info. These are classes that will replace the use of tuples in these helper methods. The fact that they specify
+  // types and have named parameters will make the methods that plot multiple things much easier to use as implicit conversions will be
+  // done automatically. Need to consider how to do this to allow different styles of plots in the same space. The challenge is the
+  // different axis types.
+  
   /**
    * Make a basic scatter plot with a single set of data. The different series are treated as parallel arrays. So the ith index
    * in each one matches up. Implicit conversions will allow you to use constants for values such as size and color. You should not

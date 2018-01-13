@@ -13,6 +13,14 @@ package object plotting {
   val CyanARGB = 0xff00ffff
   val MagentaARGB = 0xffff00ff
   
+  def ARGB(a: Double, r: Double, g: Double, b: Double): Int = {
+    val ai = (a*255).toInt max 0 min 255
+    val ri = (r*255).toInt max 0 min 255
+    val gi = (g*255).toInt max 0 min 255
+    val bi = (b*255).toInt max 0 min 255
+    ai << 24 | ri << 16 | gi << 8 | bi
+  }
+  
   implicit class SeqToDoubleSeries(data: Seq[Double]) extends PlotDoubleSeries {
     def minIndex: Int = 0
     def maxIndex: Int = data.size
@@ -56,6 +64,12 @@ package object plotting {
   }
 
   implicit class SeqToStringSeries(data: Seq[String]) extends PlotStringSeries {
+    def minIndex: Int = 0
+    def maxIndex: Int = data.size
+    def apply(i: Int) = data(i)
+  }
+  
+  implicit class ArrayToStringSeries(data: Array[String]) extends PlotStringSeries {
     def minIndex: Int = 0
     def maxIndex: Int = data.size
     def apply(i: Int) = data(i)
