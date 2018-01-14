@@ -11,15 +11,15 @@ import swiftvis2.plotting.renderer.Renderer
 final case class ScatterStyle(
     xSource: PlotDoubleSeries,
     ySource: PlotDoubleSeries,
-    symbol: PlotSymbol,
-    symbolWidth: PlotDoubleSeries,
-    symbolHeight: PlotDoubleSeries,
-    xSizing: PlotSymbol.Sizing.Value,
-    ySizing: PlotSymbol.Sizing.Value,
-    colorFunction: PlotIntSeries,
+    symbol: PlotSymbol = Ellipse,
+    symbolWidth: PlotDoubleSeries = 10,
+    symbolHeight: PlotDoubleSeries = 10,
+    xSizing: PlotSymbol.Sizing.Value = PlotSymbol.Sizing.Pixels,
+    ySizing: PlotSymbol.Sizing.Value = PlotSymbol.Sizing.Pixels,
+    colorFunction: PlotIntSeries = BlackARGB,
     connectWithLines: Option[(PlotSeries, Renderer.StrokeData)] = None,
     xErrorBars: Option[PlotDoubleSeries] = None,
-    yErrorBars: Option[PlotDoubleSeries] = None) extends PlotStyle {
+    yErrorBars: Option[PlotDoubleSeries] = None) extends NumberNumberPlotStyle {
 
   def render(r: Renderer, bounds: Bounds, xAxis: Axis, xminFunc: Axis => Double, xmaxFunc: Axis => Double,
              yAxis: Axis, yminFunc: Axis => Double, ymaxFunc: Axis => Double, axisBounds: Seq[Bounds]): (Seq[Double], Seq[Double], Axis.AxisRenderer, Axis.AxisRenderer) = {

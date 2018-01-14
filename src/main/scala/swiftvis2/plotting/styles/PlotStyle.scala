@@ -41,3 +41,8 @@ trait PlotStyle {
    */
   def yDataMax(): Option[Double]
 }
+
+// This subtypes are used to indicate what combination of axis types a style works with 
+trait NumberNumberPlotStyle extends PlotStyle
+trait CategoryNumberPlotStyle extends PlotStyle
+trait CategoryCategoryPlotStyle extends PlotStyle

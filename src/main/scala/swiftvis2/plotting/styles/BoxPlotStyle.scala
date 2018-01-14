@@ -1,13 +1,7 @@
 package swiftvis2.plotting.styles
 
-import swiftvis2.plotting.NumericAxis
-import swiftvis2.plotting.PlotDoubleSeries
-import swiftvis2.plotting.PlotStringSeries
-import swiftvis2.plotting.CategoryAxis
-import swiftvis2.plotting.Axis
-import swiftvis2.plotting.Bounds
+import swiftvis2.plotting._
 import swiftvis2.plotting.renderer.Renderer
-import swiftvis2.plotting.PlotSymbol
 
 /**
  * This holds the data for rendering a box for a single category.
@@ -23,7 +17,7 @@ final case class BoxPlotStyle(
   symbol:       PlotSymbol,
   symbolSize:   Double,
   color:        Int,
-  stroke:       Renderer.StrokeData) extends PlotStyle {
+  stroke:       Renderer.StrokeData) extends CategoryNumberPlotStyle {
 
   private val minData = boxData.map { bpd =>
     bpd.min min (if(bpd.outliers.isEmpty) Double.MaxValue else bpd.outliers.min)
@@ -81,8 +75,8 @@ final case class BoxPlotStyle(
 }
 
 object BoxPlotStyle {
-  def apply(categories: Array[String], plotData: Array[PlotDoubleSeries], boxWidthFrac: Double, symbol: PlotSymbol, symbolSize: Double,
-            color: Int, stroke: Renderer.StrokeData): BoxPlotStyle = {
+  def apply(categories: Array[String], plotData: Array[PlotDoubleSeries], boxWidthFrac: Double = 0.8, symbol: PlotSymbol = EllipseLine, symbolSize: Double = 5,
+            color: Int = BlackARGB, stroke: Renderer.StrokeData = Renderer.StrokeData(1, Nil)): BoxPlotStyle = {
     val boxData = for ((cat, data) <- categories zip plotData) yield {
       val d = (data.minIndex until data.maxIndex).map(data).sorted
       val median = if (d.length % 2 == 1) d(d.length / 2) else 0.5 * (d(d.length / 2) + d(d.length / 2 - 1))

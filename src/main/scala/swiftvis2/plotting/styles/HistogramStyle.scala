@@ -17,7 +17,7 @@ import swiftvis2.plotting.PlotIntSeries
  */
 final case class HistogramStyle(
     binValues: PlotDoubleSeries,
-    valSourceColor: Seq[(PlotDoubleSeries, Int)], centerOnBins: Boolean = false) extends PlotStyle {
+    valSourceColor: Seq[(PlotDoubleSeries, Int)], centerOnBins: Boolean = false) extends NumberNumberPlotStyle {
 
   def render(r: Renderer, bounds: Bounds, xAxis: Axis, xminFunc: Axis => Double, xmaxFunc: Axis => Double,
       yAxis: Axis, yminFunc: Axis => Double, ymaxFunc: Axis => Double, axisBounds: Seq[Bounds]): 

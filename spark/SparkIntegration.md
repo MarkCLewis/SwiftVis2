@@ -51,8 +51,7 @@ you want to have a plot that includes data from two different Datasets, as is sh
 val set1 = ... // Code to generate the first Dataset.
 ...
 val set2 = ... // Code that creates a different Dataset.
-// TODO - Hold off until I have completely refactored the methods that plot multiple styles.
-val plot = Plot.scatterPlots(doubles(set2,'x), doubles(set2,'y), "Spark Based Plot", "x", "y", doubles(set2,'size), ints(set2,'color))
+val plot = Plot.stackedNN(Array(ScatterStyle(doubles(set1, 'x), doubles(set1, 'y)), ScatterStyle(doubles(set2, 'x), doubles(set2, 'y))), "Stacked", "x", "y")
 FXRenderer(plot, 600, 600)
 ```
 

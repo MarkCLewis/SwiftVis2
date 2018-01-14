@@ -1,12 +1,7 @@
 package swiftvis2.plotting.styles
 
-import swiftvis2.plotting.PlotSymbol
-import swiftvis2.plotting.NumericAxis
-import swiftvis2.plotting.CategoryAxis
-import swiftvis2.plotting.Axis
-import swiftvis2.plotting.Bounds
+import swiftvis2.plotting._
 import swiftvis2.plotting.renderer.Renderer
-import swiftvis2.plotting.PlotDoubleSeries
 
 sealed trait DensityTreeNode {
   def density(x: Double, bandwidth: Double): Double
@@ -48,7 +43,7 @@ final case class ViolinPlotStyle private (
   maxWidthFrac: Double,
   color:        Int,
   stroke:       Renderer.StrokeData,
-  maxDensity:   Double) extends PlotStyle {
+  maxDensity:   Double) extends CategoryNumberPlotStyle {
 
   private val minData = violinData.map(_.min).min
 
@@ -84,7 +79,7 @@ final case class ViolinPlotStyle private (
         r.drawLine(cx - lastFrac * hwidth, lastY, cx - frac * hwidth, py)
         r.drawLine(cx + lastFrac * hwidth, lastY, cx + frac * hwidth, py)
         if (curMark < markers.length && oy >= markers(curMark)) {
-          r.drawLine(cx - frac * hwidth, py, cx + frac * hwidth, py)
+          r.drawLine(cx - 0.5*(frac+lastFrac) * hwidth, 0.5*(py+lastY), cx + 0.5*(frac+lastFrac) * hwidth, 0.5*(py+lastY))
           curMark += 1
         }
         lastY = py
@@ -105,8 +100,8 @@ final case class ViolinPlotStyle private (
 }
 
 object ViolinPlotStyle {
-  def apply(categories: Array[String], plotData: Array[PlotDoubleSeries], maxWidthFrac: Double,
-            color: Int, stroke: Renderer.StrokeData, bandwidth: Option[Double]): ViolinPlotStyle = {
+  def apply(categories: Array[String], plotData: Array[PlotDoubleSeries], maxWidthFrac: Double = 0.8,
+            color: Int = BlackARGB, stroke: Renderer.StrokeData = Renderer.StrokeData(1, Nil), bandwidth: Option[Double] = None): ViolinPlotStyle = {
     var maxDensity = 0.0
     val violinData = for ((cat, data) <- categories zip plotData) yield {
       val d = (data.minIndex until data.maxIndex).map(data).sorted

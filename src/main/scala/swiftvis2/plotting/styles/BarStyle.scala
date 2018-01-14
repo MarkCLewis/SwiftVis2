@@ -13,9 +13,9 @@ import swiftvis2.plotting.PlotIntSeries
 case class BarStyle(
     categories: PlotStringSeries,
     valSourceColor: Seq[(PlotDoubleSeries, Int)],
-    stacked: Boolean,
-    barWidthFrac: Double
-    ) extends PlotStyle {
+    stacked: Boolean = false,
+    barWidthFrac: Double = 0.8
+    ) extends CategoryNumberPlotStyle {
   
   def render(r: Renderer, bounds: Bounds, xAxis: Axis, xminFunc: Axis => Double, xmaxFunc: Axis => Double,
       yAxis: Axis, yminFunc: Axis => Double, ymaxFunc: Axis => Double, axisBounds: Seq[Bounds]): 
