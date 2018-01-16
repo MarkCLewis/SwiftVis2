@@ -100,7 +100,7 @@ final case class ViolinPlotStyle private (
 }
 
 object ViolinPlotStyle {
-  def apply(categories: Array[String], plotData: Array[PlotDoubleSeries], maxWidthFrac: Double = 0.8,
+  def apply(categories: Seq[String], plotData: Array[PlotDoubleSeries], maxWidthFrac: Double = 0.8,
             color: Int = BlackARGB, stroke: Renderer.StrokeData = Renderer.StrokeData(1, Nil), bandwidth: Option[Double] = None): ViolinPlotStyle = {
     var maxDensity = 0.0
     val violinData = for ((cat, data) <- categories zip plotData) yield {

@@ -129,6 +129,14 @@ object PlotTesting extends JFXApp {
   /**
    * Short form histogram plot
    */
+  def histogramSide(): Plot = {
+    val bins = 0.0 to 10.0 by 1.0
+    Plot.histogramPlot(bins, bins.map(12 - _).init, BlueARGB, false, "Histogram Plot", "Value", "Count", false)
+  }
+
+  /**
+   * Short form histogram plot
+   */
   def histogram2(): Plot = {
     val bins = 1.0 to 10.1 by 1.0
     Plot.stackedHistogramPlot(bins, Seq(bins.map(12 - _) -> BlueARGB, bins.map(x => 5 * (math.cos(x) + 2)) -> 0xffff0000), true, "Histogram Plot", "Value", "Count")
@@ -274,6 +282,23 @@ object PlotTesting extends JFXApp {
       Seq(Seq(BarStyle(cats, Array((Array(1, 2, 3): PlotDoubleSeries) -> YellowARGB)), BoxPlotStyle(cats, ys), ViolinPlotStyle(cats, ys))),
       title = "Stacked CN", xLabel = "Categories", yLabel = "Y")
   }
+  
+  def rowOfDists(): Plot = {
+    val xs = Array.fill(1000)(math.random*100)
+    val ys = xs.map(_ => (math.random - 0.5) * (math.random - 0.5) * 4 + 1)
+    val bins = 0.0 to 2.0 by 0.05
+    val cnts = Array.fill(bins.length-1)(0.0)
+    for(y <- ys) {
+      val bin = (y / 0.05).toInt
+      if(bin >= 0 && bin < cnts.length) cnts(bin) += 1
+    }
+    Plot.row(Seq(
+        ScatterStyle(xs, ys), 
+        HistogramStyle(bins, Seq((cnts: PlotDoubleSeries) -> GreenARGB), binsOnX = false), 
+        BoxPlotStyle(Array("Distrib"), Array(ys)), 
+        ViolinPlotStyle(Array("Distrib"), Array(ys))
+      ), "Distribs", "Num X", "Categories", "Y")
+  }
 
   Future {
     //    FXRenderer(scatter1(), 800, 800)
@@ -283,19 +308,21 @@ object PlotTesting extends JFXApp {
     //    FXRenderer(scatterWithErrorBars(), 800, 800)
     //    FXRenderer(scatterMultidata(), 800, 800)
     //    FXRenderer(scatterWithSizeandColor(), 800, 800)
-    //    FXRenderer(scatterLogLog(), 800, 800)
+//        FXRenderer(scatterLogLog(), 800, 800)
     //    FXRenderer(fullScatter(), 800, 800)
     //    FXRenderer(stackedNNTest(), 800, 800)
-    FXRenderer(gridNNTest(), 800, 800)
-    //    FXRenderer(stackedCNTest(), 800, 800)
-    FXRenderer(gridCNTest(), 800, 800)
+//    FXRenderer(gridNNTest(), 800, 800)
+//        FXRenderer(stackedCNTest(), 800, 800)
+//    FXRenderer(gridCNTest(), 800, 800)
     //    FXRenderer(barChart(), 1200, 1000)
-    //    histogram()
-    //    histogram2()
-    //    histogramGrid()
+//        FXRenderer(histogram(), 600, 600)
+//        FXRenderer(histogramSide(), 600, 600)
+//        FXRenderer(histogram2(), 600, 600)
+//        FXRenderer(histogramGrid(), 800, 800)
     //    SVGRenderer(longForm(), "plot.svg", 1200, 1000)
     //    FXRenderer(boxPlot(), 600, 600)
     //    FXRenderer(violinPlot(), 600, 600)
+        FXRenderer(rowOfDists(), 1200, 600)
     //    FXRenderer(colorTest(), 1200, 1000)
     //    saveToFile()
   }

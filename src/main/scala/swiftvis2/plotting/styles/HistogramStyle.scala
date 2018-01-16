@@ -17,7 +17,9 @@ import swiftvis2.plotting.PlotIntSeries
  */
 final case class HistogramStyle(
     binValues: PlotDoubleSeries,
-    valSourceColor: Seq[(PlotDoubleSeries, Int)], centerOnBins: Boolean = false) extends NumberNumberPlotStyle {
+    valSourceColor: Seq[(PlotDoubleSeries, Int)], 
+    centerOnBins: Boolean = false,
+    binsOnX: Boolean = true) extends NumberNumberPlotStyle {
 
   def render(r: Renderer, bounds: Bounds, xAxis: Axis, xminFunc: Axis => Double, xmaxFunc: Axis => Double,
       yAxis: Axis, yminFunc: Axis => Double, ymaxFunc: Axis => Double, axisBounds: Seq[Bounds]): 
@@ -32,27 +34,33 @@ final case class HistogramStyle(
       xminFunc(xNAxis), xmaxFunc(xNAxis), Axis.RenderOrientation.XAxis, r, axisBounds)
     val (yConv, ytfs, ynfs, yRender) = yNAxis.renderInfo(bounds.y + bounds.height, bounds.y,
       yminFunc(yNAxis), ymaxFunc(yNAxis), Axis.RenderOrientation.YAxis, r, axisBounds)
+      
+    val (binsConv, valConv) = if(binsOnX) (xConv, yConv) else (yConv, xConv)
     for (i <- start until end) {
-      val ys = valSourceColor.map(vs => vs._1(i))
-      val (sx, ex) = if(centerOnBins) { 
+      val values = valSourceColor.map(vs => vs._1(i))
+      val (sbin, ebin) = if(centerOnBins) { 
         if (i == start) {
-          (xConv(binValues(i) - (binValues(i + 1) - binValues(i)) / 2), xConv((binValues(i) + binValues(i + 1)) / 2))
+          (binsConv(binValues(i) - (binValues(i + 1) - binValues(i)) / 2), binsConv((binValues(i) + binValues(i + 1)) / 2))
         } else if (i == end - 1) {
-          (xConv((binValues(i) + binValues(i - 1)) / 2), xConv(binValues(i) + (binValues(i) - binValues(i - 1)) / 2))
+          (binsConv((binValues(i) + binValues(i - 1)) / 2), binsConv(binValues(i) + (binValues(i) - binValues(i - 1)) / 2))
         } else {
-          (xConv((binValues(i) + binValues(i - 1)) / 2), xConv((binValues(i) + binValues(i + 1)) / 2))
+          (binsConv((binValues(i) + binValues(i - 1)) / 2), binsConv((binValues(i) + binValues(i + 1)) / 2))
         }
       } else {
-        (xConv(binValues(i)), xConv(binValues(i+1)))
+        (binsConv(binValues(i)), binsConv(binValues(i+1)))
       }
-      var lasty = 0.0
-      for (j <- ys.indices) {
+      var lastValue = 0.0
+      for (j <- values.indices) {
         r.setColor(valSourceColor(j)._2)
-        val y = ys(j) + lasty
-        val clasty = yConv(lasty)
-        val cy = yConv(y)
-        r.fillRectangle(sx, clasty min cy, ex - sx, (clasty - cy).abs)
-        lasty = y
+        val value = values(j) + lastValue
+        val clasty = valConv(lastValue)
+        val cy = valConv(value)
+        if(binsOnX) {
+          r.fillRectangle(sbin min ebin, clasty min cy, (ebin - sbin).abs, (clasty - cy).abs)
+        } else {
+          r.fillRectangle(clasty min cy, sbin min ebin, (clasty - cy).abs, (sbin - ebin).abs)
+        }
+        lastValue = value
       }
     }
     (Seq(xtfs, ytfs), Seq(xnfs, ynfs), xRender, yRender)
@@ -67,23 +75,28 @@ final case class HistogramStyle(
     val (start, end) = calcStartEnd()
     Some(xdMin(start, end))
   }
-  def xdMin(start: Int, end: Int): Double = if(centerOnBins) binValues(start) - (binValues(start + 1) - binValues(start)) / 2 else binValues(start)
+  def xdMin(start: Int, end: Int): Double = if(binsOnX) binMin(start, end) else valueMin(start, end)
   
   def xDataMax(): Option[Double] = {
     val (start, end) = calcStartEnd()
     Some(xdMax(start, end))
   }
-  def xdMax(start: Int, end: Int): Double = if(centerOnBins) binValues(end - 1) + (binValues(end - 1) - binValues(end - 2)) / 2 else binValues(end)
+  def xdMax(start: Int, end: Int): Double = if(binsOnX) binMax(start, end) else valueMax(start, end)
     
   def yDataMin(): Option[Double] = {
     val (start, end) = calcStartEnd()
     Some(ydMin(start, end))
   }
-  def ydMin(start: Int, end: Int): Double = (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_._1(a)).sum)
+  def ydMin(start: Int, end: Int): Double = if(binsOnX) valueMin(start, end) else binMin(start, end)
   
   def yDataMax(): Option[Double] = {
     val (start, end) = calcStartEnd()
     Some(ydMax(start, end))
   }
-  def ydMax(start: Int, end: Int): Double = (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_._1(a)).sum)
+  def ydMax(start: Int, end: Int): Double = if(binsOnX) valueMax(start, end) else binMax(start, end)
+
+  def binMin(start: Int, end: Int): Double = if(centerOnBins) binValues(start) - (binValues(start + 1) - binValues(start)) / 2 else binValues(start)
+  def binMax(start: Int, end: Int): Double = if(centerOnBins) binValues(end - 1) + (binValues(end - 1) - binValues(end - 2)) / 2 else binValues(end)
+  def valueMin(start: Int, end: Int): Double = (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_._1(a)).sum)
+  def valueMax(start: Int, end: Int): Double = (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_._1(a)).sum)
 }

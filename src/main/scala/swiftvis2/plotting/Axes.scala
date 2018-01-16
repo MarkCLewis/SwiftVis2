@@ -136,15 +136,11 @@ class NumericAxis(
         case Axis.ScaleStyle.Log =>
           var pos = Math.pow(10, Math.floor(Math.log10(Math.min(amin, amax))))
           var ret = List[Double]()
-          while (pos <= Math.max(amin, amax)) {
-            if (pos >= Math.min(amin, amax)) {
+          while (pos <= (amin max amax)) {
+            if (pos >= (amin min amax)) {
               ret ::= pos
             }
-            // Code for minor ticks in case they are added later.
-            //                for(int i=2; i<10; ++i) {
-            //                    if(pos*i>=Math.min(min.getValue(),max.getValue()) && pos*i<=Math.max(min.getValue(),max.getValue()))
-            //                        worker.handleMark(pos*i,null,true);
-            //                }
+            for(i <- 2 to 8 by 2; if pos*i <= (amin max amax) && pos*i >= (amin min amax)) ret ::= pos*i
             pos *= 10
           }
           ret.reverse

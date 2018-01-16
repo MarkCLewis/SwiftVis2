@@ -102,7 +102,7 @@ case class PlotGrid(
     val minXAxisCount = minXAxes.maxBy(_.size).size
     val minXAxisFracHeight = 1.0 / minXAxisCount
     for ((axisSeq, xStart, xEnd) <- (minXAxes.zipWithIndex, xStarts, xStarts.tail).zipped) {
-      val b = minXAxisBounds.subX(xStart, xEnd)
+//      val b = minXAxisBounds.subX(xStart, xEnd)
       for (i <- 0 until minXAxisCount; if i < axisSeq._1.size) {
         axisRenderers(axisSeq._1(i) -> axisSeq._2)(tickFontSize, nameFontSize)
       }
@@ -110,7 +110,7 @@ case class PlotGrid(
     val maxXAxisCount = minXAxes.maxBy(_.size).size
     val maxXAxisFracHeight = 1.0 / minXAxisCount
     for ((axisSeq, xStart, xEnd) <- (maxXAxes.zipWithIndex, xStarts, xStarts.tail).zipped) {
-      val b = minXAxisBounds.subX(xStart, xEnd)
+//      val b = minXAxisBounds.subX(xStart, xEnd)
       for (i <- 0 until maxXAxisCount; if i < axisSeq._1.size) {
         axisRenderers(axisSeq._1(i) -> axisSeq._2)(tickFontSize, nameFontSize)
       }
@@ -120,7 +120,7 @@ case class PlotGrid(
     val minYAxisCount = minYAxes.maxBy(_.size).size
     val minYAxisFracHeight = 1.0 / minYAxisCount
     for ((axisSeq, yStart, yEnd) <- (minYAxes.zipWithIndex, yStarts, yStarts.tail).zipped) {
-      val b = minYAxisBounds.subY(yStart, yEnd)
+//      val b = minYAxisBounds.subY(yStart, yEnd)
       for (i <- 0 until minYAxisCount; if i < axisSeq._1.size) {
         axisRenderers(axisSeq._1(i) -> axisSeq._2)(tickFontSize, nameFontSize)
       }
@@ -128,7 +128,7 @@ case class PlotGrid(
     val maxYAxisCount = minYAxes.maxBy(_.size).size
     val maxYAxisFracHeight = 1.0 / minYAxisCount
     for ((axisSeq, yStart, yEnd) <- (maxYAxes.zipWithIndex, yStarts, yStarts.tail).zipped) {
-      val b = minYAxisBounds.subY(yStart, yEnd)
+//      val b = minYAxisBounds.subY(yStart, yEnd)
       for (i <- 0 until maxYAxisCount; if i < axisSeq._1.size) {
         axisRenderers(axisSeq._1(i) -> axisSeq._2)(tickFontSize, nameFontSize)
       }
