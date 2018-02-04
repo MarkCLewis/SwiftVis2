@@ -17,7 +17,7 @@ final case class ScatterStyle(
     xSizing: PlotSymbol.Sizing.Value = PlotSymbol.Sizing.Pixels,
     ySizing: PlotSymbol.Sizing.Value = PlotSymbol.Sizing.Pixels,
     colorFunction: PlotIntSeries = BlackARGB,
-    connectWithLines: Option[(PlotSeries, Renderer.StrokeData)] = None,
+    connectWithLines: Option[ScatterStyle.LineData] = None,
     xErrorBars: Option[PlotDoubleSeries] = None,
     yErrorBars: Option[PlotDoubleSeries] = None) extends NumberNumberPlotStyle {
 
@@ -59,7 +59,7 @@ final case class ScatterStyle(
       }
       r.setColor(color)
       (connectWithLines, connectMap).zipped.foreach {
-        case ((groupFunc, stroke), cm) =>
+        case (ScatterStyle.LineData(groupFunc, stroke), cm) =>
           val group = groupFunc(i)
           cm.get(group) match {
             case Some(Nil) => // Shouldn't get here.
@@ -79,7 +79,7 @@ final case class ScatterStyle(
       symbol.drawSymbol(px, py, pwidth, pheight, r)
     }
     (connectWithLines, connectMap).zipped.foreach {
-      case ((groupFunc, stroke), cm) =>
+      case (ScatterStyle.LineData(groupFunc, stroke), cm) =>
         for ((group, lst @ ((_, _, c) :: _)) <- cm) {
           r.setColor(c)
           r.setStroke(stroke)
@@ -90,8 +90,8 @@ final case class ScatterStyle(
   }
 
   def calcStartEnd(): (Int, Int) = {
-    (Array(xSource, ySource, symbolWidth, symbolHeight, colorFunction, connectWithLines.map(_._1).getOrElse(UnboundDoubleSeries)).map(_.minIndex).max,
-      Array(xSource, ySource, symbolWidth, symbolHeight, colorFunction, connectWithLines.map(_._1).getOrElse(UnboundDoubleSeries)).map(_.maxIndex).min)
+    (Array(xSource, ySource, symbolWidth, symbolHeight, colorFunction, connectWithLines.map(_.groups).getOrElse(UnboundDoubleSeries)).map(_.minIndex).max,
+      Array(xSource, ySource, symbolWidth, symbolHeight, colorFunction, connectWithLines.map(_.groups).getOrElse(UnboundDoubleSeries)).map(_.maxIndex).min)
   }
 
   def xDataMin(): Option[Double] = {
@@ -117,4 +117,13 @@ final case class ScatterStyle(
     Some(ydMax(start, end))
   }
   def ydMax(start: Int, end: Int): Double = (start until end).foldLeft(Double.MinValue)((d, a) => d max ySource(a)+yErrorBars.map(_(a)).getOrElse(0.0))
+}
+
+object ScatterStyle {
+  /**
+   * This class provides the information on how to connect elements with lines. The groups is a series that has one element
+   * for each data point. Elements with the same value in this series are connected with line. If you provide a constant,
+   * all the data points will be connected with one line.
+   */
+  case class LineData(groups: PlotSeries, stroke: Renderer.StrokeData)
 }

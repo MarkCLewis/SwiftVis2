@@ -2,7 +2,8 @@ package swiftvis2.plotting
 
 import swiftvis2.plotting.renderer.Renderer
 
-case class PlotText(text: String, color: Int, font: Renderer.FontData, align: Renderer.HorizontalAlign.Value, angle: Double) extends Plottable {
+case class PlotText(text: String, color: Int = BlackARGB, font: Renderer.FontData = Renderer.FontData("Ariel", Renderer.FontStyle.Plain), 
+    align: Renderer.HorizontalAlign.Value = Renderer.HorizontalAlign.Center, angle: Double = 0.0) extends Plottable {
   def render(r: Renderer, bounds: Bounds) = {
     val size = r.maxFontSize(Seq(text), bounds.width, bounds.height, font)
     r.setFont(font, size)

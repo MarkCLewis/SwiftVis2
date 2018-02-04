@@ -65,8 +65,8 @@ object PlotTesting extends JFXApp {
   def scatterMultidata(): Plot = {
     Plot.scatterPlots(
       Seq(
-      ((1 to 1000).map(_ => math.random * math.random), (1 to 1000).map(_ => math.random * math.random * 0.5), RedARGB, 5),
-      ((1 to 1000).map(_ => 1.0 - math.random * math.random), (1 to 1000).map(_ => 1.0 - math.random * math.random * 0.5), GreenARGB, 5)),
+        ((1 to 1000).map(_ => math.random * math.random), (1 to 1000).map(_ => math.random * math.random * 0.5), RedARGB, 5),
+        ((1 to 1000).map(_ => 1.0 - math.random * math.random), (1 to 1000).map(_ => 1.0 - math.random * math.random * 0.5), GreenARGB, 5)),
       title = "Colored Points", xLabel = "Horizontal", yLabel = "Vertical")
   }
 
@@ -108,14 +108,15 @@ object PlotTesting extends JFXApp {
     val stroke = Renderer.StrokeData(1, Nil)
     val xerr = x.map(_ => 0.2 * math.random)
     val yerr = x.map(_ => 0.2 * math.random)
-    Plot.scatterPlotsFull(Seq((x, y1, color, size1, None, Some(xerr), Some(yerr)), (x, y2, color, size2, Some((0: PlotIntSeries) -> stroke), None, None)))
+    Plot.scatterPlotsFull(Seq((x, y1, color, size1, None, Some(xerr), Some(yerr)), (x, y2, color, size2, Some(ScatterStyle.LineData(0, stroke)), None, None)))
   }
 
   /**
    * Short form bar plot
    */
   def barChart(): Plot = {
-    Plot.barPlot(Seq("red", "green", "blue"), Seq(Seq(3.0, 7.0, 4.0) -> YellowARGB, Seq(2.0, 1.0, 3.0) -> MagentaARGB), true, 0.8, "Bar Plot", "Colors", "Measure")
+    import BarStyle._
+    Plot.barPlot(Seq("red", "green", "blue"), Seq(DataAndColor(Seq(3.0, 7.0, 4.0), YellowARGB), DataAndColor(Seq(2.0, 1.0, 3.0), MagentaARGB)), true, 0.8, "Bar Plot", "Colors", "Measure")
   }
 
   /**
@@ -139,7 +140,8 @@ object PlotTesting extends JFXApp {
    */
   def histogram2(): Plot = {
     val bins = 1.0 to 10.1 by 1.0
-    Plot.stackedHistogramPlot(bins, Seq(bins.map(12 - _) -> BlueARGB, bins.map(x => 5 * (math.cos(x) + 2)) -> 0xffff0000), true, "Histogram Plot", "Value", "Count")
+    import HistogramStyle.DataAndColor
+    Plot.stackedHistogramPlot(bins, Seq(DataAndColor(bins.map(12 - _), BlueARGB), DataAndColor(bins.map(x => 5 * (math.cos(x) + 2)), 0xffff0000)), true, "Histogram Plot", "Value", "Count")
   }
 
   /**
@@ -147,9 +149,10 @@ object PlotTesting extends JFXApp {
    */
   def histogramGrid(): Plot = {
     val bins = 0.0 to 10.0 by 1.0
+    import HistogramStyle.DataAndColor
     Plot.histogramGrid(bins, Seq(
-      Seq((bins.map(12 - _).init: PlotDoubleSeries) -> RedARGB, (bins.map(1 + _).init: PlotDoubleSeries) -> GreenARGB),
-      Seq((bins.map(c => c * c / 6).tail: PlotDoubleSeries) -> BlueARGB, (bins.map(c => 10 * math.random).init: PlotDoubleSeries) -> CyanARGB)),
+      Seq(DataAndColor(bins.map(12 - _).init, RedARGB), DataAndColor(bins.map(1 + _).init, GreenARGB)),
+      Seq(DataAndColor(bins.map(c => c * c / 6).tail, BlueARGB), DataAndColor(bins.map(c => 10 * math.random).init, CyanARGB))),
       false, false, "Histogram Grid", "Values", "Counts")
   }
 
@@ -177,7 +180,7 @@ object PlotTesting extends JFXApp {
     // Function overplot
     val (funcX, funcY) = (-1.0 to 1.0 by 0.002).map(x => x -> math.sin(20 * x * x) * 0.4).unzip
     val funcScatter = ScatterStyle(funcX, funcY, NoSymbol, 5, 5, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, BlackARGB,
-      Some((1: PlotSeries) -> Renderer.StrokeData(2, Seq.empty)))
+      Some(ScatterStyle.LineData(1, Renderer.StrokeData(2, Seq.empty))))
     val funcScatterPlot = Plot2D(funcScatter, "x1", "y1")
 
     // Histogram
@@ -185,13 +188,14 @@ object PlotTesting extends JFXApp {
     val bins = (-1.0 to 1.0 by binSize).toArray
     val counts = Array.fill(bins.length - 1)(0)
     for (x <- mainX) counts(((x + 1) / binSize).toInt min counts.length) += 1
-    val histogram = HistogramStyle(bins, Seq((counts: PlotDoubleSeries) -> RedARGB), false)
+    val histogram = HistogramStyle(bins, Seq(HistogramStyle.DataAndColor(counts, RedARGB)), false)
     val histogramPlot = Plot2D(histogram, "x1", "y2")
 
     // Bar Chart
+    import BarStyle._
     val barChart = BarStyle(Seq("FY", "Sophomore", "Junior", "Senior"), Seq(
-      (Seq(70, 25, 15, 5): PlotDoubleSeries) -> CyanARGB,
-      (Seq(3, 25, 5, 1): PlotDoubleSeries) -> MagentaARGB, (Seq(0, 5, 35, 2): PlotDoubleSeries) -> YellowARGB, (Seq(0, 0, 5, 40): PlotDoubleSeries) -> GreenARGB),
+      DataAndColor(Seq(70, 25, 15, 5), CyanARGB), DataAndColor(Seq(3, 25, 5, 1), MagentaARGB),
+      DataAndColor(Seq(0, 5, 35, 2), YellowARGB), DataAndColor(Seq(0, 0, 5, 40), GreenARGB)),
       false, 0.8)
     val barChartPlot = Plot2D(barChart, "xcat", "y3")
 
@@ -212,14 +216,14 @@ object PlotTesting extends JFXApp {
       Map("x1" -> xAxis1, "x2" -> xAxis2, "xcat" -> xAxisCat, "y1" -> yAxis1, "y2" -> yAxis2, "y3" -> yAxis3),
       Seq(0.7, 0.3), Seq(0.3, 0.7), 0.1)
 
-    Plot(Map("title" -> Plot.PlotTextData(title, Bounds(0, 0, 1.0, 0.1))), Map("grid1" -> Plot.PlotGridData(grid1, Bounds(0, 0.1, 1.0, 0.9))))
+    Plot(Map("title" -> Plot.TextData(title, Bounds(0, 0, 1.0, 0.1))), Map("grid1" -> Plot.GridData(grid1, Bounds(0, 0.1, 1.0, 0.9))))
   }
 
   def saveToFile(): Unit = {
     val plot = Plot.scatterPlots(
       Seq(
-      ((1 to 10000).map(_ => math.random * math.random), (1 to 10000).map(_ => math.random * math.random * 0.5), RedARGB, 5),
-      ((1 to 10000).map(_ => 1.0 - math.random * math.random), (1 to 10000).map(_ => 1.0 - math.random * math.random * 0.5), GreenARGB, 5)),
+        ((1 to 10000).map(_ => math.random * math.random), (1 to 10000).map(_ => math.random * math.random * 0.5), RedARGB, 5),
+        ((1 to 10000).map(_ => 1.0 - math.random * math.random), (1 to 10000).map(_ => 1.0 - math.random * math.random * 0.5), GreenARGB, 5)),
       title = "Colored Points", xLabel = "Horizontal", yLabel = "Vertical")
     FXRenderer.saveToImage(plot, 1200, 700, new File("sample.png"))
   }
@@ -247,7 +251,7 @@ object PlotTesting extends JFXApp {
     val cntsMap = xs.groupBy(x => (x * 10).toInt)
     val cnts = Array.tabulate(10)(i => cntsMap.get(i).getOrElse(Nil).length): PlotDoubleSeries
     Plot.stackedNN(
-      Seq(HistogramStyle(0.0 to 1.0 by 0.1, Array(cnts -> RedARGB)), ScatterStyle(xs, ys, symbolWidth = 5, symbolHeight = 5)),
+      Seq(HistogramStyle(0.0 to 1.0 by 0.1, Array(HistogramStyle.DataAndColor(cnts, RedARGB))), ScatterStyle(xs, ys, symbolWidth = 5, symbolHeight = 5)),
       title = "Stacked NN", xLabel = "X", yLabel = "Y")
   }
 
@@ -257,8 +261,8 @@ object PlotTesting extends JFXApp {
     val cntsMap = xs.groupBy(x => (x * 10).toInt)
     val cnts = Array.tabulate(10)(i => cntsMap.get(i).getOrElse(Nil).length): PlotDoubleSeries
     Plot.gridNN(
-      Seq(Seq(ScatterStyle(xs, ys, symbolWidth = 5, symbolHeight = 5)), Seq(HistogramStyle(0.0 to 1.0 by 0.1, Array(cnts -> RedARGB)))),
-      title = "Stacked NN", xLabel = "X", yLabel = "Y")
+      Seq(Seq(ScatterStyle(xs, ys, symbolWidth = 5, symbolHeight = 5)), Seq(HistogramStyle(0.0 to 1.0 by 0.1, Array(HistogramStyle.DataAndColor(cnts, RedARGB))))),
+      title = "Grid NN", xLabel = "X", yLabel = "Y")
   }
 
   def stackedCNTest(): Plot = {
@@ -268,7 +272,7 @@ object PlotTesting extends JFXApp {
       (1 to 1000).map(_ => (math.random - 0.5) * (math.random - 0.5) * 4 + 2),
       (1 to 1000).map(_ => (math.random - 0.5) * (math.random - 0.5) * 3 + 1.5))
     Plot.stackedCN(
-      Seq(BarStyle(cats, Array((Array(1, 2, 3): PlotDoubleSeries) -> YellowARGB)), BoxPlotStyle(cats, ys), ViolinPlotStyle(cats, ys)),
+      Seq(BarStyle(cats, Array(BarStyle.DataAndColor(Array(1, 2, 3), YellowARGB))), BoxPlotStyle(cats, ys), ViolinPlotStyle(cats, ys)),
       title = "Stacked CN", xLabel = "Categories", yLabel = "Y")
   }
 
@@ -279,50 +283,50 @@ object PlotTesting extends JFXApp {
       (1 to 1000).map(_ => (math.random - 0.5) * (math.random - 0.5) * 4 + 2),
       (1 to 1000).map(_ => (math.random - 0.5) * (math.random - 0.5) * 3 + 1.5))
     Plot.gridCN(
-      Seq(Seq(BarStyle(cats, Array((Array(1, 2, 3): PlotDoubleSeries) -> YellowARGB)), BoxPlotStyle(cats, ys), ViolinPlotStyle(cats, ys))),
-      title = "Stacked CN", xLabel = "Categories", yLabel = "Y")
+      Seq(Seq(BarStyle(cats, Array(BarStyle.DataAndColor(Array(1, 2, 3), YellowARGB))), BoxPlotStyle(cats, ys), ViolinPlotStyle(cats, ys))),
+      title = "Grid CN", xLabel = "Categories", yLabel = "Y")
   }
-  
+
   def rowOfDists(): Plot = {
-    val xs = Array.fill(1000)(math.random*100)
+    val xs = Array.fill(1000)(math.random * 100)
     val ys = xs.map(_ => (math.random - 0.5) * (math.random - 0.5) * 4 + 1)
     val bins = 0.0 to 2.0 by 0.05
-    val cnts = Array.fill(bins.length-1)(0.0)
-    for(y <- ys) {
+    val cnts = Array.fill(bins.length - 1)(0.0)
+    for (y <- ys) {
       val bin = (y / 0.05).toInt
-      if(bin >= 0 && bin < cnts.length) cnts(bin) += 1
+      if (bin >= 0 && bin < cnts.length) cnts(bin) += 1
     }
     Plot.row(Seq(
-        ScatterStyle(xs, ys), 
-        HistogramStyle(bins, Seq((cnts: PlotDoubleSeries) -> GreenARGB), binsOnX = false), 
-        BoxPlotStyle(Array("Distrib"), Array(ys)), 
-        ViolinPlotStyle(Array("Distrib"), Array(ys))
-      ), "Distribs", "Num X", "Categories", "Y")
+      ScatterStyle(xs, ys),
+      HistogramStyle(bins, Seq(HistogramStyle.DataAndColor(cnts, GreenARGB)), binsOnX = false),
+      BoxPlotStyle(Array("Distrib"), Array(ys)),
+      ViolinPlotStyle(Array("Distrib"), Array(ys))), "Distribs", "Num X", "Categories", "Y")
   }
 
   Future {
-    //    FXRenderer(scatter1(), 800, 800)
-    //    FXRenderer(scatter2(), 800, 800)
-    //    FXRenderer(scatterLines(), 800, 800)
-    //    FXRenderer(scatterGrid(), 800, 800)
-    //    FXRenderer(scatterWithErrorBars(), 800, 800)
-    //    FXRenderer(scatterMultidata(), 800, 800)
-    //    FXRenderer(scatterWithSizeandColor(), 800, 800)
-//        FXRenderer(scatterLogLog(), 800, 800)
-    //    FXRenderer(fullScatter(), 800, 800)
-    //    FXRenderer(stackedNNTest(), 800, 800)
-//    FXRenderer(gridNNTest(), 800, 800)
-//        FXRenderer(stackedCNTest(), 800, 800)
+//        FXRenderer(scatter1(), 800, 800)
+//        FXRenderer(scatter2(), 800, 800)
+//        FXRenderer(scatterLines(), 800, 800)
+//        FXRenderer(scatterGrid(), 800, 800)
+//        FXRenderer(scatterWithErrorBars(), 800, 800)
+//        FXRenderer(scatterMultidata(), 800, 800)
+//        FXRenderer(scatterWithSizeandColor(), 800, 800)
+//            FXRenderer(scatterLogLog(), 800, 800)
+//        FXRenderer(fullScatter(), 800, 800)
+//        FXRenderer(stackedNNTest(), 800, 800)
+//        FXRenderer(gridNNTest(), 800, 800)
+//    FXRenderer(stackedCNTest(), 800, 800)
 //    FXRenderer(gridCNTest(), 800, 800)
-    //    FXRenderer(barChart(), 1200, 1000)
-//        FXRenderer(histogram(), 600, 600)
-//        FXRenderer(histogramSide(), 600, 600)
-//        FXRenderer(histogram2(), 600, 600)
-//        FXRenderer(histogramGrid(), 800, 800)
-    //    SVGRenderer(longForm(), "plot.svg", 1200, 1000)
+//    FXRenderer(barChart(), 600, 500)
+//            FXRenderer(histogram(), 600, 600)
+//            FXRenderer(histogramSide(), 600, 600)
+//            FXRenderer(histogram2(), 600, 600)
+//            FXRenderer(histogramGrid(), 800, 800)
+//    FXRenderer(longForm(), 1200, 1000)
+            SVGRenderer(longForm(), "plot.svg", 1200, 1000)
     //    FXRenderer(boxPlot(), 600, 600)
     //    FXRenderer(violinPlot(), 600, 600)
-        FXRenderer(rowOfDists(), 1200, 600)
+            FXRenderer(rowOfDists(), 1200, 600)
     //    FXRenderer(colorTest(), 1200, 1000)
     //    saveToFile()
   }

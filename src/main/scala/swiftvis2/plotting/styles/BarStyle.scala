@@ -12,7 +12,7 @@ import swiftvis2.plotting.PlotIntSeries
 
 case class BarStyle(
     categories: PlotStringSeries,
-    valSourceColor: Seq[(PlotDoubleSeries, Int)],
+    valSourceColor: Seq[BarStyle.DataAndColor],
     stacked: Boolean = false,
     barWidthFrac: Double = 0.8
     ) extends CategoryNumberPlotStyle {
@@ -29,13 +29,13 @@ case class BarStyle(
         yminFunc(yNAxis), ymaxFunc(yNAxis), Axis.RenderOrientation.YAxis, r, axisBounds)
     for(i <- start until end) {
       val (scatx, ecatx) = catConv(categories(i))
-      val ys = valSourceColor.map(vs => vs._1(i))
+      val ys = valSourceColor.map(vs => vs.data(i))
       val sx = scatx+(1.0-barWidthFrac)/2*(ecatx-scatx)
       val ex = ecatx-(1.0-barWidthFrac)/2*(ecatx-scatx)
       if(stacked) {
         var lasty = 0.0
         for(j <- ys.indices) {
-          r.setColor(valSourceColor(j)._2)
+          r.setColor(valSourceColor(j).color)
           val y = ys(j)+lasty
           val clasty = yConv(lasty)
           val cy = yConv(y)
@@ -46,7 +46,7 @@ case class BarStyle(
         val zeroy = yConv(0.0)
         val barWidth = (ex-sx)/ys.length
         for(j <- ys.indices) {
-          r.setColor(valSourceColor(j)._2)
+          r.setColor(valSourceColor(j).color)
           val y = yConv(ys(j))
           r.fillRectangle(sx+barWidth*j, y min zeroy, barWidth, (y-zeroy).abs)
         }
@@ -56,8 +56,8 @@ case class BarStyle(
   }
   
   def calcStartEnd(): (Int, Int) = {
-    ((valSourceColor.map(_._1) :+ categories).map(_.minIndex).max,
-     (valSourceColor.map(_._1) :+ categories).map(_.maxIndex).min)
+    ((valSourceColor.map(_.data) :+ categories).map(_.minIndex).max,
+     (valSourceColor.map(_.data) :+ categories).map(_.maxIndex).min)
   }
 
   def xDataMin(): Option[Double] = None
@@ -71,9 +71,9 @@ case class BarStyle(
   
   def ydMin(start: Int, end: Int): Double = {
     if(stacked) {
-      (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_._1(a)).sum)
+      (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_.data(a)).sum)
     } else {
-      (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_._1(a)).min)
+      (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_.data(a)).min)
     }
   }
   
@@ -84,9 +84,13 @@ case class BarStyle(
   
   def ydMax(start: Int, end: Int): Double = {
     if(stacked) {
-      (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_._1(a)).sum)
+      (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_.data(a)).sum)
     } else {
-      (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_._1(a)).max)
+      (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_.data(a)).max)
     }
   }
+}
+
+object BarStyle {
+  case class DataAndColor(data: PlotDoubleSeries, color: Int)
 }

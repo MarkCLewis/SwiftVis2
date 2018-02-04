@@ -17,7 +17,7 @@ import swiftvis2.plotting.PlotIntSeries
  */
 final case class HistogramStyle(
     binValues: PlotDoubleSeries,
-    valSourceColor: Seq[(PlotDoubleSeries, Int)], 
+    valSourceColor: Seq[HistogramStyle.DataAndColor], 
     centerOnBins: Boolean = false,
     binsOnX: Boolean = true) extends NumberNumberPlotStyle {
 
@@ -37,7 +37,7 @@ final case class HistogramStyle(
       
     val (binsConv, valConv) = if(binsOnX) (xConv, yConv) else (yConv, xConv)
     for (i <- start until end) {
-      val values = valSourceColor.map(vs => vs._1(i))
+      val values = valSourceColor.map(vs => vs.data(i))
       val (sbin, ebin) = if(centerOnBins) { 
         if (i == start) {
           (binsConv(binValues(i) - (binValues(i + 1) - binValues(i)) / 2), binsConv((binValues(i) + binValues(i + 1)) / 2))
@@ -51,7 +51,7 @@ final case class HistogramStyle(
       }
       var lastValue = 0.0
       for (j <- values.indices) {
-        r.setColor(valSourceColor(j)._2)
+        r.setColor(valSourceColor(j).color)
         val value = values(j) + lastValue
         val clasty = valConv(lastValue)
         val cy = valConv(value)
@@ -67,8 +67,8 @@ final case class HistogramStyle(
   }
 
   def calcStartEnd(): (Int, Int) = {
-    ((valSourceColor.map(_._1) :+ binValues).map(_.minIndex).max,
-     (valSourceColor.map(_._1) :+ binValues).map(_.maxIndex).min)
+    ((valSourceColor.map(_.data) :+ binValues).map(_.minIndex).max,
+     (valSourceColor.map(_.data) :+ binValues).map(_.maxIndex).min)
   }
 
   def xDataMin(): Option[Double] = {
@@ -97,6 +97,10 @@ final case class HistogramStyle(
 
   def binMin(start: Int, end: Int): Double = if(centerOnBins) binValues(start) - (binValues(start + 1) - binValues(start)) / 2 else binValues(start)
   def binMax(start: Int, end: Int): Double = if(centerOnBins) binValues(end - 1) + (binValues(end - 1) - binValues(end - 2)) / 2 else binValues(end)
-  def valueMin(start: Int, end: Int): Double = (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_._1(a)).sum)
-  def valueMax(start: Int, end: Int): Double = (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_._1(a)).sum)
+  def valueMin(start: Int, end: Int): Double = (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_.data(a)).sum)
+  def valueMax(start: Int, end: Int): Double = (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_.data(a)).sum)
+}
+
+object HistogramStyle {
+  case class DataAndColor(data: PlotDoubleSeries, color: Int)
 }
