@@ -127,7 +127,6 @@ case class NumericAxis(
         case Axis.ScaleStyle.Linear =>
           val majorSep = tickSpacing.getOrElse {
             val str = "%e".format((amax - amin) / 6)
-            println("SwiftVis2 autosep string = "+str)
             (str.take(str.indexOf('.') + 2).toDouble.round + str.drop(str.indexOf('e'))).toDouble // TODO - consider BigDecimal here if display gets unhappy
           }
           val firstTickApprox = (amin / majorSep).toInt * majorSep

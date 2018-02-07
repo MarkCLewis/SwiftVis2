@@ -9,6 +9,7 @@ import swiftvis2.plotting.styles.ViolinPlotStyle
 import swiftvis2.plotting.styles.NumberNumberPlotStyle
 import swiftvis2.plotting.styles.CategoryNumberPlotStyle
 import swiftvis2.plotting.styles.PlotStyle
+import swiftvis2.plotting.styles.CategoryCategoryPlotStyle
 
 /**
  * This class represents the full concept of a plot in SwiftVis2. It contains maps of the various
@@ -75,8 +76,29 @@ object Plot {
    */
   case class GridData(grid: PlotGrid, bounds: Bounds)
 
-  /////////////////////////// Older Style Convenience Methods ////////////////////////////////////////////////
-
+  def simple(style: PlotStyle, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    style match {
+      case nnps: NumberNumberPlotStyle =>
+        val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
+        val grid = PlotGrid.oneByOne(xLabel, Axis.ScaleStyle.Linear, yLabel, Axis.ScaleStyle.Linear, style)
+        Plot(
+          Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
+          Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+      case cnps: CategoryNumberPlotStyle =>
+        val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
+        val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+        val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
+          Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+        val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
+        Plot(
+          Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
+          Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+      case ccps: CategoryCategoryPlotStyle => 
+        ???
+    }
+  }
+  
   /**
    * Make a 1x1 grid with with multiple scatter plots that all share the same x and y axis with the ability to add connecting lines and error bars. If you want to
    * plot multiple lines for separate sets of data, this is likely the easiest approach.

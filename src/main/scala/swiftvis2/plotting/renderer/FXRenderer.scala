@@ -30,6 +30,8 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import java.io.File
 import java.awt.image.BufferedImage
+import scalafx.scene.text.TextAlignment
+import scalafx.geometry.VPos
 
 object FXRenderer {
   def shellStart(args: Array[String] = Array()): Future[JFXApp] = {
@@ -229,21 +231,15 @@ class FXRenderer(gc: GraphicsContext) extends Renderer {
     gc.save
     text.text = s
     text.font = gc.font
-    val fb = text.boundsInLocal()
-    align match {
-      case Renderer.HorizontalAlign.Left =>
-        gc.translate(x, y)
-        gc.rotate(angle)
-        gc.fillText(s, 0, -(fb.minY + fb.maxY) / 2)
-      case Renderer.HorizontalAlign.Center =>
-        gc.translate(x, y)
-        gc.rotate(angle)
-        gc.fillText(s, -fb.width / 2, -(fb.minY + fb.maxY) / 2)
-      case Renderer.HorizontalAlign.Right =>
-        gc.translate(x, y)
-        gc.rotate(angle)
-        gc.fillText(s, -fb.width, -(fb.minY + fb.maxY) / 2)
+    gc.textBaseline = VPos.Center
+    gc.translate(x, y)
+    gc.rotate(angle)
+    gc.textAlign = align match {
+      case Renderer.HorizontalAlign.Left => TextAlignment.Left
+      case Renderer.HorizontalAlign.Center => TextAlignment.Center
+      case Renderer.HorizontalAlign.Right => TextAlignment.Right
     }
+    gc.fillText(s, 0, 0)
     gc.restore
   }
 

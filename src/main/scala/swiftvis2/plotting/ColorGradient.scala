@@ -18,6 +18,12 @@ class ColorGradient private (colorValues: Seq[(Double, Int)]) extends (Double =>
       }.getOrElse(colorValues.last._2)
     }
   }
+  
+  def apply(ds: PlotDoubleSeries): PlotIntSeries = new PlotIntSeries {
+    def apply(index: Int): Int = ColorGradient.this.apply(ds(index))
+    def maxIndex: Int = ds.maxIndex
+    def minIndex: Int = ds.minIndex
+  }
 }
 
 object ColorGradient {

@@ -16,8 +16,8 @@ final case class ScatterStyle(
     symbolHeight: PlotDoubleSeries = 10,
     xSizing: PlotSymbol.Sizing.Value = PlotSymbol.Sizing.Pixels,
     ySizing: PlotSymbol.Sizing.Value = PlotSymbol.Sizing.Pixels,
-    colorFunction: PlotIntSeries = BlackARGB,
-    connectWithLines: Option[ScatterStyle.LineData] = None,
+    colors: PlotIntSeries = BlackARGB,
+    lines: Option[ScatterStyle.LineData] = None,
     xErrorBars: Option[PlotDoubleSeries] = None,
     yErrorBars: Option[PlotDoubleSeries] = None) extends NumberNumberPlotStyle {
 
@@ -27,7 +27,7 @@ final case class ScatterStyle(
     val yNAxis = yAxis.asInstanceOf[NumericAxis]
     val (start, end) = calcStartEnd()
 
-    val connectMap = connectWithLines.map(_ => collection.mutable.Map[Any, List[(Double, Double, Int)]]())
+    val connectMap = lines.map(_ => collection.mutable.Map[Any, List[(Double, Double, Int)]]())
 
     val (xConv, xtfs, xnfs, xRender) = xNAxis.renderInfo(bounds.x, bounds.x + bounds.width,
       xminFunc(xNAxis), xmaxFunc(xNAxis), Axis.RenderOrientation.XAxis, r, axisBounds)
@@ -44,7 +44,7 @@ final case class ScatterStyle(
       val py = (pminy+pmaxy)/2
       val pwidth = pmaxx-pminx
       val pheight = pmaxy-pminy
-      val color = colorFunction(i)
+      val color = colors(i)
       xErrorBars.foreach { ex =>
         val error = ex(i)
         r.setStroke(Renderer.StrokeData(1, Nil))
@@ -58,7 +58,7 @@ final case class ScatterStyle(
         r.drawLine(px, yConv(y - error), px, yConv(y + error))
       }
       r.setColor(color)
-      (connectWithLines, connectMap).zipped.foreach {
+      (lines, connectMap).zipped.foreach {
         case (ScatterStyle.LineData(groupFunc, stroke), cm) =>
           val group = groupFunc(i)
           cm.get(group) match {
@@ -78,7 +78,7 @@ final case class ScatterStyle(
       }
       symbol.drawSymbol(px, py, pwidth, pheight, r)
     }
-    (connectWithLines, connectMap).zipped.foreach {
+    (lines, connectMap).zipped.foreach {
       case (ScatterStyle.LineData(groupFunc, stroke), cm) =>
         for ((group, lst @ ((_, _, c) :: _)) <- cm) {
           r.setColor(c)
@@ -90,8 +90,8 @@ final case class ScatterStyle(
   }
 
   def calcStartEnd(): (Int, Int) = {
-    (Array(xSource, ySource, symbolWidth, symbolHeight, colorFunction, connectWithLines.map(_.groups).getOrElse(UnboundDoubleSeries)).map(_.minIndex).max,
-      Array(xSource, ySource, symbolWidth, symbolHeight, colorFunction, connectWithLines.map(_.groups).getOrElse(UnboundDoubleSeries)).map(_.maxIndex).min)
+    (Array(xSource, ySource, symbolWidth, symbolHeight, colors, lines.map(_.groups).getOrElse(UnboundDoubleSeries)).map(_.minIndex).max,
+      Array(xSource, ySource, symbolWidth, symbolHeight, colors, lines.map(_.groups).getOrElse(UnboundDoubleSeries)).map(_.maxIndex).min)
   }
 
   def xDataMin(): Option[Double] = {

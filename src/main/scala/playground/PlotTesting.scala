@@ -95,7 +95,7 @@ object PlotTesting extends JFXApp {
   def scatterWithSizeandColor(): Plot = {
     val xs = 0.0 to 10.0 by 0.01
     val cg = ColorGradient((0.0, RedARGB), (5.0, GreenARGB), (10.0, BlueARGB))
-    Plot.scatterPlot(xs, xs.map(math.cos), title = "Cosine", xLabel = "Theta", yLabel = "Value", symbolSize = xs.map(x => math.sin(x) + 2), symbolColor = xs.map(cg))
+    Plot.scatterPlot(xs, xs.map(math.cos), title = "Cosine", xLabel = "Theta", yLabel = "Value", symbolSize = xs.map(x => math.sin(x) + 2), symbolColor = cg(xs))
   }
 
   def fullScatter(): Plot = {
@@ -205,7 +205,7 @@ object PlotTesting extends JFXApp {
     val ex2 = x2.map(x => 0.1 * math.random)
     val ey2 = x2.map(x => 0.2 * math.random)
     val cg = ColorGradient(-1.0 -> BlackARGB, 0.0 -> BlueARGB, 1.0 -> GreenARGB)
-    val errorScatter = ScatterStyle(x2, y2, Rectangle, 5, ey2, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Scaled, y2.map(cg),
+    val errorScatter = ScatterStyle(x2, y2, Rectangle, 5, ey2, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Scaled, cg(y2),
       None, Some(ex2), Some(ey2))
     val errorScatterPlot = Plot2D(errorScatter, "x2", "y1")
 
@@ -230,7 +230,7 @@ object PlotTesting extends JFXApp {
 
   def colorTest(): Plot = {
     val cg = ColorGradient(0.0 -> BlueARGB, 1.0 -> RedARGB, 2.0 -> GreenARGB)
-    Plot.scatterPlot(Seq(-1, 0, 1), Seq(-1, 0, 1), title = "Title", xLabel = "x", yLabel = "y", symbolSize = 10, symbolColor = Array(0.0, 1.0, 2.0).map(cg))
+    Plot.scatterPlot(Seq(-1, 0, 1), Seq(-1, 0, 1), title = "Title", xLabel = "x", yLabel = "y", symbolSize = 10, symbolColor = cg(Array(0.0, 1.0, 2.0)))
   }
 
   def boxPlot(): Plot = {
@@ -307,10 +307,10 @@ object PlotTesting extends JFXApp {
 //        FXRenderer(scatter1(), 800, 800)
 //        FXRenderer(scatter2(), 800, 800)
 //        FXRenderer(scatterLines(), 800, 800)
-//        FXRenderer(scatterGrid(), 800, 800)
+        FXRenderer(scatterGrid(), 800, 800)
 //        FXRenderer(scatterWithErrorBars(), 800, 800)
 //        FXRenderer(scatterMultidata(), 800, 800)
-//        FXRenderer(scatterWithSizeandColor(), 800, 800)
+        FXRenderer(scatterWithSizeandColor(), 800, 800)
 //            FXRenderer(scatterLogLog(), 800, 800)
 //        FXRenderer(fullScatter(), 800, 800)
 //        FXRenderer(stackedNNTest(), 800, 800)
@@ -322,12 +322,12 @@ object PlotTesting extends JFXApp {
 //            FXRenderer(histogramSide(), 600, 600)
 //            FXRenderer(histogram2(), 600, 600)
 //            FXRenderer(histogramGrid(), 800, 800)
-//    FXRenderer(longForm(), 1200, 1000)
-            SVGRenderer(longForm(), "plot.svg", 1200, 1000)
+    FXRenderer(longForm(), 1200, 1000)
+//            SVGRenderer(longForm(), "plot.svg", 1200, 1000)
     //    FXRenderer(boxPlot(), 600, 600)
     //    FXRenderer(violinPlot(), 600, 600)
-            FXRenderer(rowOfDists(), 1200, 600)
-    //    FXRenderer(colorTest(), 1200, 1000)
+//            FXRenderer(rowOfDists(), 1200, 600)
+        FXRenderer(colorTest(), 1200, 1000)
     //    saveToFile()
   }
 }
