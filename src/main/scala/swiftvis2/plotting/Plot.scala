@@ -95,7 +95,13 @@ object Plot {
           Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
           Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
       case ccps: CategoryCategoryPlotStyle => 
-        ???
+        val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
+        val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+        val yAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+        val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
+        Plot(
+          Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
+          Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
     }
   }
   
