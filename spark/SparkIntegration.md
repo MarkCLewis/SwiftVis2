@@ -66,11 +66,11 @@ is no equivalent to a `Column` for an RDD, the only versions take functions.
 ```
 ...
 val rdd1 = ... // Code to generate the first RDD.
-val plot = Plot.scatterPlot(doubles(rdd1,_.x), doubles(rdd1,_y), "Spark Based Plot", "x", "y")
+val plot = Plot.scatterPlot(doubles(rdd1)(_.x), doubles(rdd1)(_y), "Spark Based Plot", "x", "y")
 FXRenderer(plot, 600, 600)
 
 ...
 val rdd2 = ... // Code that creates a different RDD.
-val plot2 = Plot.scatterPlot(doubles(rdd2,_.x), doubles(rdd2,_.y), "Spark Based Plot", "x", "y", doubles(rdd2,_.value), ints(rdd2,a => myColorFunc(a.value)))
+val plot2 = Plot.scatterPlot(doubles(rdd2)(_.x), doubles(rdd2)(_.y), "Spark Based Plot", "x", "y", doubles(rdd2)(_.value), ints(rdd2,a => myColorFunc(a.value)))
 FXRenderer(plot2, 600, 600)
 ```

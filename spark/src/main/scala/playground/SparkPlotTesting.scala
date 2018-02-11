@@ -58,8 +58,9 @@ object SparkPlotTesting extends JFXApp {
   FXRenderer(plot3b, 600, 600)
   
   val df2 = df.map(p => p.copy(x = p.x+3))
-  val plot4b = Plot.stackedNN(Array(ScatterStyle(doubles(df, 'x), doubles(df, 'y)), ScatterStyle(doubles(df2, 'x), doubles(df2, 'y))), "Stacked", "x", "y")
+  val plot4b = Plot.stackedNN(Array(ScatterStyle(doubles(df)(_.x), doubles(df)(_.y)), ScatterStyle(doubles(df2)(_.x), doubles(df2)(_.y))), "Stacked", "x", "y")
   FXRenderer(plot4b, 600, 600)
 
+  
   spark.stop()
 }

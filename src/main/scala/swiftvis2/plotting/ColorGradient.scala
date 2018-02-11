@@ -1,6 +1,21 @@
 package swiftvis2.plotting
 
+/**
+ * This class defines a color gradient that can be used for plotting colors that vary with a value.
+ * The ColorGradient is a function of Double => Int that takes the value and gives back the
+ * appropriate color. It also can be applied to a PlotDoubleSeries and it will give back a
+ * PlotIntSeries.
+ * 
+ * When you are working with Scala collections, you can use values.map(cg) to get the colors
+ * associated with the values for the data point. The second form is most useful when working
+ * with Spark. You can instead do cg('col) as the Spark Column will be implicitly converted to
+ * a PlotIntSeries and the gradient will be applied to the values. 
+ */
 class ColorGradient private (colorValues: Seq[(Double, Int)]) extends (Double => Int) {
+  
+  /**
+   * Apply this as a function to a Double and produce the appropriate color as an Int.
+   */
   def apply(x: Double): Int = {
     if (x < colorValues.head._1) colorValues.head._2
     else {
@@ -19,6 +34,10 @@ class ColorGradient private (colorValues: Seq[(Double, Int)]) extends (Double =>
     }
   }
   
+  /**
+   * Use this function to convert a PlotDoubleSeries to a PlotIntSeries. This form can be used with Scala
+   * collections, but is most useful when dealing with Spark data.
+   */
   def apply(ds: PlotDoubleSeries): PlotIntSeries = new PlotIntSeries {
     def apply(index: Int): Int = ColorGradient.this.apply(ds(index))
     def maxIndex: Int = ds.maxIndex
@@ -27,6 +46,9 @@ class ColorGradient private (colorValues: Seq[(Double, Int)]) extends (Double =>
 }
 
 object ColorGradient {
+  /**
+   * Create a ColorGradient from a sequence of values and colors.
+   */
   def apply(cv: (Double, Int)*): ColorGradient = {
     new ColorGradient(cv.sortBy(_._1))
   }

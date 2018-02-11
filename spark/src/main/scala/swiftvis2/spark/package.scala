@@ -17,6 +17,7 @@ package object spark {
     def maxIndex: Int = data.length
     def apply(i: Int) = data(i)
   }
+  
   implicit class ColumnToDoubleSeries(col: Column)(implicit ds: Dataset[_]) extends PlotDoubleSeries {
     import ds.sparkSession.implicits._
     val data = ds.select(col).as[Double].collect()
@@ -24,6 +25,7 @@ package object spark {
     def maxIndex: Int = data.length
     def apply(i: Int) = data(i)
   }
+  
   implicit class ColumnToStringSeries(col: Column)(implicit ds: Dataset[_]) extends PlotStringSeries {
     import ds.sparkSession.implicits._
     val data = ds.select(col).as[String].collect()
@@ -31,6 +33,7 @@ package object spark {
     def maxIndex: Int = data.length
     def apply(i: Int) = data(i)
   }
+  
   implicit class SymbolToIntSeries(col: Symbol)(implicit ds: Dataset[_]) extends PlotIntSeries {
     import ds.sparkSession.implicits._
     val data = ds.select(col).as[Int].collect()
@@ -38,6 +41,7 @@ package object spark {
     def maxIndex: Int = data.length
     def apply(i: Int) = data(i)
   }
+  
   implicit class SymbolToDoubleSeries(col: Symbol)(implicit ds: Dataset[_]) extends PlotDoubleSeries {
     import ds.sparkSession.implicits._
     val data = ds.select(col).as[Double].collect()
@@ -45,6 +49,7 @@ package object spark {
     def maxIndex: Int = data.length
     def apply(i: Int) = data(i)
   }
+  
   implicit class SymbolToStringSeries(col: Symbol)(implicit ds: Dataset[_]) extends PlotStringSeries {
     import ds.sparkSession.implicits._
     val data = ds.select(col).as[String].collect()
@@ -57,33 +62,41 @@ package object spark {
     import ds.sparkSession.implicits._
     ds.select(col).as[Int].collect()
   }
-  def ints[A](ds: Dataset[A], f: A => Int): PlotIntSeries = {
+  
+  def ints[A](ds: Dataset[A])(f: A => Int): PlotIntSeries = {
     import ds.sparkSession.implicits._
     ds.map(f).collect()
   }
-  def ints[A](rdd: RDD[A], f: A => Int): PlotIntSeries = {
+  
+  def ints[A](rdd: RDD[A])(f: A => Int): PlotIntSeries = {
     rdd.map(f).collect()
   }
+  
   def doubles(ds: Dataset[_], col: Column): PlotDoubleSeries = {
     import ds.sparkSession.implicits._
     ds.select(col).as[Double].collect()
   }
-  def doubles[A](ds: Dataset[A], f: A => Double): PlotDoubleSeries = {
+  
+  def doubles[A](ds: Dataset[A])(f: A => Double): PlotDoubleSeries = {
     import ds.sparkSession.implicits._
     ds.map(f).collect()
   }
-  def doubles[A](rdd: RDD[A], f: A => Double): PlotDoubleSeries = {
+  
+  def doubles[A](rdd: RDD[A])(f: A => Double): PlotDoubleSeries = {
     rdd.map(f).collect()
   }
+  
   def strings(ds: Dataset[_], col: Column): PlotStringSeries = {
     import ds.sparkSession.implicits._
     ds.select(col).as[String].collect()
   }
-  def strings[A](ds: Dataset[A], f: A => String): PlotStringSeries = {
+  
+  def strings[A](ds: Dataset[A])(f: A => String): PlotStringSeries = {
     import ds.sparkSession.implicits._
     ds.map(f).collect()
   }
-  def strings[A](rdd: RDD[A], f: A => String): PlotStringSeries = {
+  
+  def strings[A](rdd: RDD[A])(f: A => String): PlotStringSeries = {
     rdd.map(f).collect()
   }
 }

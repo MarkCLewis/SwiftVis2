@@ -76,12 +76,22 @@ object Plot {
    */
   case class GridData(grid: PlotGrid, bounds: Bounds)
 
-  def simple(style: PlotStyle, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
+  /**
+   * Plots a single style in a 1x1 grid.
+   * @param style The plot styles to stack on a 1x1 grid.
+   * @param title The title put on the plot.
+   * @param xLabel The label drawn on the x-axis.
+   * @param yLabel The label drawn on the y-axis.
+   * @param xType The type of the x-axis if it is numeric. This argument isn't used for a categorical x-axis.
+   * @param yType The type of the y-axis if it is numeric. This argument isn't used for a categorical y-axis.
+   */
+  def simple(style: PlotStyle, title: String = "", xLabel: String = "", yLabel: String = "",
+      xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     style match {
       case nnps: NumberNumberPlotStyle =>
         val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
-        val grid = PlotGrid.oneByOne(xLabel, Axis.ScaleStyle.Linear, yLabel, Axis.ScaleStyle.Linear, style)
+        val grid = PlotGrid.oneByOne(xLabel, xType, yLabel, yType, style)
         Plot(
           Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
           Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
@@ -89,7 +99,7 @@ object Plot {
         val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
         val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
         val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
-          Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+          Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, yType)
         val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
         Plot(
           Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
@@ -104,14 +114,55 @@ object Plot {
           Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
     }
   }
+
+  /**
+   * Make a 1x1 grid with with multiple plots that all share the same x and y axis with the ability to add connecting lines and error bars. If you want to
+   * plot multiple lines for separate sets of data, this is likely the easiest approach. Note that this requires all plots have the same axis types.
+   * @param styles A sequence of the plot styles to stack on a 1x1 grid.
+   * @param title The title put on the plot.
+   * @param xLabel The label drawn on the x-axis.
+   * @param yLabel The label drawn on the y-axis.
+   * @param xType The type of the x-axis if it is numeric.
+   * @param yType The type of the y-axis if it is numeric.
+   */
+  def stacked(styles: Seq[PlotStyle], title: String = "", xLabel: String = "", yLabel: String = "",
+                xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
+    require(styles.nonEmpty, "Stacked plot needs at least one plot in the sequence to work.")
+    styles.head match {
+      case nnps: NumberNumberPlotStyle =>
+        require(styles.forall(_.isInstanceOf[NumberNumberPlotStyle]), "All axis styles much match for plot stack.")
+        val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
+        val grid = PlotGrid.oneByOne(xLabel, xType, yLabel, yType, styles: _*)
+        Plot(
+          Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
+          Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+      case cnps: CategoryNumberPlotStyle =>
+        require(styles.forall(_.isInstanceOf[CategoryNumberPlotStyle]), "All axis styles much match for plot stack.")
+        val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+        val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
+        val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+        val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
+          Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, yType)
+        val grid = PlotGrid(Seq(Seq(styles.map(s => Plot2D(s, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
+        Plot(
+          Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
+          Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    }
+  }
+  
+  // TODO - add grid
+  
+  // TODO - add stackedGrid
   
   /**
-   * Make a 1x1 grid with with multiple scatter plots that all share the same x and y axis with the ability to add connecting lines and error bars. If you want to
+   * Make a 1x1 grid with with multiple numeric axes plots that all share the same x and y axis with the ability to add connecting lines and error bars. If you want to
    * plot multiple lines for separate sets of data, this is likely the easiest approach.
    * @param styles A sequence of the plot styles to stack on a 1x1 grid.
    * @param title The title put on the plot.
    * @param xLabel The label drawn on the x-axis.
    * @param yLabel The label drawn on the y-axis.
+   * @param xType The type of the x-axis if it is numeric.
+   * @param yType The type of the y-axis if it is numeric.
    */
   def stackedNN(styles: Seq[NumberNumberPlotStyle], title: String = "", xLabel: String = "", yLabel: String = "",
                 xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
@@ -129,14 +180,15 @@ object Plot {
    * @param title The title put on the plot.
    * @param xLabel The label drawn on the x-axis.
    * @param yLabel The label drawn on the y-axis.
+   * @param yType The type of the y-axis if it is numeric.
    */
   def stackedCN(styles: Seq[CategoryNumberPlotStyle], title: String = "", xLabel: String = "", yLabel: String = "",
-                xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
+                yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
     val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
     val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, yType)
     val grid = PlotGrid(Seq(Seq(styles.map(s => Plot2D(s, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
     Plot(
       Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
@@ -149,6 +201,8 @@ object Plot {
    * @param title The title put on the plot.
    * @param xLabel The label drawn on the x-axis.
    * @param yLabel The label drawn on the y-axis.
+   * @param xType The type of the x-axis if it is numeric.
+   * @param yType The type of the y-axis if it is numeric.
    */
   def gridNN(styles: Seq[Seq[NumberNumberPlotStyle]], title: String = "", xLabel: String = "", yLabel: String = "",
              xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
@@ -176,9 +230,10 @@ object Plot {
    * @param title The title put on the plot.
    * @param xLabel The label drawn on the x-axis.
    * @param yLabel The label drawn on the y-axis.
+   * @param yType The type of the y-axis if it is numeric.
    */
   def gridCN(styles: Seq[Seq[CategoryNumberPlotStyle]], title: String = "", xLabel: String = "", yLabel: String = "",
-             xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
+             yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
     val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
@@ -203,15 +258,18 @@ object Plot {
    * @param xNumLabel The label drawn on the x-axis of numbered axes.
    * @param xCatLabel The label drawn on the x-axis of categorical axes.
    * @param yLabel The label drawn on the y-axis.
+   * @param xType The type of the x-axis if it is numeric. This argument isn't used for a categorical x-axis.
+   * @param yType The type of the y-axis if it is numeric.
    */
-  def row(styles: Seq[PlotStyle], title: String = "", xNumLabel: String = "", xCatLabel: String = "", yLabel: String = ""): Plot = {
+  def row(styles: Seq[PlotStyle], title: String = "", xNumLabel: String = "", xCatLabel: String = "", yLabel: String = "",
+      xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
     val xNumAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xNumLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xNumLabel -> font), Axis.DisplaySide.Min, xType)
     val xCatAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xCatLabel -> font), Axis.DisplaySide.Min)
     val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, yType)
     val plots = Seq(styles.map { 
       case style: NumberNumberPlotStyle =>
           Seq(Plot2D(style, "nx", "y"))
@@ -223,6 +281,8 @@ object Plot {
       Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
       Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
+  
+  // TODO - add column
 
   /**
    * This makes an MxN grid of scatter plots that all share the same axes.
@@ -230,8 +290,10 @@ object Plot {
    * @param title The title put on the plot.
    * @param xLabel The label drawn on the x-axis.
    * @param yLabel The label drawn on the y-axis.
+   * @param xType The type of the x-axis if it is numeric. This argument isn't used for a categorical x-axis.
+   * @param yType The type of the y-axis if it is numeric. This argument isn't used for a categorical y-axis.
    */
-  def fullGridNN(styles: Seq[Seq[Seq[NumberNumberPlotStyle]]], title: String = "", xLabel: String = "", yLabel: String = "",
+  def stackedGridNN(styles: Seq[Seq[Seq[NumberNumberPlotStyle]]], title: String = "", xLabel: String = "", yLabel: String = "",
              xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
