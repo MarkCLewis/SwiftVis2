@@ -7,6 +7,7 @@ import swiftvis2.plotting.renderer.Renderer
  */
 sealed trait Axis {
   val displaySide: Axis.DisplaySide.Value
+  val name: Option[(String, Renderer.FontData)]
   def isDrawn: Boolean
 }
 
@@ -17,14 +18,14 @@ sealed trait Axis {
  * the tickSpacing will be ignored, even if it is provided.
  */
 case class NumericAxis(
-  min:             Option[Double]                      = None,
-  max:             Option[Double]                      = None,
-  tickSpacing:     Option[Double]                      = None,
-  tickStyle:       Axis.TickStyle.Value                = Axis.TickStyle.Both,
-  tickLabelInfo:   Option[Axis.LabelSettings]          = None, // Angle in degrees, None if no labels shown
-  name:            Option[(String, Renderer.FontData)] = None,
-  val displaySide: Axis.DisplaySide.Value              = Axis.DisplaySide.Min,
-  style:           Axis.ScaleStyle.Value               = Axis.ScaleStyle.Linear) extends Axis {
+  min:           Option[Double]                      = None,
+  max:           Option[Double]                      = None,
+  tickSpacing:   Option[Double]                      = None,
+  tickStyle:     Axis.TickStyle.Value                = Axis.TickStyle.Both,
+  tickLabelInfo: Option[Axis.LabelSettings]          = None, // Angle in degrees, None if no labels shown
+  name:          Option[(String, Renderer.FontData)] = None,
+  displaySide:   Axis.DisplaySide.Value              = Axis.DisplaySide.Min,
+  style:         Axis.ScaleStyle.Value               = Axis.ScaleStyle.Linear) extends Axis {
 
   def isDrawn: Boolean = {
     tickStyle != Axis.TickStyle.Neither || name.nonEmpty
@@ -37,7 +38,7 @@ case class NumericAxis(
     val toPixels = toPixelFunc(pmin, pmax, amin, amax)
     val whichBounds = (if (orient == Axis.RenderOrientation.YAxis) 2 else 0) + (if (displaySide == Axis.DisplaySide.Max) 1 else 0)
     val (tickBounds, tickSize, nameBounds, nameSize, tickLocs) = boundsAndSizing(r, bounds(whichBounds), orient, amin, amax)
-    (toPixels, tickSize, nameSize, (tfs, nfs) => render(r, tickBounds, tfs, nameBounds, nfs, orient, tickLocs, toPixels))
+    (toPixels, tickSize, nameSize, (tfs, nfs, aggBounds, nextAxis) => render(r, tickBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, tickLocs, toPixels))
   }
 
   def toPixelFunc(pmin: Double, pmax: Double, amin: Double, amax: Double): Double => Double = {
@@ -84,11 +85,8 @@ case class NumericAxis(
     (tickBounds, tickFontSize, nameBounds, nameFontSize, tickLocs)
   }
 
-  private def render(r: Renderer, tickBounds: Bounds, tickFontSize: Double, nameBounds: Bounds, nameFontSize: Double,
-                     orient: Axis.RenderOrientation.Value, tickLocs: Seq[Double], toPixels: Axis.UnitConverter): Unit = {
-
-    // Draw name
-    name.foreach { case (nameStr, fd) => Axis.drawName(nameStr, fd, nameFontSize, nameBounds, orient, r) }
+  private def render(r: Renderer, tickBounds: Bounds, tickFontSize: Double, nameBounds: Bounds, aggBounds: Option[Bounds], nextAxis: Option[Axis], 
+      nameFontSize: Double, orient: Axis.RenderOrientation.Value, tickLocs: Seq[Double], toPixels: Axis.UnitConverter): Option[Bounds] = {
 
     // Draw ticks and labels
     orient match {
@@ -119,6 +117,14 @@ case class NumericAxis(
           }
         }
     }
+
+    if(name == nextAxis.flatMap(_.name)) {
+      aggBounds.map(b => b join nameBounds).orElse(Some(nameBounds))
+    } else {
+      // Draw name
+      name.foreach { case (nameStr, fd) => Axis.drawName(nameStr, fd, nameFontSize, aggBounds.map(_ join nameBounds).getOrElse(nameBounds), orient, r) }
+      None
+    }
   }
 
   private def calcTickLocations(amin: Double, amax: Double): Seq[Double] = {
@@ -139,7 +145,7 @@ case class NumericAxis(
             if (pos >= (amin min amax)) {
               ret ::= pos
             }
-            for(i <- 2 to 8 by 2; if pos*i <= (amin max amax) && pos*i >= (amin min amax)) ret ::= pos*i
+            for (i <- 2 to 8 by 2; if pos * i <= (amin max amax) && pos * i >= (amin min amax)) ret ::= pos * i
             pos *= 10
           }
           ret.reverse
@@ -156,7 +162,7 @@ case class CategoryAxis(
   labelOrientation: Double, // angle in degrees
   labelFont:        Renderer.FontData,
   name:             Option[(String, Renderer.FontData)],
-  val displaySide:  Axis.DisplaySide.Value) extends Axis {
+  displaySide:      Axis.DisplaySide.Value) extends Axis {
 
   def isDrawn: Boolean = true
 
@@ -174,7 +180,7 @@ case class CategoryAxis(
         }
         c -> range
     }.toMap
-    (catLocs, catSize, nameSize, (tfs, nfs) => render(r, catBounds, tfs, nameBounds, nfs, orient, categories, catLocs))
+    (catLocs, catSize, nameSize, (tfs, nfs, aggBounds, nextAxis) => render(r, catBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, categories, catLocs))
   }
 
   def boundsAndSizing(r: Renderer, bounds: Bounds, orient: Axis.RenderOrientation.Value, categories: Seq[String]): (Bounds, Double, Bounds, Double) = {
@@ -190,11 +196,8 @@ case class CategoryAxis(
     (labelBounds, labelFontSize, nameBounds, nameFontSize)
   }
 
-  def render(r: Renderer, tickBounds: Bounds, tickFontSize: Double, nameBounds: Bounds, nameFontSize: Double,
-             orient: Axis.RenderOrientation.Value, categories: Seq[String], catLocs: Axis.CategoryLoc): Unit = {
-
-    // Draw name
-    name.foreach { case (nameStr, fd) => Axis.drawName(nameStr, fd, nameFontSize, nameBounds, orient, r) }
+  def render(r: Renderer, tickBounds: Bounds, tickFontSize: Double, nameBounds: Bounds, aggBounds: Option[Bounds], nextAxis: Option[Axis], 
+      nameFontSize: Double, orient: Axis.RenderOrientation.Value, categories: Seq[String], catLocs: Axis.CategoryLoc): Option[Bounds] = {
 
     // Draw ticks and labels
     orient match {
@@ -225,6 +228,15 @@ case class CategoryAxis(
           r.drawText(cat, labelX, (sy + ey) / 2, textAlign, labelOrientation)
         }
     }
+        
+    if(name == nextAxis.flatMap(_.name)) {
+      aggBounds.map(b => b join nameBounds).orElse(Some(nameBounds))
+    } else {
+      // Draw name
+      name.foreach { case (nameStr, fd) => Axis.drawName(nameStr, fd, nameFontSize, aggBounds.map(_ join nameBounds).getOrElse(nameBounds), orient, r) }
+      None
+    }
+
   }
 }
 
@@ -235,7 +247,7 @@ object Axis {
   type UnitConverter = Double => Double
   type CategoryLoc = String => (Double, Double)
   type FontSizer = (Renderer, Bounds, Axis.RenderOrientation.Value) => (Double, Double)
-  type AxisRenderer = (Double, Double) => Unit
+  type AxisRenderer = (Double, Double, Option[Bounds], Option[Axis]) => Option[Bounds]
   case class LabelSettings(angle: Double, font: Renderer.FontData, numberFormat: String)
 
   object TickStyle extends Enumeration {

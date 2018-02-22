@@ -19,7 +19,7 @@ import swiftvis2.plotting.styles.CategoryCategoryPlotStyle
  * This allows the user to place multiple plots with separate axes or multiple labels. Text is drawn
  * after all plot grids so it will appear on top of them.
  */
-case class Plot(texts: Map[String, Plot.TextData], grids: Map[String, Plot.GridData]) {
+case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String, Plot.GridData] = Map.empty) {
   import Plot._
   
   /**

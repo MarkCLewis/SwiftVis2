@@ -23,7 +23,7 @@ case class PlotGrid(
     axes: Map[String, Axis],
     xWeights: Seq[Double],
     yWeights: Seq[Double],
-    axisFrac: Double) extends Plottable {
+    axisFrac: Double = 0.15) extends Plottable {
 
   // TODO - labels and listeners
 
@@ -101,37 +101,41 @@ case class PlotGrid(
     // Draw X axes
     val minXAxisCount = minXAxes.maxBy(_.size).size
     val minXAxisFracHeight = 1.0 / minXAxisCount
-    for ((axisSeq, xStart, xEnd) <- (minXAxes.zipWithIndex, xStarts, xStarts.tail).zipped) {
-//      val b = minXAxisBounds.subX(xStart, xEnd)
-      for (i <- 0 until minXAxisCount; if i < axisSeq._1.size) {
-        axisRenderers(axisSeq._1(i) -> axisSeq._2)(tickFontSize, nameFontSize)
-      }
+    minXAxes.zipWithIndex.foldLeft(None:Option[Bounds]) { case (aggBounds, (axisSeq, index)) =>
+//      for (i <- 0 until minXAxisCount; if i < axisSeq.size) {
+      if(axisSeq.nonEmpty) {
+        val nextAxis = if(index >= minXAxes.length-1 || minXAxes(index+1).isEmpty) None else Some(axes(minXAxes(index+1)(0)))
+        axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis)
+      } else None
     }
-    val maxXAxisCount = minXAxes.maxBy(_.size).size
-    val maxXAxisFracHeight = 1.0 / minXAxisCount
-    for ((axisSeq, xStart, xEnd) <- (maxXAxes.zipWithIndex, xStarts, xStarts.tail).zipped) {
-//      val b = minXAxisBounds.subX(xStart, xEnd)
-      for (i <- 0 until maxXAxisCount; if i < axisSeq._1.size) {
-        axisRenderers(axisSeq._1(i) -> axisSeq._2)(tickFontSize, nameFontSize)
-      }
+    val maxXAxisCount = maxXAxes.maxBy(_.size).size
+    val maxXAxisFracHeight = 1.0 / maxXAxisCount
+    maxXAxes.zipWithIndex.foldLeft(None:Option[Bounds]) { case (aggBounds, (axisSeq, index)) =>
+//      for (i <- 0 until maxXAxisCount; if i < axisSeq._1.size) {
+      if(axisSeq.nonEmpty) {
+        val nextAxis = if(index >= maxXAxes.length-1 || maxXAxes(index+1).isEmpty) None else Some(axes(maxXAxes(index+1)(0)))
+        axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis)
+      } else None
     }
 
     // Draw Y Axes
     val minYAxisCount = minYAxes.maxBy(_.size).size
     val minYAxisFracHeight = 1.0 / minYAxisCount
-    for ((axisSeq, yStart, yEnd) <- (minYAxes.zipWithIndex, yStarts, yStarts.tail).zipped) {
-//      val b = minYAxisBounds.subY(yStart, yEnd)
-      for (i <- 0 until minYAxisCount; if i < axisSeq._1.size) {
-        axisRenderers(axisSeq._1(i) -> axisSeq._2)(tickFontSize, nameFontSize)
-      }
+    minYAxes.zipWithIndex.foldLeft(None:Option[Bounds]) { case (aggBounds, (axisSeq, index)) =>
+//      for (i <- 0 until minYAxisCount; if i < axisSeq._1.size) {
+      if(axisSeq.nonEmpty) {
+        val nextAxis = if(index >= minYAxes.length-1 || minYAxes(index+1).isEmpty) None else Some(axes(minYAxes(index+1)(0)))
+        axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis)
+      } else None
     }
-    val maxYAxisCount = minYAxes.maxBy(_.size).size
-    val maxYAxisFracHeight = 1.0 / minYAxisCount
-    for ((axisSeq, yStart, yEnd) <- (maxYAxes.zipWithIndex, yStarts, yStarts.tail).zipped) {
-//      val b = minYAxisBounds.subY(yStart, yEnd)
-      for (i <- 0 until maxYAxisCount; if i < axisSeq._1.size) {
-        axisRenderers(axisSeq._1(i) -> axisSeq._2)(tickFontSize, nameFontSize)
-      }
+    val maxYAxisCount = maxYAxes.maxBy(_.size).size
+    val maxYAxisFracHeight = 1.0 / maxYAxisCount
+    maxYAxes.zipWithIndex.foldLeft(None:Option[Bounds]) { case (aggBounds, (axisSeq, index)) =>
+//      for (i <- 0 until maxYAxisCount; if i < axisSeq._1.size) {
+      if(axisSeq.nonEmpty) {
+        val nextAxis = if(index >= maxYAxes.length-1 || maxYAxes(index+1).isEmpty) None else Some(axes(maxYAxes(index+1)(0)))
+        axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis)
+      } else None
     }
   }
 

@@ -302,6 +302,18 @@ object PlotTesting extends JFXApp {
       BoxPlotStyle(Array("Distrib"), Array(ys)),
       ViolinPlotStyle(Array("Distrib"), Array(ys))), "Distribs", "Num X", "Categories", "Y")
   }
+  
+  def simpleFull(): Plot = {
+    val x = 1.0 to 10.0 by 0.1
+    val y = x.map(a => a*a)
+    val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    val style = ScatterStyle(x, y)
+    val p2d = Plot2D(style, "x", "y")
+    val xAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(90, font, "%1.1f")), name = Some("X" -> font))
+    val yAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(0, font, "%1.1f")), name = Some("Y" -> font))
+    val grid = PlotGrid(Seq(Seq(Seq(p2d))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0))
+    Plot(grids = Map("main" -> Plot.GridData(grid, Bounds(0.0, 0.05, 0.95, 0.95))))
+  }
 
   Future {
 //        FXRenderer(scatter1(), 800, 800)
@@ -310,24 +322,25 @@ object PlotTesting extends JFXApp {
         FXRenderer(scatterGrid(), 800, 800)
 //        FXRenderer(scatterWithErrorBars(), 800, 800)
 //        FXRenderer(scatterMultidata(), 800, 800)
-        FXRenderer(scatterWithSizeandColor(), 800, 800)
+//        FXRenderer(scatterWithSizeandColor(), 800, 800)
 //            FXRenderer(scatterLogLog(), 800, 800)
 //        FXRenderer(fullScatter(), 800, 800)
 //        FXRenderer(stackedNNTest(), 800, 800)
-//        FXRenderer(gridNNTest(), 800, 800)
+        FXRenderer(gridNNTest(), 800, 800)
 //    FXRenderer(stackedCNTest(), 800, 800)
-//    FXRenderer(gridCNTest(), 800, 800)
+    FXRenderer(gridCNTest(), 800, 800)
 //    FXRenderer(barChart(), 600, 500)
 //            FXRenderer(histogram(), 600, 600)
 //            FXRenderer(histogramSide(), 600, 600)
 //            FXRenderer(histogram2(), 600, 600)
 //            FXRenderer(histogramGrid(), 800, 800)
     FXRenderer(longForm(), 1200, 1000)
-//            SVGRenderer(longForm(), "plot.svg", 1200, 1000)
-    //    FXRenderer(boxPlot(), 600, 600)
+//    SVGRenderer(longForm(), "plot.svg", 1200, 1000)
+//        FXRenderer(boxPlot(), 600, 600)
     //    FXRenderer(violinPlot(), 600, 600)
-//            FXRenderer(rowOfDists(), 1200, 600)
-        FXRenderer(colorTest(), 1200, 1000)
+    FXRenderer(rowOfDists(), 1200, 600)
+//        FXRenderer(colorTest(), 1200, 1000)
     //    saveToFile()
+//    FXRenderer(simpleFull(), 600, 600)
   }
 }

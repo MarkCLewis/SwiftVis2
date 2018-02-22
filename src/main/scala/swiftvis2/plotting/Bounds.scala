@@ -66,4 +66,16 @@ case class Bounds(x: Double, y: Double, width: Double, height: Double) {
   def subXYBorder(minxBorder: Double, maxxBorder: Double, minyBorder: Double, maxyBorder: Double): Bounds = {
     Bounds(x+minxBorder, y+minyBorder, width-(minxBorder+maxxBorder), height-(minyBorder+maxyBorder))
   }
+  
+  /**
+   * Returns a bounds object that contains both this and that.
+   * @param that Another bounds to join with this one.
+   */
+  def join(that: Bounds): Bounds = {
+    val x1 = x min that.x
+    val y1 = y min that.y
+    val x2 = x+width max that.x+that.width
+    val y2 = y+height max that.y+that.height
+    Bounds(x1, y1, x2-x1, y2-y1)
+  }
 }
