@@ -65,5 +65,5 @@ object Renderer {
   /**
    * Information needed to set the stroke style for lines.
    */
-  case class StrokeData(width: Double, dashing: Seq[Double])
+  case class StrokeData(width: Double, dashing: Seq[Double] = Nil)
 }

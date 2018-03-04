@@ -10,15 +10,15 @@ import java.io.ByteArrayOutputStream
 
 class SVGRenderer(ps: PrintStream) extends Renderer {
   import SVGRenderer.Options
-  
+
   private var copt = Options("#000000", Renderer.StrokeData(1.0, Nil), Renderer.FontData("Ariel", Renderer.FontStyle.Plain), 10.0, None)
   private val stack = ArrayStack[Options]()
   private var clipCnt = 0
-  
+
   ps.println(s"""<svg xmlns="http://www.w3.org/2000/svg" version="1.1">""")
-  
+
   def drawEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit = {
-    ps.println(s"""<ellipse cx="$cx" cy="$cy" rx="${width*0.5}" ry="${height*0.5}" stroke="${copt.color}" stroke-width="$strokeWidth" fill="none" $clipPath/>""")
+    ps.println(s"""<ellipse cx="$cx" cy="$cy" rx="${width * 0.5}" ry="${height * 0.5}" stroke="${copt.color}" stroke-width="$strokeWidth" fill="none" $clipPath/>""")
   }
   def drawRectangle(x: Double, y: Double, width: Double, height: Double): Unit = {
     ps.println(s"""<rect x="$x" y="$y" width="$width" height="$height" stroke="${copt.color}" stroke-width="$strokeWidth"  fill="none" $clipPath/>""")
@@ -26,20 +26,20 @@ class SVGRenderer(ps: PrintStream) extends Renderer {
   def drawPolygon(xs: Seq[Double], ys: Seq[Double]): Unit = {}
   def drawPolygon(pnts: Seq[(Double, Double)]): Unit = {}
   def fillEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit = {
-    ps.println(s"""<ellipse cx="$cx" cy="$cy" rx="${width*0.5}" ry="${height*0.5}" fill="${copt.color}" $clipPath/>""")
+    ps.println(s"""<ellipse cx="$cx" cy="$cy" rx="${width * 0.5}" ry="${height * 0.5}" fill="${copt.color}" $clipPath/>""")
   }
   def fillRectangle(x: Double, y: Double, width: Double, height: Double): Unit = {
     ps.println(s"""<rect x="$x" y="$y" width="$width" height="$height" fill="${copt.color}" $clipPath/>""")
   }
   def fillPolygon(xs: Seq[Double], ys: Seq[Double]): Unit = {}
   def fillPolygon(pnts: Seq[(Double, Double)]): Unit = {}
-  
+
   def drawLine(x1: Double, y1: Double, x2: Double, y2: Double): Unit = {
     ps.println(s"""<line x1="$x1" y1="$y1" x2="$x2" y2="$y2" stroke="${copt.color}" stroke-width="$strokeWidth" $clipPath/>""")
     // TODO - dashing
   }
   def drawLinePath(x: Seq[Double], y: Seq[Double]): Unit = {
-    ps.println(s"""<polyline stroke="${copt.color}" stroke-width="$strokeWidth" fill="none" points="${(for((px, py) <- x.zip(y)) yield s"$px, $py").mkString(" ")}" $clipPath/>""")
+    ps.println(s"""<polyline stroke="${copt.color}" stroke-width="$strokeWidth" fill="none" points="${(for ((px, py) <- x.zip(y)) yield s"$px, $py").mkString(" ")}" $clipPath/>""")
     // TODO - dashing
   }
   def drawText(s: String, x: Double, y: Double, align: Renderer.HorizontalAlign.Value, angle: Double): Unit = {
@@ -49,12 +49,12 @@ class SVGRenderer(ps: PrintStream) extends Renderer {
       case Renderer.HorizontalAlign.Right => "end"
     }
 
-    ps.println(s"""<text x="0.0" y="${fontSize/3}" font-family="$fontFamily" font-size="${fontSize}px" text-anchor="$anchor" transform="translate($x, $y) rotate($angle)" $clipPath>$s</text>""")
+    ps.println(s"""<text x="0.0" y="${fontSize / 3}" font-family="$fontFamily" font-size="${fontSize}px" text-anchor="$anchor" transform="translate($x, $y) rotate($angle)" $clipPath>$s</text>""")
   }
-  
+
   def setColor(argb: Int): Unit = copt = copt.copy(color = {
     val hs = (argb & 0xffffff).toHexString
-    "#"+"0"*(6-hs.length)+hs
+    "#"+"0" * (6 - hs.length) + hs
   })
   def setStroke(stroke: Renderer.StrokeData): Unit = {
     copt = copt.copy(stroke = stroke)
@@ -69,13 +69,13 @@ class SVGRenderer(ps: PrintStream) extends Renderer {
   <clipPath id="clip$clipCnt">
     <rect x="${bounds.x}" y="${bounds.y}" width="${bounds.width}" height="${bounds.height}" />
   </clipPath>
-</defs>""")    
+</defs>""")
   }
   private def clipPath = copt.withClip.map(n => s"""clip-path="url(#clip$n)" """).getOrElse("")
   def maxFontSize(strings: Seq[String], allowedWidth: Double, allowedHeight: Double, fd: Renderer.FontData): Double = {
-    allowedHeight min 2*allowedWidth/strings.foldLeft(0.0)((m, s) => m max s.length)
+    allowedHeight min 2 * allowedWidth / strings.foldLeft(0.0)((m, s) => m max s.length)
   }
-  
+
   // Needed for clipping for JavaFX
   def save(): Unit = {
     stack.push(copt)
@@ -83,9 +83,9 @@ class SVGRenderer(ps: PrintStream) extends Renderer {
   def restore(): Unit = {
     copt = stack.pop()
   }
-  
+
   def finish(): Unit = ps.println("</svg>")
-  
+
   private def strokeWidth = copt.stroke.width
   private def fontSize = copt.fsize
   private def fontFamily = copt.font.font
@@ -93,12 +93,12 @@ class SVGRenderer(ps: PrintStream) extends Renderer {
 }
 
 object SVGRenderer {
-  
+
   /**
    * Options used by the SVG renderer for the settings stack.
    */
   case class Options(color: String, stroke: Renderer.StrokeData, font: Renderer.FontData, fsize: Double, withClip: Option[Int])
-  
+
   /**
    * Convenience method to render a plot to a SVG file.
    */
@@ -109,7 +109,7 @@ object SVGRenderer {
     r.finish()
     ps.close
   }
-  
+
   /**
    * Convenience method to render a plot to an SVG string.
    */

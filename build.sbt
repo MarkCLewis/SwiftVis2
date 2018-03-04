@@ -22,7 +22,7 @@ lazy val spark = (project in file("spark"))
     scalaVersion := "2.11.8",
     scalacOptions := Seq("-unchecked", "-deprecation"),
     version      := "0.1.0-SNAPSHOT",
-    libraryDependencies += "org.apache.spark" % "spark-core_2.11" % "2.2.1",
-    libraryDependencies += "org.apache.spark" % "spark-sql_2.11" % "2.2.1"
+    libraryDependencies += "org.apache.spark" % "spark-core_2.11" % "2.3.0",
+    libraryDependencies += "org.apache.spark" % "spark-sql_2.11" % "2.3.0"
   ).dependsOn(root)
   

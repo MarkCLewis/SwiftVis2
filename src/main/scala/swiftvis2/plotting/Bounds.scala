@@ -9,13 +9,13 @@ case class Bounds(x: Double, y: Double, width: Double, height: Double) {
   /**
    * Calculates the center of the bounds in X.
    */
-  def centerX = x+width/2
-  
+  def centerX = x + width / 2
+
   /**
    * Calculates the center of the bounds in Y.
    */
-  def centerY = y+height/2
-  
+  def centerY = y + height / 2
+
   /**
    * Produces a new Bounds object with range in X determined by the fractional min and max arguments. Passing 0.0 and 1.0 would
    * reproduce the original object.
@@ -23,9 +23,9 @@ case class Bounds(x: Double, y: Double, width: Double, height: Double) {
    * @param max The fractional relative maximum bound.
    */
   def subX(min: Double, max: Double): Bounds = {
-    copy(x = x+min*width, width = (max-min)*width)
+    copy(x = x + min * width, width = (max - min) * width)
   }
-  
+
   /**
    * Produces a new Bounds object with range in Y determined by the fractional min and max arguments. Passing 0.0 and 1.0 would
    * reproduce the original object.
@@ -33,9 +33,9 @@ case class Bounds(x: Double, y: Double, width: Double, height: Double) {
    * @param max The fractional relative maximum bound.
    */
   def subY(min: Double, max: Double): Bounds = {
-    copy(y = y+min*height, height = (max-min)*height)
+    copy(y = y + min * height, height = (max - min) * height)
   }
-  
+
   /**
    * Produces a new Bounds object with range in X and Y determined by the fractional min and max arguments. Passing 0.0, 1.0, 0.0, 1.0 would
    * reproduce the original object.
@@ -45,7 +45,7 @@ case class Bounds(x: Double, y: Double, width: Double, height: Double) {
    * @param maxy The fractional relative maximum bound for Y.
    */
   def subXY(minx: Double, maxx: Double, miny: Double, maxy: Double): Bounds = {
-    Bounds(x+minx*width, y+miny*height, (maxx-minx)*width, (maxy-miny)*height) 
+    Bounds(x + minx * width, y + miny * height, (maxx - minx) * width, (maxy - miny) * height)
   }
 
   /**
@@ -53,9 +53,9 @@ case class Bounds(x: Double, y: Double, width: Double, height: Double) {
    * @param bounds A fractional bounds used to make the sub-bounds.
    */
   def subXY(b: Bounds): Bounds = {
-    Bounds(x+b.x*width, y+b.y*height, b.width*width, b.height*height) 
+    Bounds(x + b.x * width, y + b.y * height, b.width * width, b.height * height)
   }
-  
+
   /**
    * Produces a new Bounds with absolute offsets for the X and Y values.
    * @param minxBorder The absolute width of the X offset on the minimum edge.
@@ -64,9 +64,9 @@ case class Bounds(x: Double, y: Double, width: Double, height: Double) {
    * @param maxyBorder The absolute height of the Y offset on the maximum edge.
    */
   def subXYBorder(minxBorder: Double, maxxBorder: Double, minyBorder: Double, maxyBorder: Double): Bounds = {
-    Bounds(x+minxBorder, y+minyBorder, width-(minxBorder+maxxBorder), height-(minyBorder+maxyBorder))
+    Bounds(x + minxBorder, y + minyBorder, width - (minxBorder + maxxBorder), height - (minyBorder + maxyBorder))
   }
-  
+
   /**
    * Returns a bounds object that contains both this and that.
    * @param that Another bounds to join with this one.
@@ -74,8 +74,8 @@ case class Bounds(x: Double, y: Double, width: Double, height: Double) {
   def join(that: Bounds): Bounds = {
     val x1 = x min that.x
     val y1 = y min that.y
-    val x2 = x+width max that.x+that.width
-    val y2 = y+height max that.y+that.height
-    Bounds(x1, y1, x2-x1, y2-y1)
+    val x2 = x + width max that.x + that.width
+    val y2 = y + height max that.y + that.height
+    Bounds(x1, y1, x2 - x1, y2 - y1)
   }
 }

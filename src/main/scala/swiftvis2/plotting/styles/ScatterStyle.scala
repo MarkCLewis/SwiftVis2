@@ -125,5 +125,5 @@ object ScatterStyle {
    * for each data point. Elements with the same value in this series are connected with line. If you provide a constant,
    * all the data points will be connected with one line.
    */
-  case class LineData(groups: PlotSeries, stroke: Renderer.StrokeData)
+  case class LineData(groups: PlotSeries, stroke: Renderer.StrokeData = Renderer.StrokeData(1))
 }
