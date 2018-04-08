@@ -46,6 +46,7 @@ object FXRenderer {
     val canvas = new Canvas(pwidth, pheight)
     val gc = canvas.graphicsContext2D
     val renderer = new FXRenderer(gc)
+    
     Platform.runLater {
       try {
         val stage = new Stage(StageStyle.Decorated)

@@ -334,7 +334,7 @@ object PlotTesting extends JFXApp {
     //        FXRenderer(scatter1(), 800, 800)
     //        FXRenderer(scatter2(), 800, 800)
     //        FXRenderer(scatterLines(), 800, 800)
-//    FXRenderer(scatterGrid(), 800, 800)
+    FXRenderer(scatterGrid(), 800, 800)
 //    SVGRenderer(scatterGrid(), "scatterGrid.svg", 400, 400)
     //        FXRenderer(scatterWithErrorBars(), 800, 800)
     //        FXRenderer(scatterMultidata(), 800, 800)
