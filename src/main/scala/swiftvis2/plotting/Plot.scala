@@ -33,6 +33,8 @@ case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String
     grids.foreach { case (_, g) => g.grid.render(r, bounds.subXY(g.bounds)) }
     texts.foreach { case (_, t) => t.text.render(r, bounds.subXY(t.bounds)) }
   }
+  
+  // Fluent Interface
 
   /**
    * Generates a new Plot with the added TextData.

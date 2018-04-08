@@ -66,6 +66,23 @@ case class NumericAxis(
         p => math.pow(10, (p - pmin) * scale + logmin)
     }
   }
+  
+  // Fluent Interface
+  
+  def asMinSideXAxis: NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = 90)), displaySide = Axis.DisplaySide.Min)
+  def asMaxSideXAxis: NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = -90)), displaySide = Axis.DisplaySide.Max)
+  def asMinSideYAxis: NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = 90)), displaySide = Axis.DisplaySide.Min)
+  def asMaxSideYAxis: NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = 90)), displaySide = Axis.DisplaySide.Max)
+  
+  def updatedScaleStyle(newStyle: Axis.ScaleStyle.Value): NumericAxis = copy(style = newStyle) 
+  def updatedScaleStyle(f: Axis.ScaleStyle.Value => Axis.ScaleStyle.Value): NumericAxis = copy(style = f(style))
+  
+  def updatedName(newName: String): NumericAxis = copy(name = name.map(_.copy(name = newName)))
+  // TODO - More matching methods go here.
+  
+  // TODO - More fluent interface here.
+  
+  // Private methods
 
   private def boundsAndSizing(r: Renderer, bounds: Bounds, orient: Axis.RenderOrientation.Value, amin: Double, amax: Double): (Bounds, Double, Bounds, Double, Seq[Double]) = {
     // Calc tick and name bounds
@@ -345,7 +362,6 @@ object Axis {
     val rangle = angle * math.Pi / 180
     val tickFontWidth = labelWidth / math.cos(rangle).abs min labelHeight / math.sin(rangle).abs
     val tickFontHeight = labelWidth / math.sin(rangle).abs min labelHeight / math.cos(rangle).abs
-    println(tickFontWidth, tickFontHeight, labels)
     r.maxFontSize(labels, tickFontWidth, tickFontHeight, font)
   }
 

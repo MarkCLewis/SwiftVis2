@@ -311,11 +311,10 @@ object PlotTesting extends JFXApp {
         ScatterStyle(temp, alt, lines=ScatterStyle.connectAll), 
         ScatterStyle(pressure, alt, lines=ScatterStyle.connectAll, symbol = Rectangle)), 
         "Temp and Pressure", "Temperature [C]", "Altitude [km]").
-        withModifiedAxis[NumericAxis]("x", "pressure", axis => axis.copy(
-            tickLabelInfo = axis.tickLabelInfo.map(_.copy(angle = -90)),
-            name = axis.name.map(_.copy(name = "Pressure [Pa]")),
-            displaySide = Axis.DisplaySide.Max, 
-            style = Axis.ScaleStyle.LogSparse)).
+        withModifiedAxis[NumericAxis]("x", "pressure", 
+            _.asMaxSideXAxis
+             .updatedScaleStyle(Axis.ScaleStyle.LogSparse)
+             .updatedName("Pressure [Pa]")).
         updatedStyleXAxis("pressure", stack = 1)
   }
 
@@ -360,7 +359,7 @@ object PlotTesting extends JFXApp {
 //    SVGRenderer(rowPlot, "rowOfDists.svg", 400, 300)
     val ptPlot = pressureTempPlot
     FXRenderer(ptPlot, 600, 600)
-    SVGRenderer(ptPlot, "pressureTempPlot.svg", 400, 400)
+//    SVGRenderer(ptPlot, "pressureTempPlot.svg", 400, 400)
     //        FXRenderer(colorTest(), 1200, 1000)
     //    saveToFile()
 //        FXRenderer(simpleFull(), 600, 600)

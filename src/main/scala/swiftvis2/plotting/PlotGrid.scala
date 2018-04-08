@@ -142,7 +142,7 @@ case class PlotGrid(
     }
   }
 
-  // Fluent API Methods
+  // Fluent Interface
 
   def withRow(row: Int = plots.length): PlotGrid = ??? // TODO
   
