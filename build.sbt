@@ -4,7 +4,7 @@ lazy val root = (project in file("."))
   .settings(
     name         := "SwiftVis2",
     organization := "edu.trinity",
-    crossScalaVersions := Seq("2.11.8", "2.12.4"),
+    crossScalaVersions := Seq("2.11.8", "2.12.5"),
     scalacOptions := Seq("-unchecked", "-deprecation"),
     version      := "0.1.0-SNAPSHOT",
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value, 

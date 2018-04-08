@@ -7,7 +7,7 @@ import swiftvis2.plotting.renderer.Renderer
  */
 sealed trait Axis {
   val displaySide: Axis.DisplaySide.Value
-  val name: Option[(String, Renderer.FontData)]
+  val name: Option[Axis.NameSettings]
   def isDrawn: Boolean
 }
 
@@ -23,7 +23,7 @@ case class NumericAxis(
   tickSpacing:   Option[Double]                      = None,
   tickStyle:     Axis.TickStyle.Value                = Axis.TickStyle.Both,
   tickLabelInfo: Option[Axis.LabelSettings]          = None, // Angle in degrees, None if no labels shown
-  name:          Option[(String, Renderer.FontData)] = None,
+  name:          Option[Axis.NameSettings]           = None,
   displaySide:   Axis.DisplaySide.Value              = Axis.DisplaySide.Min,
   style:         Axis.ScaleStyle.Value               = Axis.ScaleStyle.Linear) extends Axis {
 
@@ -46,7 +46,7 @@ case class NumericAxis(
       case Axis.ScaleStyle.Linear =>
         val scale = (pmax - pmin) / (amax - amin)
         x => pmin + (x - amin) * scale
-      case Axis.ScaleStyle.Log =>
+      case Axis.ScaleStyle.LogDense | Axis.ScaleStyle.LogSparse =>
         val scale = (pmax - pmin) / (math.log10(amax / amin))
         val logmin = math.log10(amin)
         x => pmin + (math.log10(x) - logmin) * scale
@@ -60,7 +60,7 @@ case class NumericAxis(
       case Axis.ScaleStyle.Linear =>
         val scale = (amax - amin) / (pmax - pmin)
         p => amin + (p - pmin) * scale
-      case Axis.ScaleStyle.Log =>
+      case Axis.ScaleStyle.LogDense | Axis.ScaleStyle.LogSparse =>
         val scale = (math.log10(amax / amin)) / (pmax - pmin)
         val logmin = math.log10(amin)
         p => math.pow(10, (p - pmin) * scale + logmin)
@@ -122,7 +122,7 @@ case class NumericAxis(
       aggBounds.map(b => b join nameBounds).orElse(Some(nameBounds))
     } else {
       // Draw name
-      name.foreach { case (nameStr, fd) => Axis.drawName(nameStr, fd, nameFontSize, aggBounds.map(_ join nameBounds).getOrElse(nameBounds), orient, r) }
+      name.foreach { case Axis.NameSettings(nameStr, fd) => Axis.drawName(nameStr, fd, nameFontSize, aggBounds.map(_ join nameBounds).getOrElse(nameBounds), orient, r) }
       None
     }
   }
@@ -138,7 +138,7 @@ case class NumericAxis(
           val firstTickApprox = (amin / majorSep).toInt * majorSep
           val firstTick = firstTickApprox + (if ((amax - amin).abs < (amax - firstTickApprox).abs) majorSep else 0)
           firstTick to amax by majorSep
-        case Axis.ScaleStyle.Log =>
+        case Axis.ScaleStyle.LogDense =>
           var pos = Math.pow(10, Math.floor(Math.log10(Math.min(amin, amax))))
           var ret = List[Double]()
           while (pos <= (amin max amax)) {
@@ -146,6 +146,16 @@ case class NumericAxis(
               ret ::= pos
             }
             for (i <- 2 to 8 by 2; if pos * i <= (amin max amax) && pos * i >= (amin min amax)) ret ::= pos * i
+            pos *= 10
+          }
+          ret.reverse
+        case Axis.ScaleStyle.LogSparse =>
+          var pos = Math.pow(10, Math.floor(Math.log10(Math.min(amin, amax))))
+          var ret = List[Double]()
+          while (pos <= (amin max amax)) {
+            if (pos >= (amin min amax)) {
+              ret ::= pos
+            }
             pos *= 10
           }
           ret.reverse
@@ -161,7 +171,7 @@ case class CategoryAxis(
   tickStyle:        Axis.TickStyle.Value,
   labelOrientation: Double, // angle in degrees
   labelFont:        Renderer.FontData,
-  name:             Option[(String, Renderer.FontData)],
+  name:             Option[Axis.NameSettings],
   displaySide:      Axis.DisplaySide.Value) extends Axis {
 
   def isDrawn: Boolean = true
@@ -233,7 +243,7 @@ case class CategoryAxis(
       aggBounds.map(b => b join nameBounds).orElse(Some(nameBounds))
     } else {
       // Draw name
-      name.foreach { case (nameStr, fd) => Axis.drawName(nameStr, fd, nameFontSize, aggBounds.map(_ join nameBounds).getOrElse(nameBounds), orient, r) }
+      name.foreach { case Axis.NameSettings(nameStr, fd) => Axis.drawName(nameStr, fd, nameFontSize, aggBounds.map(_ join nameBounds).getOrElse(nameBounds), orient, r) }
       None
     }
 
@@ -249,6 +259,7 @@ object Axis {
   type FontSizer = (Renderer, Bounds, Axis.RenderOrientation.Value) => (Double, Double)
   type AxisRenderer = (Double, Double, Option[Bounds], Option[Axis]) => Option[Bounds]
   case class LabelSettings(angle: Double, font: Renderer.FontData, numberFormat: String)
+  case class NameSettings(name: String, font: Renderer.FontData)
 
   object TickStyle extends Enumeration {
     val Inner, Outer, Both, Neither = Value
@@ -265,9 +276,13 @@ object Axis {
       }
     }
   }
+  
+  // TODO - broadly reconsider the use of enumerations. Instead, consider using algebraic data types. There are two motivations here.
+  // The log values could be merged to a single option that takes a sequence of the density for the plot.
+  // Lots of things are currently wrapped in options. This seems to be a bit verbose in the fluent interface. ADTs might be shorter. Have to play with that.
 
   object ScaleStyle extends Enumeration {
-    val Linear, Log = Value
+    val Linear, LogSparse, LogDense = Value
   }
 
   object DisplaySide extends Enumeration {
@@ -289,7 +304,7 @@ object Axis {
   }
 
   private[plotting] def calcBounds(bounds: Bounds, orient: Axis.RenderOrientation.Value, showLabels: Boolean,
-                                   name: Option[(String, Renderer.FontData)], displaySide: Axis.DisplaySide.Value): (Bounds, Bounds) = {
+                                   name: Option[NameSettings], displaySide: Axis.DisplaySide.Value): (Bounds, Bounds) = {
     val tickFrac = 0.7 * (if (showLabels) 1.0 else 0.0)
     val nameFrac = 0.3 * (if (name.nonEmpty) 1.0 else 0.0)
     val fracSum = tickFrac + nameFrac
@@ -311,9 +326,9 @@ object Axis {
     }
   }
 
-  private[plotting] def calcNameFontSize(nameBounds: Bounds, orient: Axis.RenderOrientation.Value, r: Renderer, name: Option[(String, Renderer.FontData)]): Double = {
+  private[plotting] def calcNameFontSize(nameBounds: Bounds, orient: Axis.RenderOrientation.Value, r: Renderer, name: Option[NameSettings]): Double = {
     name.map {
-      case (str, fd) =>
+      case NameSettings(str, fd) =>
         val (w, h) = orient match {
           case Axis.RenderOrientation.XAxis => (nameBounds.width, nameBounds.height)
           case Axis.RenderOrientation.YAxis => (nameBounds.height, nameBounds.width)
@@ -328,8 +343,9 @@ object Axis {
     val labelWidth = Axis.RenderOrientation.axisWidth(orient, tickBounds, tickNum)
     val labelHeight = Axis.RenderOrientation.axisHeight(orient, tickBounds, tickNum)
     val rangle = angle * math.Pi / 180
-    val tickFontWidth = labelWidth / math.cos(rangle) min labelHeight / math.sin(rangle)
-    val tickFontHeight = labelWidth / math.sin(rangle) min labelHeight / math.cos(rangle)
+    val tickFontWidth = labelWidth / math.cos(rangle).abs min labelHeight / math.sin(rangle).abs
+    val tickFontHeight = labelWidth / math.sin(rangle).abs min labelHeight / math.cos(rangle).abs
+    println(tickFontWidth, tickFontHeight, labels)
     r.maxFontSize(labels, tickFontWidth, tickFontHeight, font)
   }
 

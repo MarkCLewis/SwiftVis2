@@ -34,30 +34,65 @@ case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String
     texts.foreach { case (_, t) => t.text.render(r, bounds.subXY(t.bounds)) }
   }
 
+  /**
+   * Generates a new Plot with the added TextData.
+   */
   def withText(name: String, textData: TextData): Plot = {
     copy(texts = texts + (name -> textData))
   }
   
+  /**
+   * Generate a new plot with the added text and bounds.
+   */
   def withText(name: String, text: PlotText, bounds: Bounds): Plot = {
     copy(texts = texts + (name -> TextData(text, bounds)))
   }
   
-  def updatedText(name: String, f: TextData => TextData): Plot = {
+  /**
+   * Generate a new plot with an updated TextData.
+   */
+  def updatedText(f: TextData => TextData, name: String = "Title"): Plot = {
     copy(texts = texts + (name -> f(texts(name))))
   }
   
-  def updatedNumericAxis(gridName: String, axisName: String, f: NumericAxis => NumericAxis): Plot = {
+  /**
+   * Generate a new plot with an updated axis.
+   */
+  def updatedAxis[A <: Axis](axisName: String, f: A => A, gridName: String = "Main"): Plot = {
     val grid = grids(gridName).grid
-    val axis = grids(gridName).grid.axes(axisName).asInstanceOf[NumericAxis]
+    val axis = grids(gridName).grid.axes(axisName).asInstanceOf[A]
     copy(grids = grids + (gridName -> grids(gridName).copy(grid = grid.copy(axes = grid.axes + (axisName -> f(axis)))))) 
   }
 
-  def updatedCategoryAxis(gridName: String, axisName: String, f: CategoryAxis => CategoryAxis): Plot = {
+  /**
+   * Generate a new plot with an updated plot style.
+   */
+  def updatedStyle[A <: PlotStyle](f: A => A, gridName: String = "Main", row: Int = 0, col: Int = 0, stack: Int = 0): Plot = {
     val grid = grids(gridName).grid
-    val axis = grids(gridName).grid.axes(axisName).asInstanceOf[CategoryAxis]
-    copy(grids = grids + (gridName -> grids(gridName).copy(grid = grid.copy(axes = grid.axes + (axisName -> f(axis)))))) 
+    copy(grids = grids + (gridName -> grids(gridName).copy(grid = grid.updatedStyle(f, row, col, stack))))
   }
-// TODO - Add methods for updating and adding different elements.
+  
+  def withAxis(axisName: String, axis: Axis, gridName: String = "Main"): Plot = {
+    val grid = grids(gridName).grid
+    copy(grids = grids + (gridName -> grids(gridName).copy(grid = grid.withAxis(axisName, axis))))
+  }
+  
+  def withModifiedAxis[A <: Axis](currentAxisName: String, newAxisName: String, f: A => A, gridName: String = "Main"): Plot = {
+    val grid = grids(gridName).grid
+    copy(grids = grids + (gridName -> grids(gridName).copy(grid = grid.withModifiedAxis(currentAxisName, newAxisName, f))))
+  }
+  
+  def updatedStyleXAxis(axisName: String, row: Int = 0, col: Int = 0, stack: Int = 0, gridName: String = "Main"): Plot = {
+    val grid = grids(gridName).grid
+    copy(grids = grids + (gridName -> grids(gridName).copy(grid = grid.updatedStyleXAxis(axisName, row, col, stack))))
+  }
+  
+  // TODO - Add methods for updating and adding different elements.
+  
+  // withRow
+  // withColumn
+  // withStyle
+  
 }
 
 /**
@@ -97,17 +132,17 @@ object Plot {
           Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
       case cnps: CategoryNumberPlotStyle =>
         val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
-        val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+        val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min)
         val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
-          Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, yType)
+          Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
         val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
         Plot(
           Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
           Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
       case ccps: CategoryCategoryPlotStyle => 
         val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
-        val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
-        val yAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+        val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min)
+        val yAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min)
         val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
         Plot(
           Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
@@ -140,9 +175,9 @@ object Plot {
         require(styles.forall(_.isInstanceOf[CategoryNumberPlotStyle]), "All axis styles much match for plot stack.")
         val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
         val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
-        val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+        val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min)
         val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
-          Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, yType)
+          Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
         val grid = PlotGrid(Seq(Seq(styles.map(s => Plot2D(s, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
         Plot(
           Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
@@ -186,9 +221,9 @@ object Plot {
                 yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
-    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min)
     val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, yType)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
     val grid = PlotGrid(Seq(Seq(styles.map(s => Plot2D(s, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
     Plot(
       Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
@@ -209,9 +244,9 @@ object Plot {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
     val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xLabel -> font), Axis.DisplaySide.Min, xType)
+      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min, xType)
     val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, yType)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
     val plots = styles.map { row =>
       row.map {
         case style =>
@@ -236,9 +271,9 @@ object Plot {
              yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
-    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min)
     val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, yType)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
     val plots = styles.map { row =>
       row.map {
         case style =>
@@ -266,10 +301,10 @@ object Plot {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
     val xNumAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xNumLabel -> font), Axis.DisplaySide.Min, xType)
-    val xCatAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xCatLabel -> font), Axis.DisplaySide.Min)
+      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xNumLabel, font)), Axis.DisplaySide.Min, xType)
+    val xCatAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xCatLabel, font)), Axis.DisplaySide.Min)
     val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, yType)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
     val plots = Seq(styles.map { 
       case style: NumberNumberPlotStyle =>
           Seq(Plot2D(style, "nx", "y"))
@@ -298,9 +333,9 @@ object Plot {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
     val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xLabel -> font), Axis.DisplaySide.Min, xType)
+      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min, xType)
     val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, yType)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
     val plots = styles.map { row =>
       row.map { stack => 
         stack.map { style =>
@@ -451,9 +486,9 @@ object Plot {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
     val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xLabel -> font), Axis.DisplaySide.Min, xType)
+      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min, xType)
     val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, yType)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
     val plots = pdata.map { row =>
       row.map {
         case (x, y, argb, size, lines, xerr, yerr) =>
@@ -481,9 +516,9 @@ object Plot {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
     val style = BarStyle(categories, valsAndColors, stacked, fracWidth)
-    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min)
     val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
     Plot(
       Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
@@ -506,9 +541,9 @@ object Plot {
     val categories = data.keySet.toSeq
     val vac = categories.map(k => BarStyle.DataAndColor(Seq(data(k)), color))
     val style = BarStyle(categories, vac, stacked, fracWidth)
-    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min)
     val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
     Plot(
       Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
@@ -531,9 +566,9 @@ object Plot {
     val style = HistogramStyle(bins, Seq(HistogramStyle.DataAndColor(vals, color)), centerOnBins, binsOnX)
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val xAxis = NumericAxis(if (binsOnX) None else Some(0.0), None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val yAxis = NumericAxis(if (binsOnX) Some(0.0) else None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
     Plot(
       Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
@@ -560,13 +595,13 @@ object Plot {
     }
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val yAxes = if (sharedYAxis) {
       Seq("y" -> NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
-        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear))
+        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear))
     } else {
       valsAndColors.indices.map(r => "y"+r -> NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
-        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear))
+        Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear))
     }
     val grid = PlotGrid(plots, (("x" -> xAxis) +: yAxes).toMap, (0 until valsAndColors.map(_.length).max).map(_ => 1.0), valsAndColors.map(_ => 1.0), 0.15)
     Plot(
@@ -588,9 +623,9 @@ object Plot {
     val style = HistogramStyle(bins, valsAndColors, centerOnBins)
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(xLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
     Plot(
       Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
@@ -614,9 +649,9 @@ object Plot {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
     val style = BoxPlotStyle(categories, plotData, boxWidthFrac, symbol, symbolSize, color, Renderer.StrokeData(1.0, Nil))
-    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min)
     val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
     Plot(
       Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
@@ -639,9 +674,9 @@ object Plot {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
     val style = ViolinPlotStyle(categories, plotData, widthFrac, color, Renderer.StrokeData(1.0, Nil), bandwidth)
-    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(xLabel -> font), Axis.DisplaySide.Min)
+    val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min)
     val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(yLabel -> font), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
     Plot(
       Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),

@@ -20,8 +20,8 @@ object SparkPlotTesting extends JFXApp {
 
   spark.sparkContext.setLogLevel("WARN")
 
-  val pnts = Array.tabulate(100)(i => Point(i, i * i, 3 + 3 * math.random, ARGB(1, math.random, math.random, math.random), util.Random.nextInt(5), 
-      math.random * 10, math.random * 500))
+  val pnts = Array.tabulate(100)(i => Point(i, i * i, 3 + 3 * math.random, ARGB(1, math.random, math.random, math.random), util.Random.nextInt(5),
+    math.random * 10, math.random * 500))
 
   {
     implicit val df = spark.createDataset(pnts)
@@ -34,10 +34,11 @@ object SparkPlotTesting extends JFXApp {
 
     pnts foreach println
     val stroke = Renderer.StrokeData(1, Nil)
-    val plot3 = Plot.stackedNN(Array(ScatterStyle('x, 'y, colors = 'color, symbolWidth = 'size, symbolHeight = 'size, lines = Some(ScatterStyle.LineData('line: PlotIntSeries, stroke)), 
-        xErrorBars = Some('xerr), yErrorBars = Some('yerr))), "Spark Based Plot", "x", "y")
+    val plot3 = Plot.stackedNN(Array(ScatterStyle('x, 'y, colors = 'color, symbolWidth = 'size, symbolHeight = 'size,
+      lines = Some(ScatterStyle.LineData('line: PlotIntSeries, stroke)),
+      xErrorBars = Some('xerr), yErrorBars = Some('yerr))), "Spark Based Plot", "x", "y")
     FXRenderer(plot3, 600, 600)
-    
+
     val cg = ColorGradient(0.0 -> RedARGB, 100.0 -> GreenARGB)
     val plot4 = Plot.simple(ScatterStyle('x, 'y, colors = cg('x)), "Color Grad", "X", "Y")
     FXRenderer(plot4, 600, 600)
@@ -53,14 +54,13 @@ object SparkPlotTesting extends JFXApp {
 
   pnts foreach println
   val stroke = Renderer.StrokeData(1, Nil)
-  val plot3b = Plot.scatterPlotsFull(Array((doubles(df, 'x), doubles(df, 'y), ints(df, 'color), doubles(df, 'size), Some(ScatterStyle.LineData(doubles(df, 'line), stroke)), 
-      Some(doubles(df, 'xerr)), Some(doubles(df, 'yerr)))), "Spark Based Plot", "x", "y")
+  val plot3b = Plot.scatterPlotsFull(Array((doubles(df, 'x), doubles(df, 'y), ints(df, 'color), doubles(df, 'size), Some(ScatterStyle.LineData(doubles(df, 'line), stroke)),
+    Some(doubles(df, 'xerr)), Some(doubles(df, 'yerr)))), "Spark Based Plot", "x", "y")
   FXRenderer(plot3b, 600, 600)
-  
-  val df2 = df.map(p => p.copy(x = p.x+3))
+
+  val df2 = df.map(p => p.copy(x = p.x + 3))
   val plot4b = Plot.stackedNN(Array(ScatterStyle(doubles(df)(_.x), doubles(df)(_.y)), ScatterStyle(doubles(df2)(_.x), doubles(df2)(_.y))), "Stacked", "x", "y")
   FXRenderer(plot4b, 600, 600)
 
-  
   spark.stop()
 }

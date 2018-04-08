@@ -126,4 +126,6 @@ object ScatterStyle {
    * all the data points will be connected with one line.
    */
   case class LineData(groups: PlotSeries, stroke: Renderer.StrokeData = Renderer.StrokeData(1))
+  
+  val connectAll = Some(LineData(0))
 }

@@ -29,7 +29,7 @@ object PlotTesting extends JFXApp {
   def scatterLogLog(): Plot = {
     val xPnt = 1 to 100
     val yPnt = xPnt.map(a => a * a)
-    Plot.scatterPlot(xPnt, yPnt, title = "Quadratic", xLabel = "x", xType = Axis.ScaleStyle.Log, yLabel = "y", yType = Axis.ScaleStyle.Log)
+    Plot.scatterPlot(xPnt, yPnt, title = "Quadratic", xLabel = "x", xType = Axis.ScaleStyle.LogDense, yLabel = "y", yType = Axis.ScaleStyle.LogDense)
   }
 
   /**
@@ -161,12 +161,12 @@ object PlotTesting extends JFXApp {
    */
   def longForm(): Plot = {
     val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    val xAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, "%1.1f")), Some("X1" -> font))
-    val xAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, "%1.1f")), Some("X2" -> font))
-    val xAxisCat = new CategoryAxis(Axis.TickStyle.Both, 0, font, Some("Categories" -> font), Axis.DisplaySide.Max)
-    val yAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.1f")), Some("Y1" -> font))
-    val yAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")), Some("Y2" -> font))
-    val yAxis3 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")), Some("Y3" -> font), Axis.DisplaySide.Max)
+    val xAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, "%1.1f")), Some(Axis.NameSettings("X1", font)))
+    val xAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, "%1.1f")), Some(Axis.NameSettings("X2", font)))
+    val xAxisCat = new CategoryAxis(Axis.TickStyle.Both, 0, font, Some(Axis.NameSettings("Categories", font)), Axis.DisplaySide.Max)
+    val yAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.1f")), Some(Axis.NameSettings("Y1", font)))
+    val yAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")), Some(Axis.NameSettings("Y2", font)))
+    val yAxis3 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")), Some(Axis.NameSettings("Y3", font)), Axis.DisplaySide.Max)
 
     // Main Scatter plot
     val (mainX, mainY) = (for (_ <- 1 to 1000) yield {
@@ -288,7 +288,7 @@ object PlotTesting extends JFXApp {
   }
 
   def rowOfDists(): Plot = {
-    val xs = Array.fill(1000)(math.random * 100)
+    val xs = Array.fill(900)(math.random * 100)
     val ys = xs.map(_ => (math.random - 0.5) * (math.random - 0.5) * 4 + 1)
     val bins = 0.0 to 2.0 by 0.05
     val cnts = Array.fill(bins.length - 1)(0.0)
@@ -297,10 +297,26 @@ object PlotTesting extends JFXApp {
       if (bin >= 0 && bin < cnts.length) cnts(bin) += 1
     }
     Plot.row(Seq(
-      ScatterStyle(xs, ys),
+      ScatterStyle(xs, ys, symbolWidth = 5, symbolHeight = 5),
       HistogramStyle(bins, Seq(HistogramStyle.DataAndColor(cnts, GreenARGB)), binsOnX = false),
       BoxPlotStyle(Array("Distrib"), Array(ys)),
-      ViolinPlotStyle(Array("Distrib"), Array(ys))), "Distribs", "Num X", "Categories", "Y")
+      ViolinPlotStyle(Array("Distrib"), Array(ys))), "Distributions", "Num X", "Categories", "Y")
+  }
+  
+  def pressureTempPlot: Plot = {
+    val alt = Array(-0.6, 11, 20, 32, 47, 51, 71, 84.852)
+    val temp = Array(19.0, -56.5, -56.5, -44.5, -2.5, -2.5, -58.5, -86.38)
+    val pressure = Array(108900, 22632, 5474.9, 868.02, 110.91, 66.939, 3.9564, 0.3734)
+    Plot.stacked(Seq(
+        ScatterStyle(temp, alt, lines=ScatterStyle.connectAll), 
+        ScatterStyle(pressure, alt, lines=ScatterStyle.connectAll, symbol = Rectangle)), 
+        "Temp and Pressure", "Temperature [C]", "Altitude [km]").
+        withModifiedAxis[NumericAxis]("x", "pressure", axis => axis.copy(
+            tickLabelInfo = axis.tickLabelInfo.map(_.copy(angle = -90)),
+            name = axis.name.map(_.copy(name = "Pressure [Pa]")),
+            displaySide = Axis.DisplaySide.Max, 
+            style = Axis.ScaleStyle.LogSparse)).
+        updatedStyleXAxis("pressure", stack = 1)
   }
 
   def simpleFull(): Plot = {
@@ -309,8 +325,8 @@ object PlotTesting extends JFXApp {
     val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val style = ScatterStyle(x, y)
     val p2d = Plot2D(style, "x", "y")
-    val xAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(90, font, "%1.1f")), name = Some("X" -> font))
-    val yAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(0, font, "%1.1f")), name = Some("Y" -> font))
+    val xAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(90, font, "%1.1f")), name = Some(Axis.NameSettings("X", font)))
+    val yAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(0, font, "%1.1f")), name = Some(Axis.NameSettings("Y", font)))
     val grid = PlotGrid(Seq(Seq(Seq(p2d))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0))
     Plot(grids = Map("main" -> Plot.GridData(grid, Bounds(0.0, 0.05, 0.95, 0.95))))
   }
@@ -319,27 +335,32 @@ object PlotTesting extends JFXApp {
     //        FXRenderer(scatter1(), 800, 800)
     //        FXRenderer(scatter2(), 800, 800)
     //        FXRenderer(scatterLines(), 800, 800)
-    FXRenderer(scatterGrid(), 800, 800)
+//    FXRenderer(scatterGrid(), 800, 800)
 //    SVGRenderer(scatterGrid(), "scatterGrid.svg", 400, 400)
     //        FXRenderer(scatterWithErrorBars(), 800, 800)
     //        FXRenderer(scatterMultidata(), 800, 800)
     //        FXRenderer(scatterWithSizeandColor(), 800, 800)
-    //            FXRenderer(scatterLogLog(), 800, 800)
+//    FXRenderer(scatterLogLog(), 800, 800)
     //        FXRenderer(fullScatter(), 800, 800)
 //            FXRenderer(stackedNNTest(), 800, 800)
-    FXRenderer(gridNNTest(), 800, 800)
+//    FXRenderer(gridNNTest(), 800, 800)
     //    FXRenderer(stackedCNTest(), 800, 800)
-    FXRenderer(gridCNTest(), 800, 800)
+//    FXRenderer(gridCNTest(), 800, 800)
     //    FXRenderer(barChart(), 600, 500)
     //            FXRenderer(histogram(), 600, 600)
     //            FXRenderer(histogramSide(), 600, 600)
     //            FXRenderer(histogram2(), 600, 600)
     //            FXRenderer(histogramGrid(), 800, 800)
-    FXRenderer(longForm(), 1200, 1000)
+//    FXRenderer(longForm(), 1200, 1000)
     //    SVGRenderer(longForm(), "plot.svg", 1200, 1000)
     //        FXRenderer(boxPlot(), 600, 600)
     //    FXRenderer(violinPlot(), 600, 600)
-    FXRenderer(rowOfDists(), 1200, 600)
+//    val rowPlot = rowOfDists()
+//    FXRenderer(rowPlot, 1200, 600)
+//    SVGRenderer(rowPlot, "rowOfDists.svg", 400, 300)
+    val ptPlot = pressureTempPlot
+    FXRenderer(ptPlot, 600, 600)
+    SVGRenderer(ptPlot, "pressureTempPlot.svg", 400, 400)
     //        FXRenderer(colorTest(), 1200, 1000)
     //    saveToFile()
 //        FXRenderer(simpleFull(), 600, 600)
