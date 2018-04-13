@@ -21,6 +21,7 @@ final case class ScatterStyle(
     xErrorBars: Option[PlotDoubleSeries] = None,
     yErrorBars: Option[PlotDoubleSeries] = None) extends NumberNumberPlotStyle {
 
+  import ScatterStyle._
   def render(r: Renderer, bounds: Bounds, xAxis: Axis, xminFunc: Axis => Double, xmaxFunc: Axis => Double,
              yAxis: Axis, yminFunc: Axis => Double, ymaxFunc: Axis => Double, axisBounds: Seq[Bounds]): (Seq[Double], Seq[Double], Axis.AxisRenderer, Axis.AxisRenderer) = {
     val xNAxis = xAxis.asInstanceOf[NumericAxis]
@@ -33,6 +34,8 @@ final case class ScatterStyle(
       xminFunc(xNAxis), xmaxFunc(xNAxis), Axis.RenderOrientation.XAxis, r, axisBounds)
     val (yConv, ytfs, ynfs, yRender) = yNAxis.renderInfo(bounds.y + bounds.height, bounds.y,
       yminFunc(yNAxis), ymaxFunc(yNAxis), Axis.RenderOrientation.YAxis, r, axisBounds)
+// Commented lines allow parallel calculation of plot information. Currently this doesn't help performance.
+//    val pdata = for (i <- (start until end).par) yield {
     for (i <- start until end) {
       val x = xSource(i)
       val y = ySource(i)
@@ -45,6 +48,10 @@ final case class ScatterStyle(
       val pwidth = pmaxx-pminx
       val pheight = pmaxy-pminy
       val color = colors(i)
+//      ScatterData(i, x, y, px, py, pwidth, pheight, color)
+//    }
+//    for(ScatterData(i, x, y, px, py, pwidth, pheight, color) <- pdata.seq) {
+      r.setColor(color)
       xErrorBars.foreach { ex =>
         val error = ex(i)
         r.setStroke(Renderer.StrokeData(1, Nil))
@@ -57,7 +64,6 @@ final case class ScatterStyle(
         r.setColor(BlackARGB)
         r.drawLine(px, yConv(y - error), px, yConv(y + error))
       }
-      r.setColor(color)
       (lines, connectMap).zipped.foreach {
         case (ScatterStyle.LineData(groupFunc, stroke), cm) =>
           val group = groupFunc(i)
@@ -79,7 +85,7 @@ final case class ScatterStyle(
       symbol.drawSymbol(px, py, pwidth, pheight, r)
     }
     (lines, connectMap).zipped.foreach {
-      case (ScatterStyle.LineData(groupFunc, stroke), cm) =>
+      case (LineData(groupFunc, stroke), cm) =>
         for ((group, lst @ ((_, _, c) :: _)) <- cm) {
           r.setColor(c)
           r.setStroke(stroke)
@@ -128,4 +134,6 @@ object ScatterStyle {
   case class LineData(groups: PlotSeries, stroke: Renderer.StrokeData = Renderer.StrokeData(1))
   
   val connectAll = Some(LineData(0))
+  
+  private case class ScatterData(i: Int, d: Double, y: Double, px: Double, py: Double, pwidth: Double, pheight: Double, color: Int)
 }

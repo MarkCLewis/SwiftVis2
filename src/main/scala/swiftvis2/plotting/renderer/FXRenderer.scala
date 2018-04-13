@@ -50,7 +50,7 @@ object FXRenderer {
     val ec = ExecutionContext.fromExecutorService(Executors.newSingleThreadExecutor())
     val canvas = new Canvas(pwidth, pheight)
     val gc = canvas.graphicsContext2D
-    val renderer = new FXRenderer(gc, 1000)
+    val renderer = new FXRenderer(gc)
     Platform.runLater {
       try {
         val stage = new Stage(StageStyle.Decorated)
@@ -158,7 +158,7 @@ object FXRenderer {
   }
 }
 
-class FXRenderer(gc: GraphicsContext, maxQueue: Int = 10000) extends Renderer {
+class FXRenderer(gc: GraphicsContext, maxQueue: Int = 1000) extends Renderer {
   private val text = new Text("")
   private var queue = mutable.Queue[() => Unit]()
 
