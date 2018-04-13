@@ -36,6 +36,7 @@ import collection.mutable
 import java.util.concurrent.Executors
 import scala.concurrent.ExecutionContext
 import java.util.concurrent.CountDownLatch
+import scalafx.stage.WindowEvent
 
 object FXRenderer {
   def shellStart(args: Array[String] = Array()): Future[JFXApp] = {
@@ -50,10 +51,11 @@ object FXRenderer {
     val ec = ExecutionContext.fromExecutorService(Executors.newSingleThreadExecutor())
     val canvas = new Canvas(pwidth, pheight)
     val gc = canvas.graphicsContext2D
-    val renderer = new FXRenderer(gc)
+    val renderer = new FXRenderer(gc, 10000)
     Platform.runLater {
       try {
         val stage = new Stage(StageStyle.Decorated)
+        stage.onCloseRequest = (e: WindowEvent) => ec.shutdown()
         stage.title = "Plotting Test"
         stage.scene = new Scene(pwidth, pheight + 30, false, SceneAntialiasing.Balanced) {
           val border = new BorderPane
@@ -102,10 +104,11 @@ object FXRenderer {
             if (pane.width() != canvas.width() && pane.width() > 1.0 && pane.height() > 1) {
               canvas.width = pane.width()
               if ((lastWidth - pane.width()).abs > 5 || (lastHeight - pane.height()).abs > 5) {
-                lastWidth = pane.width()
-                lastHeight = pane.height()
-                println(s"Render for width: $lastWidth $lastHeight")
+                // TODO - put in a proper queueing system
                 Future {
+                  lastWidth = pane.width()
+                  lastHeight = pane.height()
+                  println(s"Render for width: $lastWidth $lastHeight")
                   plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
                 }(ec)
               }
@@ -116,10 +119,10 @@ object FXRenderer {
             if (pane.height() != canvas.height() && pane.width() > 1 && pane.height() > 1.0) {
               canvas.height = pane.height()
               if ((lastWidth - pane.width()).abs > 5 || (lastHeight - pane.height()).abs > 5) {
-                lastWidth = pane.width()
-                lastHeight = pane.height()
-                println(s"Render for height: $lastWidth $lastHeight")
                 Future {
+                  lastWidth = pane.width()
+                  lastHeight = pane.height()
+                  println(s"Render for height: $lastWidth $lastHeight")
                   plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
                 }(ec)
               }
@@ -286,15 +289,16 @@ class FXRenderer(gc: GraphicsContext, maxQueue: Int = 1000) extends Renderer {
       while (!lq.isEmpty) {
         val f = lq.dequeue()
         f()
+        if(latch.getCount > 0 && lq.size < maxQueue/4) latch.countDown()
       }
-      latch.countDown
-//      println("Done dequeueing")
+      if(latch.getCount > 0) latch.countDown
+      //      println("Done dequeueing")
     }
   }
 
   private def clearQueue(): Unit = {
-//    println("Clearing "+queue.size)
-//    println(Thread.currentThread)
+    //    println("Clearing "+queue.size)
+    //    println(Thread.currentThread)
     val latch = new CountDownLatch(1)
     val runner = Runner(queue, latch)
     queue = mutable.Queue[() => Unit]()
