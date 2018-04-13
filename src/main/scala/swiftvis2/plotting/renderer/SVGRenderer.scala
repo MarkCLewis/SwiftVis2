@@ -106,7 +106,6 @@ object SVGRenderer {
     val ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(filename)))
     val r = new SVGRenderer(ps)
     plot.render(r, Bounds(0, 0, width, height))
-    r.finish()
     ps.close
   }
 
@@ -117,7 +116,6 @@ object SVGRenderer {
     val baos = new ByteArrayOutputStream
     val r = new SVGRenderer(new PrintStream(baos))
     plot.render(r, Bounds(0, 0, 800, 600))
-    r.finish()
     baos.toString()
   }
 }

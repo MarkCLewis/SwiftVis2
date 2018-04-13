@@ -330,8 +330,15 @@ object PlotTesting extends JFXApp {
     Plot(grids = Map("main" -> Plot.GridData(grid, Bounds(0.0, 0.05, 0.95, 0.95))))
   }
   
+  def performanceTest(): Plot = {
+    val x = Array.fill(800000)((math.random-0.5)*(math.random-0.5))
+    val y = x.map(_ => math.cos(math.random*math.random*6.28))
+    Plot.scatterPlot(x, y, "Big", "x", "y", 0.001, BlackARGB, xSizing = PlotSymbol.Sizing.Scaled, ySizing = PlotSymbol.Sizing.Scaled)
+  }
+  
   Future {
-    //        FXRenderer(scatter1(), 800, 800)
+    FXRenderer(performanceTest(), 1000, 1000)
+//            FXRenderer(scatter1(), 800, 800)
     //        FXRenderer(scatter2(), 800, 800)
     //        FXRenderer(scatterLines(), 800, 800)
 //    FXRenderer(scatterGrid(), 800, 800)
@@ -357,8 +364,8 @@ object PlotTesting extends JFXApp {
 //    val rowPlot = rowOfDists()
 //    FXRenderer(rowPlot, 1200, 600)
 //    SVGRenderer(rowPlot, "rowOfDists.svg", 400, 300)
-    val ptPlot = pressureTempPlot
-    FXRenderer(ptPlot, 600, 600)
+//    val ptPlot = pressureTempPlot
+//    FXRenderer(ptPlot, 600, 600)
 //    SVGRenderer(ptPlot, "pressureTempPlot.svg", 400, 400)
     //        FXRenderer(colorTest(), 1200, 1000)
     //    saveToFile()

@@ -36,6 +36,9 @@ trait Renderer {
   def fillRectangle(bounds: Bounds): Unit = fillRectangle(bounds.x, bounds.y, bounds.width, bounds.height)
   def fillRectangleC(cx: Double, cy: Double, width: Double, height: Double): Unit = fillRectangle(cx-width/2, cy-height/2, width, height)
   def fillRectangleP(x1: Double, y1: Double, x2: Double, y2: Double): Unit = fillRectangle(x1 min x2, y1 min y2, (x1-x2).abs, (y1-y2).abs)
+  
+  // Called when a plot is fully rendered to close/flush things
+  def finish(): Unit
 }
 
 /**

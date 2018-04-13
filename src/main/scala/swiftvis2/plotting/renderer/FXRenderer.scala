@@ -32,6 +32,10 @@ import java.io.File
 import java.awt.image.BufferedImage
 import scalafx.scene.text.TextAlignment
 import scalafx.geometry.VPos
+import collection.mutable
+import java.util.concurrent.Executors
+import scala.concurrent.ExecutionContext
+import java.util.concurrent.CountDownLatch
 
 object FXRenderer {
   def shellStart(args: Array[String] = Array()): Future[JFXApp] = {
@@ -43,9 +47,10 @@ object FXRenderer {
   }
 
   def apply(plot: Plot, pwidth: Double = 1000, pheight: Double = 1000): FXRenderer = {
+    val ec = ExecutionContext.fromExecutorService(Executors.newSingleThreadExecutor())
     val canvas = new Canvas(pwidth, pheight)
     val gc = canvas.graphicsContext2D
-    val renderer = new FXRenderer(gc)
+    val renderer = new FXRenderer(gc, 1000)
     Platform.runLater {
       try {
         val stage = new Stage(StageStyle.Decorated)
@@ -90,18 +95,35 @@ object FXRenderer {
           }
 
           import swiftvis2.plotting
+          var lastWidth = 0.0
+          var lastHeight = 0.0
 
-          plot.render(renderer, Bounds(0, 0, pwidth, pheight))
           pane.width.onChange {
             if (pane.width() != canvas.width() && pane.width() > 1.0 && pane.height() > 1) {
               canvas.width = pane.width()
-              plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
+              if ((lastWidth - pane.width()).abs > 5 || (lastHeight - pane.height()).abs > 5) {
+                lastWidth = pane.width()
+                lastHeight = pane.height()
+                println(s"Render for width: $lastWidth $lastHeight")
+                Future {
+                  plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
+                }(ec)
+              }
+              ()
             }
           }
           pane.height.onChange {
             if (pane.height() != canvas.height() && pane.width() > 1 && pane.height() > 1.0) {
               canvas.height = pane.height()
-              plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
+              if ((lastWidth - pane.width()).abs > 5 || (lastHeight - pane.height()).abs > 5) {
+                lastWidth = pane.width()
+                lastHeight = pane.height()
+                println(s"Render for height: $lastWidth $lastHeight")
+                Future {
+                  plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
+                }(ec)
+              }
+              ()
             }
           }
         }
@@ -110,55 +132,7 @@ object FXRenderer {
         case ex: Exception => ex.printStackTrace
       }
     }
-    renderer
-  }
-
-  // TODO - Quick fix for 3D issue on Pandoras
-  def aliased(plot: Plot, pwidth: Double = 1000, pheight: Double = 1000): FXRenderer = {
-    val canvas = new Canvas(pwidth, pheight)
-    val gc = canvas.graphicsContext2D
-    val renderer = new FXRenderer(gc)
-    Platform.runLater {
-      val stage = new Stage(StageStyle.Decorated)
-      stage.title = "Plotting Test"
-      stage.scene = new Scene(pwidth, pheight + 30) {
-        val border = new BorderPane
-        val menuBar = new MenuBar
-        val menu = new Menu("File")
-        val menuItem = new MenuItem("Save Image")
-        menu.items = Seq(menuItem)
-        menuBar.menus = Seq(menu)
-        border.top = menuBar
-        val pane = new Pane
-        pane.children = canvas
-        border.center = pane
-        root = border
-
-        menuItem.onAction = (ae: ActionEvent) => {
-          val img = canvas.snapshot(null, null)
-          val chooser = new FileChooser()
-          val file = chooser.showSaveDialog(stage)
-          if (file != null) ImageIO.write(SwingFXUtils.fromFXImage(img, null), "PNG", new FileOutputStream(file))
-        }
-
-        import swiftvis2.plotting
-
-        plot.render(renderer, Bounds(0, 0, pwidth, pheight))
-        pane.width.onChange {
-          if (pane.width() != canvas.width() && pane.width() > 1.0 && pane.height() > 1) {
-            canvas.width = pane.width()
-            plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
-          }
-        }
-        pane.height.onChange {
-          if (pane.height() != canvas.height() && pane.width() > 1 && pane.height() > 1.0) {
-            canvas.height = pane.height()
-            plot.render(renderer, Bounds(0, 0, pane.width(), pane.height()))
-          }
-        }
-      }
-      stage.showing = true
-    }
+    //    plot.render(renderer, Bounds(0, 0, pwidth, pheight))
     renderer
   }
 
@@ -184,91 +158,102 @@ object FXRenderer {
   }
 }
 
-class FXRenderer(gc: GraphicsContext) extends Renderer {
+class FXRenderer(gc: GraphicsContext, maxQueue: Int = 10000) extends Renderer {
   private val text = new Text("")
+  private var queue = mutable.Queue[() => Unit]()
 
   def drawEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit = {
-    gc.strokeOval(cx - width / 2, cy - height / 2, width, height)
+    enqueue(() => gc.strokeOval(cx - width / 2, cy - height / 2, width, height))
   }
 
   def drawRectangle(x: Double, y: Double, width: Double, height: Double): Unit = {
-    gc.strokeRect(x, y, width, height)
+    enqueue(() => gc.strokeRect(x, y, width, height))
   }
 
   def drawPolygon(xs: Seq[Double], ys: Seq[Double]): Unit = {
-    gc.strokePolygon(xs.toArray, ys.toArray, xs.length min ys.length)
+    enqueue(() => gc.strokePolygon(xs.toArray, ys.toArray, xs.length min ys.length))
   }
 
   def drawPolygon(pnts: Seq[(Double, Double)]): Unit = {
-    gc.strokePolygon(pnts)
+    enqueue(() => gc.strokePolygon(pnts))
   }
 
   def fillEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit = {
-    gc.fillOval(cx - width / 2, cy - height / 2, width, height)
+    enqueue(() => gc.fillOval(cx - width / 2, cy - height / 2, width, height))
   }
 
   def fillRectangle(x: Double, y: Double, width: Double, height: Double): Unit = {
-    gc.fillRect(x, y, width, height)
+    enqueue(() => gc.fillRect(x, y, width, height))
   }
 
   def fillPolygon(xs: Seq[Double], ys: Seq[Double]): Unit = {
-    gc.fillPolygon(xs.toArray, ys.toArray, xs.length min ys.length)
+    enqueue(() => gc.fillPolygon(xs.toArray, ys.toArray, xs.length min ys.length))
   }
 
   def fillPolygon(pnts: Seq[(Double, Double)]): Unit = {
-    gc.fillPolygon(pnts)
+    enqueue(() => gc.fillPolygon(pnts))
   }
 
   def drawLine(x1: Double, y1: Double, x2: Double, y2: Double): Unit = {
-    gc.strokeLine(x1, y1, x2, y2)
+    enqueue(() => gc.strokeLine(x1, y1, x2, y2))
   }
 
   def drawLinePath(x: Seq[Double], y: Seq[Double]): Unit = {
-    gc.strokePolyline(x.toArray, y.toArray, x.length min y.length)
+    enqueue(() => gc.strokePolyline(x.toArray, y.toArray, x.length min y.length))
   }
 
   def drawText(s: String, x: Double, y: Double, align: Renderer.HorizontalAlign.Value, angle: Double): Unit = {
-    gc.save
-    text.text = s
-    text.font = gc.font
-    gc.textBaseline = VPos.Center
-    gc.translate(x, y)
-    gc.rotate(angle)
-    gc.textAlign = align match {
-      case Renderer.HorizontalAlign.Left => TextAlignment.Left
-      case Renderer.HorizontalAlign.Center => TextAlignment.Center
-      case Renderer.HorizontalAlign.Right => TextAlignment.Right
-    }
-    gc.fillText(s, 0, 0)
-    gc.restore
+    enqueue(() => {
+      gc.save
+      text.text = s
+      text.font = gc.font
+      gc.textBaseline = VPos.Center
+      gc.translate(x, y)
+      gc.rotate(angle)
+      gc.textAlign = align match {
+        case Renderer.HorizontalAlign.Left => TextAlignment.Left
+        case Renderer.HorizontalAlign.Center => TextAlignment.Center
+        case Renderer.HorizontalAlign.Right => TextAlignment.Right
+      }
+      gc.fillText(s, 0, 0)
+      gc.restore
+    })
   }
 
-  def save(): Unit = gc.save
+  def save(): Unit = enqueue(() => gc.save)
 
-  def restore(): Unit = gc.restore
+  def restore(): Unit = enqueue(() => gc.restore)
 
   def setColor(argb: Int): Unit = {
-    val color = Color.rgb((argb >> 16) & 0xff, (argb >> 8) & 0xff, argb & 0xff, ((argb >> 24) & 0xff) / 255.0)
-    gc.fill = color
-    gc.stroke = color
+    enqueue(() => {
+      val color = Color.rgb((argb >> 16) & 0xff, (argb >> 8) & 0xff, argb & 0xff, ((argb >> 24) & 0xff) / 255.0)
+      gc.fill = color
+      gc.stroke = color
+    })
   }
 
   def setStroke(stroke: Renderer.StrokeData): Unit = {
-    gc.lineWidth = stroke.width
-    if (stroke.dashing.nonEmpty) {
-      gc.delegate.setLineDashes(stroke.dashing: _*)
-    }
+    enqueue(() => {
+      gc.lineWidth = stroke.width
+      if (stroke.dashing.nonEmpty) {
+        gc.delegate.setLineDashes(stroke.dashing: _*)
+      }
+    })
   }
 
   def setFont(fd: Renderer.FontData, size: Double): Unit = {
-    gc.font = Font(fd.font, size)
-    // TODO - styles not implemented
+    enqueue(() => {
+      gc.font = Font(fd.font, size)
+      // TODO - styles not implemented
+    })
   }
 
   def setClip(bounds: Bounds): Unit = {
-    gc.beginPath()
-    gc.rect(bounds.x, bounds.y, bounds.width, bounds.height)
-    gc.clip()
+    enqueue(() => {
+      gc.beginPath()
+      gc.rect(bounds.x, bounds.y, bounds.width, bounds.height)
+      gc.clip()
+    })
   }
 
   def maxFontSize(strings: Seq[String], allowedWidth: Double, allowedHeight: Double, fd: Renderer.FontData): Double = {
@@ -285,4 +270,41 @@ class FXRenderer(gc: GraphicsContext) extends Renderer {
     10 * (allowedWidth / maxWidth min allowedHeight / maxHeight)
   }
 
+  def finish(): Unit = {
+    clearQueue()
+  }
+
+  private def enqueue(op: () => Unit): Unit = {
+    //    println("adding "+queue.size)
+    queue += op
+    //    if (queue.size % 100 == 0) println(queue.size)
+    if (queue.size >= maxQueue) clearQueue()
+  }
+
+  case class Runner(lq: mutable.Queue[() => Unit], latch: CountDownLatch) {
+    def run(): Unit = {
+      while (!lq.isEmpty) {
+        val f = lq.dequeue()
+        f()
+      }
+      latch.countDown
+//      println("Done dequeueing")
+    }
+  }
+
+  private def clearQueue(): Unit = {
+//    println("Clearing "+queue.size)
+//    println(Thread.currentThread)
+    val latch = new CountDownLatch(1)
+    val runner = Runner(queue, latch)
+    queue = mutable.Queue[() => Unit]()
+    if (gc.canvas.parent != null) {
+      Platform.runLater {
+        runner.run()
+      }
+    } else {
+      runner.run()
+    }
+    latch.await
+  }
 }
