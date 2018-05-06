@@ -12,8 +12,8 @@ import java.io.File
 // https://eknet.org/main/dev/runtimecompilescala.html
 
 object CompilerTest {
-  val targetDir:Option[File] = None
-  
+  val targetDir: Option[File] = None
+
   val target = targetDir match {
     case Some(dir) => AbstractFile.getDirectory(dir)
     case None => new VirtualDirectory("(memory)", None)
@@ -38,7 +38,7 @@ object CompilerTest {
    * @param code
    * @return
    */
-  def compile(code: String) = {
+  def compile(code: String): Class[_] = {
     val className = classNameForCode(code)
     findClass(className).getOrElse {
       val sourceFiles = List(new BatchSourceFile("(inline)", wrapCodeInClass(className, code)))
@@ -89,7 +89,7 @@ object CompilerTest {
       "  }\n"+
       "}\n"
   }
-  
+
   def main(args: Array[String]): Unit = {
     eval("println(\"hi\")")
   }

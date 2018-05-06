@@ -14,13 +14,17 @@ import swiftvis2.plotting.styles.BoxPlotStyle
 import swiftvis2.plotting.styles.ViolinPlotStyle
 
 object PlotTesting extends JFXApp {
+  val xLabel = "x"
+  val yLabel = "y"
+  val numberFormat = "%1.1f"
+  
   /**
    * Short form, single data examples
    */
   def scatter1(): Plot = {
     val xPnt = 1 to 10
     val yPnt = xPnt.map(a => a * a)
-    Plot.scatterPlot(xPnt, yPnt, title = "Quadratic", xLabel = "x", yLabel = "y")
+    Plot.scatterPlot(xPnt, yPnt, title = "Quadratic", xLabel = xLabel, yLabel = yLabel)
   }
 
   /**
@@ -29,7 +33,7 @@ object PlotTesting extends JFXApp {
   def scatterLogLog(): Plot = {
     val xPnt = 1 to 100
     val yPnt = xPnt.map(a => a * a)
-    Plot.scatterPlot(xPnt, yPnt, title = "Quadratic", xLabel = "x", xType = Axis.ScaleStyle.LogDense, yLabel = "y", yType = Axis.ScaleStyle.LogDense)
+    Plot.scatterPlot(xPnt, yPnt, title = "Quadratic", xLabel = xLabel, xType = Axis.ScaleStyle.LogDense, yLabel = yLabel, yType = Axis.ScaleStyle.LogDense)
   }
 
   /**
@@ -46,7 +50,7 @@ object PlotTesting extends JFXApp {
   def scatterLines(): Plot = {
     val xPnt = 1 to 10
     val yPnt = xPnt.map(a => a * a)
-    Plot.scatterPlotWithLines(xPnt, yPnt, title = "Quadratic", xLabel = "x", yLabel = "y", lineGrouping = 1)
+    Plot.scatterPlotWithLines(xPnt, yPnt, title = "Quadratic", xLabel = xLabel, yLabel = yLabel, lineGrouping = 1)
   }
 
   /**
@@ -55,7 +59,7 @@ object PlotTesting extends JFXApp {
   def scatterWithErrorBars(): Plot = {
     val xPnt = 1 to 10
     val yPnt = xPnt.map(a => a * a)
-    Plot.scatterPlotWithErrorBars(xPnt, yPnt, title = "Quadratic", xLabel = "x", yLabel = "y", symbolSize = 5, symbolColor = BlackARGB,
+    Plot.scatterPlotWithErrorBars(xPnt, yPnt, title = "Quadratic", xLabel = xLabel, yLabel = yLabel, symbolSize = 5, symbolColor = BlackARGB,
       xError = xPnt.map(_ * 0.2), yError = yPnt.map(_ * 0.3))
   }
 
@@ -95,7 +99,8 @@ object PlotTesting extends JFXApp {
   def scatterWithSizeandColor(): Plot = {
     val xs = 0.0 to 10.0 by 0.01
     val cg = ColorGradient((0.0, RedARGB), (5.0, GreenARGB), (10.0, BlueARGB))
-    Plot.scatterPlot(xs, xs.map(math.cos), title = "Cosine", xLabel = "Theta", yLabel = "Value", symbolSize = xs.map(x => math.sin(x) + 2), symbolColor = cg(xs))
+    Plot.scatterPlot(xs, xs.map(math.cos), title = "Cosine", xLabel = "Theta", yLabel = "Value", 
+        symbolSize = xs.map(x => math.sin(x) + 2), symbolColor = cg(xs))
   }
 
   def fullScatter(): Plot = {
@@ -108,7 +113,8 @@ object PlotTesting extends JFXApp {
     val stroke = Renderer.StrokeData(1, Nil)
     val xerr = x.map(_ => 0.2 * math.random)
     val yerr = x.map(_ => 0.2 * math.random)
-    Plot.scatterPlotsFull(Seq((x, y1, color, size1, None, Some(xerr), Some(yerr)), (x, y2, color, size2, Some(ScatterStyle.LineData(0, stroke)), None, None)))
+    Plot.scatterPlotsFull(Seq((x, y1, color, size1, None, Some(xerr), Some(yerr)), 
+        (x, y2, color, size2, Some(ScatterStyle.LineData(0, stroke)), None, None)))
   }
 
   /**
@@ -116,7 +122,8 @@ object PlotTesting extends JFXApp {
    */
   def barChart(): Plot = {
     import BarStyle._
-    Plot.barPlot(Seq("red", "green", "blue"), Seq(DataAndColor(Seq(3.0, 7.0, 4.0), YellowARGB), DataAndColor(Seq(2.0, 1.0, 3.0), MagentaARGB)), true, 0.8, "Bar Plot", "Colors", "Measure")
+    Plot.barPlot(Seq("red", "green", "blue"), Seq(DataAndColor(Seq(3.0, 7.0, 4.0), YellowARGB), DataAndColor(Seq(2.0, 1.0, 3.0), MagentaARGB)), 
+        true, 0.8, "Bar Plot", "Colors", "Measure")
   }
 
   /**
@@ -141,7 +148,8 @@ object PlotTesting extends JFXApp {
   def histogram2(): Plot = {
     val bins = 1.0 to 10.1 by 1.0
     import HistogramStyle.DataAndColor
-    Plot.stackedHistogramPlot(bins, Seq(DataAndColor(bins.map(12 - _), BlueARGB), DataAndColor(bins.map(x => 5 * (math.cos(x) + 2)), 0xffff0000)), true, "Histogram Plot", "Value", "Count")
+    Plot.stackedHistogramPlot(bins, Seq(DataAndColor(bins.map(12 - _), BlueARGB), DataAndColor(bins.map(x => 5 * (math.cos(x) + 2)), 0xffff0000)), 
+        true, "Histogram Plot", "Value", "Count")
   }
 
   /**
@@ -161,12 +169,17 @@ object PlotTesting extends JFXApp {
    */
   def longForm(): Plot = {
     val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    val xAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, "%1.1f")), Some(Axis.NameSettings("X1", font)))
-    val xAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, "%1.1f")), Some(Axis.NameSettings("X2", font)))
+    val xAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)), 
+        Some(Axis.NameSettings("X1", font)))
+    val xAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)), 
+        Some(Axis.NameSettings("X2", font)))
     val xAxisCat = new CategoryAxis(Axis.TickStyle.Both, 0, font, Some(Axis.NameSettings("Categories", font)), Axis.DisplaySide.Max)
-    val yAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.1f")), Some(Axis.NameSettings("Y1", font)))
-    val yAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")), Some(Axis.NameSettings("Y2", font)))
-    val yAxis3 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")), Some(Axis.NameSettings("Y3", font)), Axis.DisplaySide.Max)
+    val yAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, numberFormat)), 
+        Some(Axis.NameSettings("Y1", font)))
+    val yAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")), 
+        Some(Axis.NameSettings("Y2", font)))
+    val yAxis3 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")), 
+        Some(Axis.NameSettings("Y3", font)), Axis.DisplaySide.Max)
 
     // Main Scatter plot
     val (mainX, mainY) = (for (_ <- 1 to 1000) yield {
@@ -209,7 +222,7 @@ object PlotTesting extends JFXApp {
       None, Some(ex2), Some(ey2))
     val errorScatterPlot = Plot2D(errorScatter, "x2", "y1")
 
-    // Combine in a plot
+    // Combine in a plotx
     val title = new PlotText("Complex Plot", BlackARGB, font, Renderer.HorizontalAlign.Center, 0)
     val grid1 = PlotGrid(
       Seq(Seq(Seq(histogramPlot), Seq(barChartPlot)), Seq(Seq(mainScatterPlot, funcScatterPlot), Seq(errorScatterPlot))),
@@ -230,7 +243,8 @@ object PlotTesting extends JFXApp {
 
   def colorTest(): Plot = {
     val cg = ColorGradient(0.0 -> BlueARGB, 1.0 -> RedARGB, 2.0 -> GreenARGB)
-    Plot.scatterPlot(Seq(-1, 0, 1), Seq(-1, 0, 1), title = "Title", xLabel = "x", yLabel = "y", symbolSize = 10, symbolColor = cg(Array(0.0, 1.0, 2.0)))
+    Plot.scatterPlot(Seq(-1, 0, 1), Seq(-1, 0, 1), title = "Title", xLabel = xLabel, yLabel = yLabel, symbolSize = 10, 
+        symbolColor = cg(Array(0.0, 1.0, 2.0)))
   }
 
   def boxPlot(): Plot = {
@@ -311,7 +325,7 @@ object PlotTesting extends JFXApp {
         ScatterStyle(temp, alt, lines=ScatterStyle.connectAll), 
         ScatterStyle(pressure, alt, lines=ScatterStyle.connectAll, symbol = Rectangle)), 
         "Temp and Pressure", "Temperature [C]", "Altitude [km]").
-        withModifiedAxis[NumericAxis]("x", "pressure", 
+        withModifiedAxis[NumericAxis](xLabel, "pressure", 
             _.asMaxSideXAxis
              .updatedScaleStyle(Axis.ScaleStyle.LogSparse)
              .updatedName("Pressure [Pa]")).
@@ -324,52 +338,56 @@ object PlotTesting extends JFXApp {
     val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val style = ScatterStyle(x, y)
     val p2d = Plot2D(style, "x", "y")
-    val xAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(90, font, "%1.1f")), name = Some(Axis.NameSettings("X", font)))
-    val yAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(0, font, "%1.1f")), name = Some(Axis.NameSettings("Y", font)))
+    val xAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(90, font, numberFormat)), name = Some(Axis.NameSettings("X", font)))
+    val yAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(0, font, numberFormat)), name = Some(Axis.NameSettings("Y", font)))
     val grid = PlotGrid(Seq(Seq(Seq(p2d))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0))
     Plot(grids = Map("main" -> Plot.GridData(grid, Bounds(0.0, 0.05, 0.95, 0.95))))
   }
   
   def performanceTest(): Plot = {
-    val x = Array.fill(800000)((math.random-0.5)*(math.random-0.5))
+    val x = Array.fill(8000000)((math.random-0.5)*(math.random-0.5))
     val y = x.map(_ => math.cos(math.random*math.random*6.28))
-    Plot.scatterPlot(x, y, "Big", "x", "y", 0.001, BlackARGB, xSizing = PlotSymbol.Sizing.Scaled, ySizing = PlotSymbol.Sizing.Scaled)
+    Plot.scatterPlot(x, y, "Big", xLabel, yLabel, 0.001, BlackARGB, xSizing = PlotSymbol.Sizing.Scaled, ySizing = PlotSymbol.Sizing.Scaled)
   }
   
   Future {
-    FXRenderer(performanceTest(), 1000, 1000)
-//            FXRenderer(scatter1(), 800, 800)
-    //        FXRenderer(scatter2(), 800, 800)
-    //        FXRenderer(scatterLines(), 800, 800)
-    FXRenderer(scatterGrid(), 800, 800)
-//    SVGRenderer(scatterGrid(), "scatterGrid.svg", 400, 400)
-    //        FXRenderer(scatterWithErrorBars(), 800, 800)
-    //        FXRenderer(scatterMultidata(), 800, 800)
-    //        FXRenderer(scatterWithSizeandColor(), 800, 800)
-//    FXRenderer(scatterLogLog(), 800, 800)
-    //        FXRenderer(fullScatter(), 800, 800)
-//            FXRenderer(stackedNNTest(), 800, 800)
-//    FXRenderer(gridNNTest(), 800, 800)
-    //    FXRenderer(stackedCNTest(), 800, 800)
-//    FXRenderer(gridCNTest(), 800, 800)
-    //    FXRenderer(barChart(), 600, 500)
-    //            FXRenderer(histogram(), 600, 600)
-    //            FXRenderer(histogramSide(), 600, 600)
-    //            FXRenderer(histogram2(), 600, 600)
-    //            FXRenderer(histogramGrid(), 800, 800)
+    val largeDim = 1000
+    val medDim = 800
+    val smallDim = 600
+    val pubDim = 400
+    FXRenderer(performanceTest(), largeDim, largeDim)
+//            FXRenderer(scatter1(), medDim, medDim)
+    //        FXRenderer(scatter2(), medDim, medDim)
+    //        FXRenderer(scatterLines(), medDim, medDim)
+    FXRenderer(scatterGrid(), medDim, medDim)
+//    SVGRenderer(scatterGrid(), "scatterGrid.svg", pubDim, pubDim)
+    //        FXRenderer(scatterWithErrorBars(), medDim, medDim)
+    //        FXRenderer(scatterMultidata(), medDim, medDim)
+    //        FXRenderer(scatterWithSizeandColor(), medDim, medDim)
+//    FXRenderer(scatterLogLog(), medDim, medDim)
+    //        FXRenderer(fullScatter(), medDim, medDim)
+//            FXRenderer(stackedNNTest(), medDim, medDim)
+//    FXRenderer(gridNNTest(), medDim, medDim)
+    //    FXRenderer(stackedCNTest(), medDim, medDim)
+//    FXRenderer(gridCNTest(), medDim, medDim)
+    //    FXRenderer(barChart(), smallDim, 500)
+    //            FXRenderer(histogram(), smallDim, smallDim)
+    //            FXRenderer(histogramSide(), smallDim, smallDim)
+    //            FXRenderer(histogram2(), smallDim, smallDim)
+    //            FXRenderer(histogramGrid(), medDim, medDim)
 //    FXRenderer(longForm(), 1200, 1000)
     //    SVGRenderer(longForm(), "plot.svg", 1200, 1000)
-    //        FXRenderer(boxPlot(), 600, 600)
-    //    FXRenderer(violinPlot(), 600, 600)
+    //        FXRenderer(boxPlot(), smallDim, smallDim)
+    //    FXRenderer(violinPlot(), smallDim, smallDim)
 //    val rowPlot = rowOfDists()
-//    FXRenderer(rowPlot, 1200, 600)
-//    SVGRenderer(rowPlot, "rowOfDists.svg", 400, 300)
+//    FXRenderer(rowPlot, 1200, smallDim)
+//    SVGRenderer(rowPlot, "rowOfDists.svg", pubDim, 300)
 //    val ptPlot = pressureTempPlot
-//    FXRenderer(ptPlot, 600, 600)
-//    SVGRenderer(ptPlot, "pressureTempPlot.svg", 400, 400)
-    //        FXRenderer(colorTest(), 1200, 1000)
+//    FXRenderer(ptPlot, smallDim, smallDim)
+//    SVGRenderer(ptPlot, "pressureTempPlot.svg", pubDim, pubDim)
+    //        FXRenderer(colorTest(), largeDim, largeDim)
     //    saveToFile()
-//        FXRenderer(simpleFull(), 600, 600)
-//    SVGRenderer(simpleFull(), "simpleFull.svg", 400, 400)
+//        FXRenderer(simpleFull(), smallDim, smallDim)
+//    SVGRenderer(simpleFull(), "simpleFull.svg", pubDim, pubDim)
   }
 }

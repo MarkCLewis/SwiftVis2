@@ -4,8 +4,16 @@ and a programming interface. I try to keep a reasonably up to date API posted [o
 SwiftVis2 is still in the early stages. I am focusing on adding basic plotting capability with the programming interface currently.
 The graphical dataflow interface and other features will follow.
 
+## Installation
+
 SwiftVis2 is not yet at the point where it belongs in a Maven repository. Until SwiftVis2 is stable enough to put in a Maven repository 
-you can use it by compiling and packaging this project and putting the JAR file in the `lib` directory of your sbt project. 
+you can use it in one of two ways.
+
+1. Run `publishLocal` in sbt and include the appropriate dependency in your `build.sbt` file.
+  * `libraryDependencies += "edu.trinity" %% "swiftvis2" % "0.1.0-SNAPSHOT"`
+2. Compile and package this project and put the JAR file in the `lib` directory of your sbt project.
+
+## Usage 
 
 While it is possible to build plots piece by piece, the fact that SwiftVis2 supports a lot of plotting options can make that tedious.
 To help with that, facade methods are added that construct frequently used structures. The following code shows how you can use

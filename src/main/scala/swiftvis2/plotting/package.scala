@@ -13,7 +13,7 @@ package object plotting {
   val CyanARGB = 0xff00ffff
   val MagentaARGB = 0xffff00ff
   
-  def ARGB(a: Double, r: Double, g: Double, b: Double): Int = {
+  def argb(a: Double, r: Double, g: Double, b: Double): Int = {
     val ai = (a*255).toInt max 0 min 255
     val ri = (r*255).toInt max 0 min 255
     val gi = (g*255).toInt max 0 min 255

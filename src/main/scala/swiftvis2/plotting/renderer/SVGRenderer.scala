@@ -72,6 +72,7 @@ class SVGRenderer(ps: PrintStream) extends Renderer {
 </defs>""")
   }
   private def clipPath = copt.withClip.map(n => s"""clip-path="url(#clip$n)" """).getOrElse("")
+
   def maxFontSize(strings: Seq[String], allowedWidth: Double, allowedHeight: Double, fd: Renderer.FontData): Double = {
     allowedHeight min 2 * allowedWidth / strings.foldLeft(0.0)((m, s) => m max s.length)
   }

@@ -41,7 +41,7 @@ import scalafx.stage.WindowEvent
 object FXRenderer {
   def shellStart(args: Array[String] = Array()): Future[JFXApp] = {
     Future {
-      object ShellFX extends JFXApp {}
+      object ShellFX extends JFXApp
       ShellFX.main(args)
       ShellFX
     }
