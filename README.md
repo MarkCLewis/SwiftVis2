@@ -27,7 +27,8 @@ If you want to use SwiftVis2 with Spark, you should probably use the `publishLoc
 While it is possible to build plots piece by piece, the fact that SwiftVis2 supports a lot of plotting options can make that tedious.
 To help with that, facade methods are added that construct frequently used structures. The following code shows how you can use
 two facade methods to generate a scatter plot and display it. Note that you need to do this in a class that extends JFXApp
-to use the FXRenderer. That isn't needed for other renderers.
+to use the FXRenderer. That isn't needed for other renderers. Based on our expereince, at this point we would recommend using 
+the SwingRenderer over the FXRenderer. It is easier to use, faster, and produces slightly nicer output.
 
 ```scala
 import scalafx.application.JFXApp
