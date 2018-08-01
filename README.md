@@ -13,11 +13,21 @@ you can use it in one of two ways.
   * `libraryDependencies += "edu.trinity" %% "swiftvis2" % "0.1.0-SNAPSHOT"`
 2. Compile and package this project and put the JAR file in the `lib` directory of your sbt project.
 
+If you want to use SwiftVis2 with Spark, you should probably use the `publishLocal` option, but with some modifications.
+
+1. Run `++ 2.11.12` to set the Scala version to 2.11. You can update the last value to whatever the latest release is. This is required because Spark currently doesn't work with Scala 2.12 or newer.
+2. Run `publishLocal` to publish the 2.11 version of the main SwiftVis2 library.
+3. Run `spark/publishLocal` to publish the Spark integration library.
+4. Add the following lines to your build.sbt
+  * `libraryDependencies += "edu.trinity" %% "swiftvis2" % "0.1.0-SNAPSHOT"`
+  * `libraryDependencies += "edu.trinity" %% "swiftvis2spark" % "0.1.0-SNAPSHOT"`
+
 ## Usage 
 
 While it is possible to build plots piece by piece, the fact that SwiftVis2 supports a lot of plotting options can make that tedious.
 To help with that, facade methods are added that construct frequently used structures. The following code shows how you can use
-two facade methods to generate a scatter plot and display it. Note that you need to do this in a class that extends JFXApp.
+two facade methods to generate a scatter plot and display it. Note that you need to do this in a class that extends JFXApp
+to use the FXRenderer. That isn't needed for other renderers.
 
 ```scala
 import scalafx.application.JFXApp
@@ -39,7 +49,7 @@ object PlotTesting extends JFXApp {
 Currently scatter plots, bar charts, and histograms are the only plotting styles that are implemented. I'm building up [some examples](examples/examples.md) 
 that can help you see how to do things.
 
-If you want to use SwiftVis2 in a shell/REPL, including the spark-shell, you can specify the SwiftVis2 JAR file on the command line with the -cp option. Once in the shell you need to import a few things and then run `FXRenderer.startShell()`. This is shown in the following example. You can then repeatedly call `FXRenderer` on various plots as long as you don't close the small window that comes up with `startShell`. 
+If you want to use SwiftVis2 in a shell/REPL, including the spark-shell, you can specify the SwiftVis2 JAR file on the command line with the -cp option. Once in the shell you need to import a few things probably including `swiftvis2.plotting._` and `swiftvis2.plotting.renderer._`.  If you are using the FXRenderer you then run `FXRenderer.startShell()`. This is shown in the following example. You can then repeatedly call `FXRenderer` on various plots as long as you don't close the small window that comes up with `startShell`. If you are using the SwingRenderer, you can skip that step and just display plots. There won't be extra windows, but you need to be careful not to have your windows exit on close.
 
 ```scala
 import swiftvis2.plotting

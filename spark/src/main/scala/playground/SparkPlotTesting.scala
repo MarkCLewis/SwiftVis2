@@ -20,7 +20,7 @@ object SparkPlotTesting extends JFXApp {
 
   spark.sparkContext.setLogLevel("WARN")
 
-  val pnts = Array.tabulate(100)(i => Point(i, i * i, 3 + 3 * math.random, ARGB(1, math.random, math.random, math.random), util.Random.nextInt(5),
+  val pnts = Array.tabulate(100)(i => Point(i, i * i, 3 + 3 * math.random, argb(1, math.random, math.random, math.random), util.Random.nextInt(5),
     math.random * 10, math.random * 500))
 
   {

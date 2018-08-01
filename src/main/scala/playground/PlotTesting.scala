@@ -13,7 +13,7 @@ import java.io.File
 import swiftvis2.plotting.styles.BoxPlotStyle
 import swiftvis2.plotting.styles.ViolinPlotStyle
 
-object PlotTesting extends JFXApp {
+object PlotTesting {
   val xLabel = "x"
   val yLabel = "y"
   val numberFormat = "%1.1f"
@@ -345,49 +345,14 @@ object PlotTesting extends JFXApp {
   }
   
   def performanceTest(): Plot = {
-    val x = Array.fill(8000000)((math.random-0.5)*(math.random-0.5))
+    val x = Array.fill(1000000)((math.random-0.5)*(math.random-0.5))
     val y = x.map(_ => math.cos(math.random*math.random*6.28))
     Plot.scatterPlot(x, y, "Big", xLabel, yLabel, 0.001, BlackARGB, xSizing = PlotSymbol.Sizing.Scaled, ySizing = PlotSymbol.Sizing.Scaled)
   }
   
-  Future {
-    val largeDim = 1000
-    val medDim = 800
-    val smallDim = 600
-    val pubDim = 400
-    FXRenderer(performanceTest(), largeDim, largeDim)
-//            FXRenderer(scatter1(), medDim, medDim)
-    //        FXRenderer(scatter2(), medDim, medDim)
-    //        FXRenderer(scatterLines(), medDim, medDim)
-    FXRenderer(scatterGrid(), medDim, medDim)
-//    SVGRenderer(scatterGrid(), "scatterGrid.svg", pubDim, pubDim)
-    //        FXRenderer(scatterWithErrorBars(), medDim, medDim)
-    //        FXRenderer(scatterMultidata(), medDim, medDim)
-    //        FXRenderer(scatterWithSizeandColor(), medDim, medDim)
-//    FXRenderer(scatterLogLog(), medDim, medDim)
-    //        FXRenderer(fullScatter(), medDim, medDim)
-//            FXRenderer(stackedNNTest(), medDim, medDim)
-//    FXRenderer(gridNNTest(), medDim, medDim)
-    //    FXRenderer(stackedCNTest(), medDim, medDim)
-//    FXRenderer(gridCNTest(), medDim, medDim)
-    //    FXRenderer(barChart(), smallDim, 500)
-    //            FXRenderer(histogram(), smallDim, smallDim)
-    //            FXRenderer(histogramSide(), smallDim, smallDim)
-    //            FXRenderer(histogram2(), smallDim, smallDim)
-    //            FXRenderer(histogramGrid(), medDim, medDim)
-//    FXRenderer(longForm(), 1200, 1000)
-    //    SVGRenderer(longForm(), "plot.svg", 1200, 1000)
-    //        FXRenderer(boxPlot(), smallDim, smallDim)
-    //    FXRenderer(violinPlot(), smallDim, smallDim)
-//    val rowPlot = rowOfDists()
-//    FXRenderer(rowPlot, 1200, smallDim)
-//    SVGRenderer(rowPlot, "rowOfDists.svg", pubDim, 300)
-//    val ptPlot = pressureTempPlot
-//    FXRenderer(ptPlot, smallDim, smallDim)
-//    SVGRenderer(ptPlot, "pressureTempPlot.svg", pubDim, pubDim)
-    //        FXRenderer(colorTest(), largeDim, largeDim)
-    //    saveToFile()
-//        FXRenderer(simpleFull(), smallDim, smallDim)
-//    SVGRenderer(simpleFull(), "simpleFull.svg", pubDim, pubDim)
-  }
+  val largeDim = 1000
+  val medDim = 800
+  val smallDim = 600
+  val pubDim = 400
 }
+

@@ -1,7 +1,10 @@
 # SwiftVis 2 Examples
 
 This is where you can find various examples of SwiftVis2 usage. Until this is finished, you'll find code to produce the testings plots
-in [playground.PlotTesting](https://github.com/MarkCLewis/SwiftVis2/blob/master/src/main/scala/playground/PlotTesting.scala).
+in [playground.PlotTesting](https://github.com/MarkCLewis/SwiftVis2/blob/master/src/main/scala/playground/PlotTesting.scala). Code that renders the plots can also be found for 
+the [FXRenderer](https://github.com/MarkCLewis/SwiftVis2/blob/master/src/main/scala/playground/JFXPlotTesting.scala), 
+the [SwingRenderer](https://github.com/MarkCLewis/SwiftVis2/blob/master/src/main/scala/playground/SwingPlotTesting.scala), 
+and the [SVGRenderer](https://github.com/MarkCLewis/SwiftVis2/blob/master/src/main/scala/playground/SVGPlotTesting.scala).
 
 ## Programmatic Usage
 
