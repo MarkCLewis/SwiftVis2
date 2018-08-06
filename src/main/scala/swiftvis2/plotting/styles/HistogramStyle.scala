@@ -10,7 +10,7 @@ import swiftvis2.plotting.PlotStringSeries
 import swiftvis2.plotting.PlotDoubleSeries
 import swiftvis2.plotting.PlotIntSeries
 
-// TODO : Add the ability to swap axes. This will allow a histogram that is comparable to a box plot or a violin plot
+// TODO - add error bars
 
 /**
  * This style will draw out a histogram.

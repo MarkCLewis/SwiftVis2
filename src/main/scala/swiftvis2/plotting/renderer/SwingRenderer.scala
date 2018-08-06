@@ -1,7 +1,6 @@
 package swiftvis2.plotting.renderer
 
 import scalafx.Includes._
-import java.util.concurrent.CountDownLatch
 import swiftvis2.plotting.Bounds
 import java.awt.Graphics2D
 import java.awt.geom.Ellipse2D
@@ -57,85 +56,83 @@ class SwingRenderer(g: Graphics2D, maxQueue: Int) extends Renderer {
   private val stack = ArrayStack[Options]()
 
   def drawEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit = {
-    enqueue(() => g.draw(new Ellipse2D.Double(cx - width / 2, cy - height / 2, width, height)))
+    g.draw(new Ellipse2D.Double(cx - width / 2, cy - height / 2, width, height))
   }
 
   def drawRectangle(x: Double, y: Double, width: Double, height: Double): Unit = {
-    enqueue(() => g.draw(new Rectangle2D.Double(x, y, width, height)))
+    g.draw(new Rectangle2D.Double(x, y, width, height))
   }
 
   def drawPolygon(xs: Seq[Double], ys: Seq[Double]): Unit = {
     val path = new Path2D.Double()
     path.moveTo(xs(0), ys(0))
     for (i <- 1 until xs.length) path.lineTo(xs(i), ys(i))
-    enqueue(() => g.draw(path))
+    g.draw(path)
   }
 
   def drawPolygon(pnts: Seq[(Double, Double)]): Unit = {
     val path = new Path2D.Double()
     path.moveTo(pnts(0)._1, pnts(0)._2)
     for (i <- 1 until pnts.length) path.lineTo(pnts(i)._1, pnts(i)._2)
-    enqueue(() => g.draw(path))
+    g.draw(path)
   }
 
   def fillEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit = {
-    enqueue(() => g.fill(new Ellipse2D.Double(cx - width / 2, cy - height / 2, width, height)))
+    g.fill(new Ellipse2D.Double(cx - width / 2, cy - height / 2, width, height))
   }
 
   def fillRectangle(x: Double, y: Double, width: Double, height: Double): Unit = {
-    enqueue(() => g.fill(new Rectangle2D.Double(x, y, width, height)))
+    g.fill(new Rectangle2D.Double(x, y, width, height))
   }
 
   def fillPolygon(xs: Seq[Double], ys: Seq[Double]): Unit = {
     val path = new Path2D.Double()
     path.moveTo(xs(0), ys(0))
     for (i <- 1 until xs.length) path.lineTo(xs(i), ys(i))
-    enqueue(() => g.fill(path))
+    g.fill(path)
   }
 
   def fillPolygon(pnts: Seq[(Double, Double)]): Unit = {
     val path = new Path2D.Double()
     path.moveTo(pnts(0)._1, pnts(0)._2)
     for (i <- 1 until pnts.length) path.lineTo(pnts(i)._1, pnts(i)._2)
-    enqueue(() => g.fill(path))
+    g.fill(path)
   }
 
   def drawLine(x1: Double, y1: Double, x2: Double, y2: Double): Unit = {
-    enqueue(() => g.draw(new Line2D.Double(x1, y1, x2, y2)))
+    g.draw(new Line2D.Double(x1, y1, x2, y2))
   }
 
   def drawLinePath(xs: Seq[Double], ys: Seq[Double]): Unit = {
     val path = new Path2D.Double()
     path.moveTo(xs(0), ys(0))
     for (i <- 1 until xs.length) path.lineTo(xs(i), ys(i))
-    enqueue(() => g.draw(path))
+    g.draw(path)
   }
 
   def drawText(s: String, x: Double, y: Double, align: Renderer.HorizontalAlign.Value, angle: Double): Unit = {
-    enqueue(() => {
-      val frc = g.getFontRenderContext()
-      val oldTrans = g.getTransform()
-      val bounds = g.getFont().getStringBounds(s, frc)
-      val rangle = angle/180*math.Pi
-      val voff = bounds.getHeight()*0.35
-      val hoff = align match {
-        case Renderer.HorizontalAlign.Left   => 0.0 
-        case Renderer.HorizontalAlign.Center => -bounds.getWidth()/2
-        case Renderer.HorizontalAlign.Right  => -bounds.getWidth()
-      }
-      g.translate(x+hoff*math.cos(rangle)-voff*math.sin(rangle), y+hoff*math.sin(rangle)+voff*math.cos(rangle))
-      g.rotate(rangle)
-      g.drawString(s, 0, 0)
-      g.setTransform(oldTrans)
-    })
+    val frc = g.getFontRenderContext()
+    val oldTrans = g.getTransform()
+    val bounds = g.getFont().getStringBounds(s, frc)
+    val rangle = angle / 180 * math.Pi
+    val voff = bounds.getHeight() * 0.35
+    val hoff = align match {
+      case Renderer.HorizontalAlign.Left   => 0.0
+      case Renderer.HorizontalAlign.Center => -bounds.getWidth() / 2
+      case Renderer.HorizontalAlign.Right  => -bounds.getWidth()
+    }
+    g.translate(x + hoff * math.cos(rangle) - voff * math.sin(rangle), y + hoff * math.sin(rangle) + voff * math.cos(rangle))
+    g.rotate(rangle)
+    g.drawString(s, 0, 0)
+    g.setTransform(oldTrans)
   }
 
-  def save(): Unit = enqueue{() =>
+  def save(): Unit = { //enqueue{() =>
     val newOpts = Options(g.getPaint(), g.getStroke(), g.getFont(), g.getClip())
     stack.push(newOpts)
   }
 
-  def restore(): Unit = enqueue{() => 
+  def restore(): Unit = { //enqueue{() =>
     val opts = stack.pop()
     g.setPaint(opts.color)
     g.setStroke(opts.stroke)
@@ -144,75 +141,39 @@ class SwingRenderer(g: Graphics2D, maxQueue: Int) extends Renderer {
   }
 
   def setColor(argb: Int): Unit = {
-    enqueue(() => {
-      val color = new Color((argb >> 16) & 0xff, (argb >> 8) & 0xff, argb & 0xff, (argb >> 24) & 0xff)
-      g.setPaint(color)
-    })
+    val color = new Color((argb >> 16) & 0xff, (argb >> 8) & 0xff, argb & 0xff, (argb >> 24) & 0xff)
+    g.setPaint(color)
   }
 
   def setStroke(stroke: Renderer.StrokeData): Unit = {
-    enqueue(() => {
-      g.setStroke(new BasicStroke(stroke.width.toFloat))
-      // TODO - add dashing
-      //      if (stroke.dashing.nonEmpty) {
-      //        gc.delegate.setLineDashes(stroke.dashing: _*)
-      //      }
-    })
+    g.setStroke(new BasicStroke(stroke.width.toFloat))
+    // TODO - add dashing
+    //      if (stroke.dashing.nonEmpty) {
+    //        gc.delegate.setLineDashes(stroke.dashing: _*)
+    //      }
   }
 
   def setFont(fd: Renderer.FontData, size: Double): Unit = {
-    enqueue(() => {
-      g.setFont(new Font(fd.font, Font.PLAIN, size.toInt))
-      // TODO - styles not implemented
-    })
+    g.setFont(new Font(fd.font, Font.PLAIN, size.toInt))
+    // TODO - styles not implemented
   }
 
   def setClip(bounds: Bounds): Unit = {
-    enqueue(() => {
-      g.clip(new Rectangle2D.Double(bounds.x, bounds.y, bounds.width, bounds.height))
-    })
+    g.clip(new Rectangle2D.Double(bounds.x, bounds.y, bounds.width, bounds.height))
   }
 
   def maxFontSize(strings: Seq[String], allowedWidth: Double, allowedHeight: Double, fd: Renderer.FontData): Double = {
     val frc = g.getFontRenderContext()
     var maxWidth = 0.0
     var maxHeight = 0.0
-    for (s <- strings; if s!=null) {
+    for (s <- strings; if s != null) {
       val bounds = g.getFont().getStringBounds(s, frc)
       if (bounds.getWidth > maxWidth) maxWidth = bounds.getWidth
       if (bounds.getHeight > maxHeight) maxHeight = bounds.getHeight
     }
-    10 * (allowedWidth / maxWidth min allowedHeight / maxHeight)
+    g.getFont().getSize() * (allowedWidth / maxWidth min allowedHeight / maxHeight)
   }
 
   def finish(): Unit = {
-    clearQueue()
-  }
-
-  private def enqueue(op: () => Unit): Unit = {
-    //    println("adding "+queue.size)
-    queue += op
-    //    if (queue.size % 100 == 0) println(queue.size)
-    if (queue.size >= maxQueue) clearQueue()
-  }
-
-  case class Runner(lq: mutable.Queue[() => Unit], latch: CountDownLatch) {
-    def run(): Unit = {
-      while (!lq.isEmpty) {
-        val f = lq.dequeue()
-        f()
-        if (latch.getCount > 0 && lq.size < maxQueue / 4) latch.countDown()
-      }
-      if (latch.getCount > 0) latch.countDown
-      //      println("Done dequeueing")
-    }
-  }
-
-  private def clearQueue(): Unit = {
-    val latch = new CountDownLatch(1)
-    val runner = Runner(queue, latch)
-    queue = mutable.Queue[() => Unit]()
-    runner.run()
-    latch.await
   }
 }

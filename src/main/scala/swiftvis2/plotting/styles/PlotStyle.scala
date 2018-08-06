@@ -4,6 +4,12 @@ import swiftvis2.plotting.Bounds
 import swiftvis2.plotting.renderer.Renderer
 import swiftvis2.plotting.Axis
 
+// TODO - Add methods to check if the axis type matches for X and Y. Allows warnings before exceptions.
+// TODO - Add style for heatmap.
+// TODO - Add style for spider or radar charts. This requires thinking about cylindrical coordinates, which is a big addition.
+// TODO - Add pie-points chart.
+// TODO - Choropleth and lollipop charts
+
 /**
  * This is the trait to be implemented by the various different styles of plots.
  */
