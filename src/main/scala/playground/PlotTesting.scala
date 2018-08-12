@@ -134,6 +134,12 @@ object PlotTesting {
     Plot.histogramPlot(bins, bins.map(12 - _).init, BlueARGB, false, "Histogram Plot", "Value", "Count")
   }
 
+  def histogramFromData(): Plot = {
+    val bins = -1.0 to 1.0 by 0.1
+    val data = (1 to 10000).map(_ => math.cos(math.random*math.Pi))
+    Plot.histogramPlotFromData(bins, data, GreenARGB)
+  }
+
   /**
    * Short form histogram plot
    */

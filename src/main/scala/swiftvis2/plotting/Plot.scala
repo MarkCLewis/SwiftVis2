@@ -556,7 +556,7 @@ object Plot {
   /**
    * Make a simple histogram. If not centered on bins, the bins series should be one element longer than the values.
    * @param bins A series of values that represent either the centers of bins or the edges of bins.
-   * @param vals The values for each of the bins.
+   * @param vals The values for each of the bins. Note that this isn't the data, but the counts in each bin.
    * @param color The color to draw the histogram boxes in.
    * @param centerOnBins Tells if the bins values are a bin centers or if the define the edges of bins.
    * @param title The title put on the plot.
@@ -578,6 +578,31 @@ object Plot {
       Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
   }
 
+/**
+   * Make a simple histogram. If not centered on bins, the bins series should be one element longer than the values.
+   * @param bins A series of values that represent either the centers of bins or the edges of bins.
+   * @param data The data that we are binning to make the Histogram.
+   * @param color The color to draw the histogram boxes in.
+   * @param centerOnBins Tells if the bins values are a bin centers or if the define the edges of bins.
+   * @param title The title put on the plot.
+   * @param xLabel The label drawn on the x-axis.
+   * @param yLabel The label drawn on the y-axis.
+   */
+  def histogramPlotFromData(bins: PlotDoubleSeries, data: PlotDoubleSeries, color: Int,
+                    title: String = "", xLabel: String = "", yLabel: String = "", binsOnX: Boolean = true): Plot = {
+    val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
+    val style = HistogramStyle.fromData(data, bins, color, binsOnX)
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    val xAxis = NumericAxis(if (binsOnX) None else Some(0.0), None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+    val yAxis = NumericAxis(if (binsOnX) Some(0.0) else None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+    val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
+    Plot(
+      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
+      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+  }
+  
   /**
    * Make a grid of histograms. If not centered on bins, the bins series should be one element longer than the values.
    * All histograms share the same bins and the same x axis. You can determine if they share the Y axis or if each row gets its own.
