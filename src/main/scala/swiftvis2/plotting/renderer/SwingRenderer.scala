@@ -19,6 +19,15 @@ import scala.collection.mutable.ArrayStack
 import java.awt.Paint
 import java.awt.Shape
 import javax.swing.JPanel
+import javax.swing.JMenuBar
+import javax.swing.JMenu
+import javax.swing.JMenuItem
+import javax.swing.JFileChooser
+import javax.swing.JOptionPane
+import java.awt.image.BufferedImage
+import javax.imageio.ImageIO
+import java.awt.event.ActionListener
+import java.awt.event.ActionEvent
 
 /**
  * A renderer for drawing to the desktop using Swing. In theory, JavaFX is the way to go for the future, but in practice
@@ -33,12 +42,53 @@ object SwingRenderer {
   def apply(plot: Plot, width: Double = 800, height: Double = 800, makeMain: Boolean = false): Unit = {
     val panel = new JPanel() {
       override def paint(gr: Graphics) {
-        val renderer = new SwingRenderer(gr.asInstanceOf[Graphics2D], 10000)
+        val renderer = new SwingRenderer(gr.asInstanceOf[Graphics2D])
         plot.render(renderer, Bounds(0, 0, getWidth(), getHeight()))
       }
     }
     val frame = new JFrame("Plot Testing")
     frame.add(panel)
+    val menuBar = new JMenuBar()
+    val fileMenu = new JMenu("File")
+    val savePNGItem = new JMenuItem("Save as PNG")
+    savePNGItem.addActionListener(new ActionListener {
+      override def actionPerformed(event: ActionEvent): Unit = {
+        val chooser = new JFileChooser()
+        if (chooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
+          val file = chooser.getSelectedFile()
+          val result = JOptionPane.showInputDialog(frame, "Enter the pixel size of the SVG output as #x#, such as 1000x1000.", "Image Size", JOptionPane.QUESTION_MESSAGE)
+          result match {
+            case null => println("Save as SVG cancelled")
+            case choice =>
+              val Array(width, height) = choice.split("x").map(_.toInt)
+              val img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
+              val renderer = new SwingRenderer(img.createGraphics())
+              plot.render(renderer, new Bounds(0, 0, width, height))
+              ImageIO.write(img, "PNG", file)
+          }
+        }
+      }
+    })
+    val saveSVGItem = new JMenuItem("Save as SVG")
+    saveSVGItem.addActionListener(new ActionListener {
+      override def actionPerformed(event: ActionEvent): Unit = {
+        val chooser = new JFileChooser()
+        if (chooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
+          val file = chooser.getSelectedFile()
+          val result = JOptionPane.showInputDialog(frame, "Enter the pixel size of the SVG output as #x#, such as 1000x1000.", "Image Size", JOptionPane.QUESTION_MESSAGE)
+          result match {
+            case null => println("Save as SVG cancelled")
+            case choice =>
+              val p = choice.split("x")
+              SVGRenderer(plot, file.getPath(), p(0).toDouble, p(1).toDouble)
+          }
+        }
+      }
+    })
+    fileMenu.add(savePNGItem)
+    fileMenu.add(saveSVGItem)
+    menuBar.add(fileMenu)
+    frame.setJMenuBar(menuBar)
     // TODO - Add a menubar with printing options.
     frame.setSize(width.toInt, height.toInt)
     if (makeMain) frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
@@ -46,10 +96,8 @@ object SwingRenderer {
   }
 }
 
-class SwingRenderer(g: Graphics2D, maxQueue: Int) extends Renderer {
+class SwingRenderer(g: Graphics2D) extends Renderer {
   import collection.mutable
-
-  private var queue = mutable.Queue[() => Unit]()
 
   import SwingRenderer.Options
 
