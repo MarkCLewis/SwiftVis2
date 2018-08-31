@@ -66,6 +66,16 @@ Plot.stackedHistogramPlot(bins, Seq(
 
 ![histogram](histogram.png "Simple Histogram")
 
+Note that the above example expects you provide counts. This is because tools
+like Spark provide methods that do this for you in an efficient, distributed
+way. If your data set fits nicely on a single machine the following code will
+do the binning and make a histogram from the data for you.
+
+```scala
+Plot.histogramPlotFromData(bins, data, GreenARGB)
+```
+![histogram from data](histogramFromData.png "Histogram from Data")
+
 #### Bar Charts
 
 The bar chart utilizes a categorical axis. The bars can be drawn side-by-side or stacked.
@@ -114,15 +124,55 @@ are different options for the axis tpes that are used.
 
 #### Row
 
+```scala
+Plot.row(Seq(
+  ScatterStyle(xs, ys, symbolWidth = 5, symbolHeight = 5),
+  HistogramStyle(bins, Seq(HistogramStyle.DataAndColor(cnts, GreenARGB)), binsOnX = false),
+  BoxPlotStyle(Array("Distrib"), Array(ys)),
+  ViolinPlotStyle(Array("Distrib"), Array(ys))), "Distributions", "Num X", "Categories", "Y")
+```
+
+![row plot](row.png "Row Plot")
+
 #### Column - TODO
 
 #### Stacked Numeric-Numeric
 
+```scala
+Plot.stackedNN(
+  Seq(HistogramStyle(0.0 to 1.0 by 0.1, Array(HistogramStyle.DataAndColor(cnts, RedARGB))), ScatterStyle(xs, ys, symbolWidth = 5, symbolHeight = 5)),
+  title = "Stacked NN", xLabel = "X", yLabel = "Y")
+```
+
+![stackedNN plot](stackedNN.png "Stacked Numeric-Numeric Plot")
+
 #### Grid Numeric-Numeric
+
+```scala
+Plot.gridNN(
+  Seq(Seq(ScatterStyle(xs, ys, symbolWidth = 5, symbolHeight = 5)), Seq(HistogramStyle(0.0 to 1.0 by 0.1, Array(HistogramStyle.DataAndColor(cnts, RedARGB))))),
+  title = "Grid NN", xLabel = "X", yLabel = "Y")
+```
+![gridNN plot](gridNN.png "Grid Numeric-Numeric Plot")
 
 #### Stacked Category-Numeric
 
+```scala
+Plot.stackedCN(
+  Seq(BarStyle(cats, Array(BarStyle.DataAndColor(Array(1, 2, 3), YellowARGB))), BoxPlotStyle(cats, ys), ViolinPlotStyle(cats, ys)),
+  title = "Stacked CN", xLabel = "Categories", yLabel = "Y")
+```
+![stackedCN plot](stackedCN.png "Stacked Category-Numeric Plot")
+
 #### Grid Category-Numeric
+
+```scala
+Plot.gridCN(
+  Seq(Seq(BarStyle(cats, Array(BarStyle.DataAndColor(Array(1, 2, 3), YellowARGB))), BoxPlotStyle(cats, ys), ViolinPlotStyle(cats, ys))),
+  title = "Grid CN", xLabel = "Categories", yLabel = "Y")
+```
+![gridCN plot](gridCN.png "Grid Category-Numeric Plot")
+
 
 ### Fluent Interface
 
@@ -131,11 +181,89 @@ want for their plots. One way to deal with this is to use the facade to build
 a plot that is close to what you want, then use the fluent interface to alter 
 some element of it to match what you really want.
 
+```scala
+Plot.stacked(Seq(
+  ScatterStyle(temp, alt, lines=ScatterStyle.connectAll), 
+  ScatterStyle(pressure, alt, lines=ScatterStyle.connectAll, symbol = Rectangle)), 
+  "Temp and Pressure", "Temperature [C]", "Altitude [km]").
+  withModifiedAxis[NumericAxis](xLabel, "pressure", 
+      _.asMaxSideXAxis
+       .updatedScaleStyle(Axis.ScaleStyle.LogSparse)
+       .updatedName("Pressure [Pa]")).
+  updatedStyleXAxis("pressure", stack = 1)
+```
+![stacked fluent plot](stackedFluent.png "Stacked Fluent Plot")
+
 ### Long-form/Non-facade
 
 All the plots above were made using facade methods that provide a shortcut syntax. However, you can also construct your own plot grids with whatever
 plot styles and axes you want, with variable width rows and columns. An example of this, which also shows many of the different capabilities of SwiftVis2
 is shown here.
+
+```scala
+val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+val xAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)), 
+    Some(Axis.NameSettings("X1", font)))
+val xAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)), 
+    Some(Axis.NameSettings("X2", font)))
+val xAxisCat = new CategoryAxis(Axis.TickStyle.Both, 0, font, Some(Axis.NameSettings("Categories", font)), Axis.DisplaySide.Max)
+val yAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, numberFormat)), 
+    Some(Axis.NameSettings("Y1", font)))
+val yAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")), 
+    Some(Axis.NameSettings("Y2", font)))
+val yAxis3 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")), 
+    Some(Axis.NameSettings("Y3", font)), Axis.DisplaySide.Max)
+
+// Main Scatter plot
+val (mainX, mainY) = (for (_ <- 1 to 1000) yield {
+  val r = math.random * math.random * math.random
+  val theta = math.random * 2 * math.Pi
+  (r * math.cos(theta), r * math.sin(theta))
+}).unzip
+val mainScatter = ScatterStyle(mainX, mainY, Ellipse, 5, 5, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, BlueARGB)
+val mainScatterPlot = Plot2D(mainScatter, "x1", "y1")
+
+// Function overplot
+val (funcX, funcY) = (-1.0 to 1.0 by 0.002).map(x => x -> math.sin(20 * x * x) * 0.4).unzip
+val funcScatter = ScatterStyle(funcX, funcY, NoSymbol, 5, 5, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, BlackARGB,
+  Some(ScatterStyle.LineData(1, Renderer.StrokeData(2, Seq.empty))))
+val funcScatterPlot = Plot2D(funcScatter, "x1", "y1")
+
+// Histogram
+val binSize = 0.02
+val bins = (-1.0 to 1.0 by binSize).toArray
+val counts = Array.fill(bins.length - 1)(0)
+for (x <- mainX) counts(((x + 1) / binSize).toInt min counts.length) += 1
+val histogram = HistogramStyle(bins, Seq(HistogramStyle.DataAndColor(counts, RedARGB)), false)
+val histogramPlot = Plot2D(histogram, "x1", "y2")
+
+// Bar Chart
+import BarStyle._
+val barChart = BarStyle(Seq("FY", "Sophomore", "Junior", "Senior"), Seq(
+  DataAndColor(Seq(70, 25, 15, 5), CyanARGB), DataAndColor(Seq(3, 25, 5, 1), MagentaARGB),
+  DataAndColor(Seq(0, 5, 35, 2), YellowARGB), DataAndColor(Seq(0, 0, 5, 40), GreenARGB)),
+  false, 0.8)
+val barChartPlot = Plot2D(barChart, "xcat", "y3")
+
+// Second Scatter
+val x2 = Array.fill(100)(math.random)
+val y2 = x2.map(x => math.cos(x * 3) + 0.2 * math.random)
+val ex2 = x2.map(x => 0.1 * math.random)
+val ey2 = x2.map(x => 0.2 * math.random)
+val cg = ColorGradient(-1.0 -> BlackARGB, 0.0 -> BlueARGB, 1.0 -> GreenARGB)
+val errorScatter = ScatterStyle(x2, y2, Rectangle, 5, ey2, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Scaled, cg(y2),
+  None, Some(ex2), Some(ey2))
+val errorScatterPlot = Plot2D(errorScatter, "x2", "y1")
+
+// Combine in a plotx
+val title = new PlotText("Complex Plot", BlackARGB, font, Renderer.HorizontalAlign.Center, 0)
+val grid1 = PlotGrid(
+  Seq(Seq(Seq(histogramPlot), Seq(barChartPlot)), Seq(Seq(mainScatterPlot, funcScatterPlot), Seq(errorScatterPlot))),
+  Map("x1" -> xAxis1, "x2" -> xAxis2, "xcat" -> xAxisCat, "y1" -> yAxis1, "y2" -> yAxis2, "y3" -> yAxis3),
+  Seq(0.7, 0.3), Seq(0.3, 0.7), 0.1)
+
+Plot(Map("title" -> Plot.TextData(title, Bounds(0, 0, 1.0, 0.1))), Map("grid1" -> Plot.GridData(grid1, Bounds(0, 0.1, 1.0, 0.9))))
+```
 
 ![complex plot](complexPlot.png "Complex Plot")
 
