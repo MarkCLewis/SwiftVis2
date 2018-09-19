@@ -10,6 +10,9 @@ import swiftvis2.plotting.PlotStringSeries
 import swiftvis2.plotting.PlotDoubleSeries
 import swiftvis2.plotting.PlotIntSeries
 
+// TODO - add error bars to these.
+// TODO - allow bars to be flipped to the other axis.
+
 case class BarStyle(
     categories: PlotStringSeries,
     valSourceColor: Seq[BarStyle.DataAndColor],

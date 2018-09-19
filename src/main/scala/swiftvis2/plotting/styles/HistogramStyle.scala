@@ -10,7 +10,7 @@ import swiftvis2.plotting.PlotStringSeries
 import swiftvis2.plotting.PlotDoubleSeries
 import swiftvis2.plotting.PlotIntSeries
 
-// TODO : Add the ability to swap axes. This will allow a histogram that is comparable to a box plot or a violin plot
+// TODO - add error bars
 
 /**
  * This style will draw out a histogram.
@@ -103,4 +103,33 @@ final case class HistogramStyle(
 
 object HistogramStyle {
   case class DataAndColor(data: PlotDoubleSeries, color: Int)
+
+  /**
+   * This method will build a Histogram from data given an arbitrary sorted set of bins.
+   */
+  def fromData(data: PlotDoubleSeries, bins: PlotDoubleSeries, color: Int, binsOnX: Boolean): HistogramStyle = {
+    val counts = Array.fill(bins.maxIndex-bins.minIndex-1)(0.0)
+    val evenSpacing = (bins.minIndex until bins.maxIndex-2).forall(i => ((bins(i+1)-bins(i)) - (bins(i+2)-bins(i+1))).abs < 1e-8)
+    val binFunc: Double => Int = if(evenSpacing) {
+      val delta = bins(1)-bins(0)
+      x => ((x-bins(0))*(bins.maxIndex-bins.minIndex)/(bins(bins.maxIndex-1)-bins(0))).toInt
+    } else {
+      def findBin(x: Double, start: Int, end: Int): Int = {
+        if(end == start+1) start
+        else if(end <= start) -1000000000
+        else {
+          val mid = (start+end)/2
+          if(x>=bins(mid) && x<bins(mid+1)) mid
+          else if(x<bins(mid)) findBin(x, start, mid)
+          else findBin(x, mid+1, end)
+        }
+      }
+      x => findBin(x, bins.minIndex, bins.maxIndex-1)
+    }
+    for(i <- data.minIndex until data.maxIndex) {
+      val bin = binFunc(data(i))-bins.minIndex
+      if(bin  >= 0 && bin < counts.length) counts(bin) += 1
+    }
+    HistogramStyle(bins, Seq(DataAndColor(counts, color)), false, binsOnX)
+  }
 }

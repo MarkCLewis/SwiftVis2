@@ -144,7 +144,7 @@ case class NumericAxis(
     }
   }
 
-  private[plotting] def calcTickLocations(amin: Double, amax: Double): Seq[Double] = {
+  def calcTickLocations(amin: Double, amax: Double): Seq[Double] = {
     if (tickSpacing.nonEmpty || tickLabelInfo.nonEmpty) {
       style match {
         case Axis.ScaleStyle.Linear =>
