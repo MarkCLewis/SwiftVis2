@@ -1,6 +1,5 @@
 package swiftvis2.plotting.renderer
 
-import scalafx.Includes._
 import swiftvis2.plotting.Bounds
 import java.awt.Graphics2D
 import java.awt.geom.Ellipse2D
