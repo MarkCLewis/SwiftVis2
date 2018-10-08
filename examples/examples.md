@@ -115,8 +115,8 @@ Plot.violinPlot(categories, data, title = "Violin Plot", yLabel = "Random values
 ### Updated Facade
 
 The updated facade includes methods that allow you to put different plot
-styles in a single plot. They let you pass in the various plot styles and there
-are different options for the axis tpes that are used.
+styles in a single plot. They let you pass in the various plot styles and 
+some of them have different options for the axis types that are used.
 
 #### Simple
 

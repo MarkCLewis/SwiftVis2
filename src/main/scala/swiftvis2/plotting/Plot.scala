@@ -234,7 +234,7 @@ object Plot {
   }
 
   /**
-   * This makes an MxN grid of scatter plots that all share the same axes.
+   * This makes an MxN grid of numeric axis plots that all share the same axes.
    * @param styles A 2D grid of plot styles.
    * @param title The title put on the plot.
    * @param xLabel The label drawn on the x-axis.
