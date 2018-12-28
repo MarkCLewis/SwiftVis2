@@ -27,7 +27,7 @@ lazy val root = (project in file("."))
   .settings(
 		commonSettings,
     name         := "SwiftVis2",
-    crossScalaVersions := Seq("2.11.12", "2.12.6"),
+    crossScalaVersions := Seq("2.11.12", "2.12.8"),
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value, 
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value, 
     libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
