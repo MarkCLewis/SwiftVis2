@@ -13,7 +13,7 @@ case class RTColor(r: Double, g: Double, b: Double, a: Double = 1.0) {
     scalafx.scene.paint.Color(r min 0 max 1.0, g min 0 max 1.0, b min 0 max 1.0, a min 0 max 1.0)
   }
   def toARGB: Int = {
-    (r * 255 min 255 max 0).toInt | ((g * 255 min 255 max 0).toInt << 8) | ((b * 255 min 255 max 0).toInt << 16) | ((a * 255 min 255 max 0).toInt << 24)
+    (b * 255 min 255 max 0).toInt | ((g * 255 min 255 max 0).toInt << 8) | ((r * 255 min 255 max 0).toInt << 16) | ((a * 255 min 255 max 0).toInt << 24)
   }
   override def toString = "RTColor=(" + r + "," + g + "," + b + "," + a + ")"
 }
