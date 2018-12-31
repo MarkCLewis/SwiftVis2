@@ -1,6 +1,6 @@
-package raytrace
+package swiftvis2.raytrace
 
-class BoundingSphere(val center:Point,val radius:Double) extends Sphere
+case class BoundingSphere(center:Point, radius:Double) extends Sphere
 
 object BoundingSphere {
   def mutualSphere(s1:Sphere,s2:Sphere):Sphere = {

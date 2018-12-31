@@ -1,8 +1,8 @@
-package raytrace
+package swiftvis2.raytrace
 
 import java.awt.Color
 
-abstract class Geometry {
+trait Geometry {
   def intersect(r:Ray) : Option[IntersectData]
   def boundingSphere : Sphere
 }

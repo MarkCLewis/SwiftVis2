@@ -1,15 +1,15 @@
-package raytrace
+package swiftvis2.raytrace
 
 import java.awt.Color
 
-class GeomPolyFunc(pnts: Array[Point], normal: (Point) => Vect, colors: (Point) => Color, reflect: (Point) => Double) extends Geometry {
+class GeomPolyFunc(pnts: Array[Point], normal: (Point) => Vect, colors: (Point) => RTColor, reflect: (Point) => Double) extends Geometry {
   val t = pnts
   val n = (t(2) - t(1)) cross (t(0) - t(1)) normalize
   val cols = colors
   val ref = reflect
 
   override def intersect(r: Ray): Option[IntersectData] = {
-    val s = ((t(0) - r.p0) dot n) / (r.dirVect dot n)
+    val s = ((t(0) - r.p0) dot n) / (r.dir dot n)
     if (s < 0) None
     else {
       val pnt = r point s
@@ -20,7 +20,7 @@ class GeomPolyFunc(pnts: Array[Point], normal: (Point) => Vect, colors: (Point) 
         val drawNorm = normal(pnt).normalize
         val drawRef = ref(pnt)
         val color = cols(pnt)
-        if (color.getAlpha == 0) None else
+        if (color.a == 0) None else
           Some(new IntersectData(s, pnt, drawNorm, cols(pnt), drawRef, this))
       } else {
         None

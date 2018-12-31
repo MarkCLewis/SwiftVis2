@@ -1,4 +1,6 @@
-package raytrace
+package swiftvis2.raytrace
+
+import scala.annotation.tailrec
 
 class ListScene(g:Geometry*) extends Geometry with Scene {
   private var geom : List[Geometry] = g.toList
@@ -12,8 +14,8 @@ class ListScene(g:Geometry*) extends Geometry with Scene {
       g match {
         case Nil => None
         case h :: t => {
+        	val thisID=h.intersect(r)
           val tailID=recur(t)
-          val thisID=h.intersect(r)
           (tailID,thisID) match {
             case (None,_) => thisID
             case (_,None) => tailID

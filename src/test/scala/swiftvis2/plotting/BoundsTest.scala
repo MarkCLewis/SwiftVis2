@@ -6,6 +6,7 @@ class BoundsTest extends FlatSpec {
   def fixture = new {
     val bounds = Bounds(0, 0, 10, 5) 
   }
+  
   "A bounds" should "have appropriate center" in {
     val f = fixture
     assert(f.bounds.centerX == 5)

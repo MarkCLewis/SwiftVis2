@@ -1,7 +1,10 @@
-package raytrace
+package swiftvis2.raytrace
 
-class Ray(val p0:Point,val p1:Point) {
-  def this(p0:Point,v:Vect) = this(p0,p0+v)
-  def dirVect : Vect = p1-p0
-  def point(t:Double):Point= p0+(p1-p0)*t;
+case class Ray(p0: Point, dir: Vect) {
+  def p1 = p0 + dir
+  def point(t: Double): Point = p0 + dir * t;
+}
+
+object Ray {
+  def apply(p0: Point, p1: Point): Ray = Ray(p0, p1 - p0)
 }

@@ -1,4 +1,4 @@
-package raytrace
+package swiftvis2.raytrace
 
 import java.awt.Color
 

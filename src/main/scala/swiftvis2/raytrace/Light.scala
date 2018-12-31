@@ -1,5 +1,5 @@
-package raytrace
+package swiftvis2.raytrace
 
 abstract class Light {
-    def color(id:IntersectData,geom:Geometry):FColor
+    def color(id:IntersectData,geom:Geometry):RTColor
 }

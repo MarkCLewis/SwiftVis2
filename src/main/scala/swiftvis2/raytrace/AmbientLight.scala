@@ -1,5 +1,5 @@
-package raytrace
+package swiftvis2.raytrace
 
-class AmbientLight(c:FColor) extends Light {
+case class AmbientLight(c:RTColor) extends Light {
     override def color(id:IntersectData,geom:Geometry)=c
 }

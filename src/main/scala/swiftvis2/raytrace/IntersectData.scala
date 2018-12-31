@@ -1,14 +1,9 @@
-package raytrace
+package swiftvis2.raytrace
 
 import java.awt.Color
 
-class IntersectData(t:Double,p:Point,n:Vect,c:Color,r:Double,g:Geometry) {
-    val time=t
-    val point=p
-    val norm=n.normalize
-    val color=c
-    val reflect=r
-    val geom=g
-    
-    def this(t:Double,p:Point,v:Vect,g:Geometry) = this(t,p,v,Color.white,0,g)
+case class IntersectData(time: Double, point: Point, norm: Vect, color: RTColor, reflect: Double, geom: Geometry)
+
+object IntersectData {
+  def apply(t: Double, p: Point, v: Vect, g: Geometry) = new IntersectData(t, p, v, RTColor(1.0f, 1.0f, 1.0f, 1.0f), 0, g)
 }
