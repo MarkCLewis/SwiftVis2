@@ -3,6 +3,8 @@ package swiftvis2.raytrace
 import java.awt.Color
 
 case class GeomSphere(center: Point, radius: Double, color: (Point) => RTColor, reflect: (Point) => Double) extends Geometry with Sphere {
+  def movedBy(v: Vect): Sphere = copy(center = center+v)
+  
   override def intersect(r: Ray): Option[IntersectData] = {
     intersectParam(r).flatMap { case (enter, exit) =>
       val inter = if (enter < 0) exit else enter

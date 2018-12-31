@@ -3,6 +3,8 @@ package swiftvis2.raytrace
 trait Sphere {
   val center: Point
   val radius: Double
+  
+  def movedBy(v: Vect): Sphere
 
   def intersectParam(r: Ray): Option[(Double, Double)] = {
     val dr = r.dir
