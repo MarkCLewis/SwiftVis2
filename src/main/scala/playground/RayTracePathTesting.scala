@@ -31,8 +31,8 @@ class FXRTImage(img: WritableImage) extends RTImage {
 object RayTracePathTesting extends JFXApp {
   stage = new JFXApp.PrimaryStage {
     title = "Ray Trace Test"
-    scene = new Scene(500, 500) {
-      val img = new WritableImage(500, 500)
+    scene = new Scene(720, 480) {
+      val img = new WritableImage(720, 480)
       content = List(new ImageView(img))
 
       val spheres = Array.fill(200)(GeomSphere(Point(math.random, math.random, math.random), 0.01, p => RTColor.White, p => 0.0))

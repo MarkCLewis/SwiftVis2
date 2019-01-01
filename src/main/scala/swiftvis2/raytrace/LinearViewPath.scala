@@ -22,14 +22,14 @@ case class LinearViewPath(stops: Seq[LinearViewPath.StopPoint], durations: Seq[D
       }
       val (at, when) = dropEarly(time, zipped)
       if (when > at.head._1.pause) {
-        val frac = (when - at.head._1.pause) / at.head._2
+        val frac = easing((when - at.head._1.pause) / at.head._2)
         val loc1 = at.head._1.view.loc
         val dir1 = at.head._1.view.dir
         val up1 = at.head._1.view.up
         val loc2 = at(1)._1.view.loc
         val dir2 = at(1)._1.view.dir
         val up2 = at(1)._1.view.up
-        View(loc1 + (loc2 - loc1) * frac, dir1 + (dir2 - dir1) * frac, up1 + (up2 - up1) * frac)
+        View(loc1 + (loc2 - loc1) * frac, (dir1 + (dir2 - dir1) * frac).normalize, (up1 + (up2 - up1) * frac).normalize)
       } else at.head._1.view
     }
   }
@@ -38,17 +38,16 @@ case class LinearViewPath(stops: Seq[LinearViewPath.StopPoint], durations: Seq[D
       case Nil      => Nil
       case h :: Nil => h._1.view :: (if (h._1.pause > timeIn) buildList(lst, timeIn + dt) else Nil)
       case h1 :: h2 :: t =>
-        println(timeIn, h1, h2, t)
         if (h1._1.pause >= timeIn) h1._1.view :: buildList(lst, timeIn + dt)
         else if (h1._1.pause + h1._2 > timeIn) {
-          val frac = (timeIn - h1._1.pause) / h1._2
+          val frac = easing((timeIn - h1._1.pause) / h1._2)
           val loc1 = h1._1.view.loc
           val dir1 = h1._1.view.dir
           val up1 = h1._1.view.up
           val loc2 = h2._1.view.loc
           val dir2 = h2._1.view.dir
           val up2 = h2._1.view.up
-          View(loc1 + (loc2 - loc1) * frac, dir1 + (dir2 - dir1) * frac, up1 + (up2 - up1) * frac) :: buildList(lst, timeIn + dt)
+          View(loc1 + (loc2 - loc1) * frac, (dir1 + (dir2 - dir1) * frac).normalize, (up1 + (up2 - up1) * frac).normalize) :: buildList(lst, timeIn + dt)
         } else buildList(h2 :: t, timeIn - (h1._1.pause + h1._2))
     }
     buildList(zipped, 0.0)
@@ -60,6 +59,6 @@ object LinearViewPath {
   case class StopPoint(view: View, pause: Double)
 
   val LinearEasing: Double => Double = x => x
-  val SmoothEasing: Double => Double = x => (math.cos((x + math.Pi / 2) / math.Pi) + 1) / 2
+  val SmoothEasing: Double => Double = x => (math.sin(x*math.Pi - math.Pi / 2) + 1) / 2
 
 }

@@ -14,14 +14,16 @@ object RayTrace {
   }
   
   def render(view: LinearViewPath.View, img: RTImage, geom: Geometry, lights: List[Light], numRays: Int): Unit = {
+    val aspect = img.width.toDouble/img.height
     val right = view.dir cross view.up
-    render(view.loc, view.loc+view.dir+view.up/2-right/2, right, -view.up, img, geom, lights, numRays)
+    render(view.loc, view.loc+view.dir+view.up/2-right*(aspect/2), right, -view.up, img, geom, lights, numRays)
   }
 
   def render(eye: Point, topLeft: Point, right: Vect, down: Vect, img: RTImage, geom: Geometry, lights: List[Light], numRays: Int): Unit = {
+    val aspect = img.width.toDouble/img.height
     for (i <- (0 until img.width).par; j <- 0 until img.height) {
       img.setColor(i, j, (((0 until numRays).map(index => {
-        val ray = Ray(eye, topLeft + right * (i + (if (index > 0) math.random * 0.75 else 0)) / img.width + down * (j + (if (index > 0) math.random * 0.75 else 0)) / img.height)
+        val ray = Ray(eye, topLeft + right * (aspect * (i + (if (index > 0) math.random * 0.75 else 0)) / img.width) + down * (j + (if (index > 0) math.random * 0.75 else 0)) / img.height)
         castRay(ray, geom, lights, 0)
       }).reduceLeft(_ + _)) / numRays))
     }
