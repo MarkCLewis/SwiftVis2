@@ -54,11 +54,11 @@ class KDTreeGeometry(geometry: Seq[Geometry], val MaxGeom: Int = 5) extends Geom
   private def partitionOnDim(g: Array[Geometry], dim: Int): (Double, Array[Geometry], Array[Geometry]) = {
     def helper(start: Int, end: Int): Unit = {
       val pivot = g((start+end)/2).boundingSphere.center(dim)
-      var low = start
-      var high = end-1
+      var low = start-1
+      var high = end
       while(low < high) {
-        while(g(low).boundingSphere.center(dim) < pivot) low += 1
-        while(g(high).boundingSphere.center(dim) > pivot) high -= 1
+        do { low += 1 } while(g(low).boundingSphere.center(dim) < pivot)
+        do { high -= 1 } while(g(high).boundingSphere.center(dim) > pivot)
         if(low < high) {
           val tmp = g(low)
           g(low) = g(high)

@@ -21,6 +21,13 @@ case class RTColor(r: Double, g: Double, b: Double, a: Double = 1.0) {
 object RTColor {
   def apply(c: java.awt.Color) = new RTColor(c.getRed() / 255.0, c.getGreen() / 255.0, c.getBlue() / 255.0, c.getAlpha() / 255.0)
   def apply(c: scalafx.scene.paint.Color) = new RTColor(c.red / 255.0, c.green / 255.0, c.blue / 255.0, c.opacity / 255.0)
+  def apply(argb: Int) = {
+    val a = (argb >> 24) / 255.0
+    val r = ((argb >> 16) & 0xFF) / 255.0
+    val g = ((argb >> 8) & 0xFF) / 255.0
+    val b = (argb & 0xFF) / 255.0
+    new RTColor(r, g, b, a)
+  }
   val White = RTColor(1, 1, 1)
   val Black = RTColor(0, 0, 0)
   val Red = RTColor(1, 0, 0)
