@@ -15,12 +15,14 @@ you can use it in one of two ways.
 
 If you want to use SwiftVis2 with Spark, you should probably use the `publishLocal` option, but with some modifications.
 
-1. Run `++ 2.11.12` to set the Scala version to 2.11. You can update the last value to whatever the latest release is. This is required because Spark currently doesn't work with Scala 2.12 or newer.
+1. Run `++2.11.12` to set the Scala version to 2.11. You can update the last value to whatever the latest release is. This is required because Spark currently doesn't work with Scala 2.12 or newer.
 2. Run `publishLocal` to publish the 2.11 version of the main SwiftVis2 library.
 3. Run `spark/publishLocal` to publish the Spark integration library.
 4. Add the following lines to your build.sbt
   * `libraryDependencies += "edu.trinity" %% "swiftvis2" % "0.1.0-SNAPSHOT"`
   * `libraryDependencies += "edu.trinity" %% "swiftvis2spark" % "0.1.0-SNAPSHOT"`
+  
+Note that the `sbt` commands can all be done at onced from the command line with `sbt ++2.11.12 publishLocal spark/publishLocal`.
 
 ## Usage 
 
