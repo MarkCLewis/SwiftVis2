@@ -29,27 +29,28 @@ object RayTrace {
     }
   }
 
-  private def castRay(ray: Ray, geom: Geometry, lights: List[Light], cnt: Int): RTColor = {
+  def castRay(ray: Ray, geom: Geometry, lights: List[Light], cnt: Int): RTColor = {
     if (cnt > 5) new RTColor(0, 0, 0, 1)
     else {
       val oid = geom intersect ray
       oid match {
         case None => RTColor.Black
         case Some(id) => {
+        	val geomSize = id.geom.boundingSphere.radius
           val lightColors = for (light <- lights) yield light.color(id, geom)
           val refColor = if (id.reflect > 0) {
-            val refRay = new Ray(id.point + id.norm * 0.0001, ray.dir - id.norm * 2 * (id.norm dot ray.dir))
+            val refRay = new Ray(id.point + id.norm * 0.0001 * geomSize, ray.dir - id.norm * 2 * (id.norm dot ray.dir))
             castRay(refRay, geom, lights, cnt + 1)
           } else new RTColor(0, 0, 0, 1)
           val alphaColor = if (id.color.a >= 1.0) new RTColor(0, 0, 0, 1)
-          else {
-            val ndd = id.norm dot ray.dir
-            //            val transRay=if(ndd<0) new Ray(id.point-id.norm*0.0001,(ray.dirVect+id.norm*ndd*2).normalize)
-            //              else new Ray(id.point+id.norm*0.0001,(ray.dirVect+id.norm*ndd*0.5).normalize)
-            val transRay = if (ndd < 0) new Ray(id.point - id.norm * 0.0001, ray.dir.normalize) // non-refracting
-            else new Ray(id.point + id.norm * 0.0001, ray.dir.normalize)
-            castRay(transRay, geom, lights, cnt + 1) * ((255 - id.color.a) / 255.0).toFloat
-          }
+            else {
+              val ndd = id.norm dot ray.dir
+              //            val transRay=if(ndd<0) new Ray(id.point-id.norm*0.0001,(ray.dirVect+id.norm*ndd*2).normalize)
+              //              else new Ray(id.point+id.norm*0.0001,(ray.dirVect+id.norm*ndd*0.5).normalize)
+              val transRay = if (ndd < 0) new Ray(id.point - id.norm * 0.0001, ray.dir.normalize) // non-refracting
+              else new Ray(id.point + id.norm * 0.0001 * geomSize, ray.dir.normalize)
+              castRay(transRay, geom, lights, cnt + 1) * ((255 - id.color.a) / 255.0).toFloat
+            }
           id.color * (lightColors.foldLeft(new RTColor(0, 0, 0, 1))(_ + _)) + refColor * id.reflect.toFloat + alphaColor
         }
       }
