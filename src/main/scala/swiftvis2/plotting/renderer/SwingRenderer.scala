@@ -27,6 +27,7 @@ import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import java.awt.event.ActionListener
 import java.awt.event.ActionEvent
+import java.awt.RenderingHints
 
 /**
  * A renderer for drawing to the desktop using Swing. In theory, JavaFX is the way to go for the future, but in practice
@@ -37,16 +38,28 @@ object SwingRenderer {
    * Options used by the Swing renderer for the settings stack.
    */
   case class Options(color: Paint, stroke: Stroke, font: Font, clip: Shape)
-
-  def apply(plot: Plot, width: Double = 800, height: Double = 800, makeMain: Boolean = false): Unit = {
+  
+  class SwingPanelUpdater(private var plot: Plot) extends Updater {
     val panel = new JPanel() {
       override def paint(gr: Graphics) {
-        val renderer = new SwingRenderer(gr.asInstanceOf[Graphics2D])
+        val g = gr.asInstanceOf[Graphics2D]
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+        g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
+        val renderer = new SwingRenderer(g)
         plot.render(renderer, Bounds(0, 0, getWidth(), getHeight()))
       }
     }
+    
+    def update(newPlot: Plot): Unit = {
+      plot = newPlot
+      panel.repaint()
+    }
+  }
+
+  def apply(plot: Plot, width: Double = 800, height: Double = 800, makeMain: Boolean = false): Updater = {
+    val updater = new SwingPanelUpdater(plot)
     val frame = new JFrame("Plot Testing")
-    frame.add(panel)
+    frame.add(updater.panel)
     val menuBar = new JMenuBar()
     val fileMenu = new JMenu("File")
     val savePNGItem = new JMenuItem("Save as PNG")
@@ -55,13 +68,16 @@ object SwingRenderer {
         val chooser = new JFileChooser()
         if (chooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
           val file = chooser.getSelectedFile()
-          val result = JOptionPane.showInputDialog(frame, "Enter the pixel size of the SVG output as #x#, such as 1000x1000.", "Image Size", JOptionPane.QUESTION_MESSAGE)
+          val result = JOptionPane.showInputDialog(frame, "Enter the pixel size of the PNG output as #x#, such as 1000x1000.", "Image Size", JOptionPane.QUESTION_MESSAGE)
           result match {
             case null => println("Save as SVG cancelled")
             case choice =>
               val Array(width, height) = choice.split("x").map(_.toInt)
               val img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
-              val renderer = new SwingRenderer(img.createGraphics())
+              val g = img.createGraphics()
+              g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+              g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
+              val renderer = new SwingRenderer(g)
               plot.render(renderer, new Bounds(0, 0, width, height))
               ImageIO.write(img, "PNG", file)
           }
@@ -92,6 +108,7 @@ object SwingRenderer {
     frame.setSize(width.toInt, height.toInt)
     if (makeMain) frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
     frame.setVisible(true)
+    updater
   }
 }
 
