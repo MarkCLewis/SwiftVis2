@@ -41,9 +41,9 @@ lazy val spark = (project in file("spark"))
   .settings(
 		commonSettings,
     name         := "SwiftVis2Spark",
-    scalaVersion := "2.11.12",
+    scalaVersion := "2.12.8",
     scalacOptions := Seq("-unchecked", "-deprecation"),
-    libraryDependencies += "org.apache.spark" % "spark-core_2.11" % "2.3.1",
-    libraryDependencies += "org.apache.spark" % "spark-sql_2.11" % "2.3.1"
+    libraryDependencies += "org.apache.spark" % "spark-core_2.12" % "2.4.0",
+    libraryDependencies += "org.apache.spark" % "spark-sql_2.12" % "2.4.0"
   ).dependsOn(root)
   

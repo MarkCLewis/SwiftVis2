@@ -59,6 +59,20 @@ case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String
   }
   
   /**
+   * Generate a new plot with an updated grid data.
+   */
+  def updatedGrid(f: GridData => GridData, gridName: String = "Main"): Plot = {
+    copy(grids = grids + (gridName -> f(grids(gridName))))
+  }
+  
+  /**
+   * Generate a new plot with an updated bounds for a grid. 
+   */
+  def updatedGridBounds(f: Bounds => Bounds, gridName: String = "Main"): Plot = {
+    copy(grids = grids + (gridName -> grids(gridName).copy(bounds = f(grids(gridName).bounds))))
+  }
+  
+  /**
    * Generate a new plot with an updated axis.
    */
   def updatedAxis[A <: Axis](axisName: String, f: A => A, gridName: String = "Main"): Plot = {
@@ -130,26 +144,23 @@ object Plot {
       case nnps: NumberNumberPlotStyle =>
         val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
         val grid = PlotGrid.oneByOne(xLabel, xType, yLabel, yType, style)
-        Plot(
-          Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-          Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+        val (tMap, gMap) = titleAndGridMaps(text, grid)
+        Plot(tMap, gMap)
       case cnps: CategoryNumberPlotStyle =>
         val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
         val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min)
         val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
           Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
         val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
-        Plot(
-          Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-          Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+        val (tMap, gMap) = titleAndGridMaps(text, grid)
+        Plot(tMap, gMap)
       case ccps: CategoryCategoryPlotStyle => 
         val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
         val xAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min)
         val yAxis = CategoryAxis(Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min)
         val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
-        Plot(
-          Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-          Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+        val (tMap, gMap) = titleAndGridMaps(text, grid)
+        Plot(tMap, gMap)
     }
   }
 
@@ -171,9 +182,8 @@ object Plot {
         require(styles.forall(_.isInstanceOf[NumberNumberPlotStyle]), "All axis styles much match for plot stack.")
         val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
         val grid = PlotGrid.oneByOne(xLabel, xType, yLabel, yType, styles: _*)
-        Plot(
-          Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-          Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+        val (tMap, gMap) = titleAndGridMaps(text, grid)
+        Plot(tMap, gMap)
       case cnps: CategoryNumberPlotStyle =>
         require(styles.forall(_.isInstanceOf[CategoryNumberPlotStyle]), "All axis styles much match for plot stack.")
         val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
@@ -182,9 +192,8 @@ object Plot {
         val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
           Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
         val grid = PlotGrid(Seq(Seq(styles.map(s => Plot2D(s, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
-        Plot(
-          Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-          Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+        val (tMap, gMap) = titleAndGridMaps(text, grid)
+        Plot(tMap, gMap)
     }
   }
   
@@ -206,9 +215,8 @@ object Plot {
                 xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
     val grid = PlotGrid.oneByOne(xLabel, xType, yLabel, yType, styles: _*)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
   /**
@@ -228,9 +236,8 @@ object Plot {
     val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
     val grid = PlotGrid(Seq(Seq(styles.map(s => Plot2D(s, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
   /**
@@ -257,9 +264,8 @@ object Plot {
       }
     }
     val grid = PlotGrid(plots, Map("x" -> xAxis, "y" -> yAxis), (0 until styles.map(_.length).max).map(_ => 1.0), styles.map(_ => 1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
   /**
@@ -284,9 +290,8 @@ object Plot {
       }
     }
     val grid = PlotGrid(plots, Map("x" -> xAxis, "y" -> yAxis), (0 until styles.map(_.length).max).map(_ => 1.0), styles.map(_ => 1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
   
   /**
@@ -315,9 +320,8 @@ object Plot {
           Seq(Plot2D(style, "cx", "y"))
     })
     val grid = PlotGrid(plots, Map("nx" -> xNumAxis, "cx" -> xCatAxis, "y" -> yAxis), styles.map(_ => 1.0), Seq(1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
   
   // TODO - add column
@@ -345,9 +349,8 @@ object Plot {
           Plot2D(style, "x", "y")
       } } }
     val grid = PlotGrid(plots, Map("x" -> xAxis, "y" -> yAxis), (0 until styles.map(_.length).max).map(_ => 1.0), styles.map(_ => 1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
   
   /////////////////////////// Older Style Convenience Methods ////////////////////////////////////////////////
@@ -373,9 +376,8 @@ object Plot {
     val text = PlotText(title, 0xff000000, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), Renderer.HorizontalAlign.Center, 0.0)
     val style = ScatterStyle(x, y, Ellipse, symbolSize, symbolSize, xSizing, ySizing, symbolColor, None)
     val grid = PlotGrid.oneByOne(xLabel, xType, yLabel, yType, style)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
   /**
@@ -401,9 +403,8 @@ object Plot {
     val style = ScatterStyle(x, y, Ellipse, symbolSize, symbolSize, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, symbolColor,
       Some(ScatterStyle.LineData(lineGrouping, lineStyle)))
     val grid = PlotGrid.oneByOne(xLabel, xType, yLabel, yType, style)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
   /**
@@ -425,9 +426,8 @@ object Plot {
     val style = ScatterStyle(x, y, Ellipse, symbolSize, symbolSize, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, symbolColor,
       None, Some(xError), Some(yError))
     val grid = PlotGrid.oneByOne(xLabel, xType, yLabel, yType, style)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
   /**
@@ -459,9 +459,8 @@ object Plot {
       ScatterStyle(x, y, Ellipse, size, size, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, argb, lines, xerr, yerr)
     }
     val grid = PlotGrid.oneByOne(xLabel, xType, yLabel, yType, styles: _*)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
   /**
@@ -499,9 +498,8 @@ object Plot {
       }
     }
     val grid = PlotGrid(plots, Map("x" -> xAxis, "y" -> yAxis), (0 until pdata.map(_.length).max).map(_ => 1.0), pdata.map(_ => 1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
   /**
@@ -523,9 +521,8 @@ object Plot {
     val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
   /**
@@ -548,9 +545,8 @@ object Plot {
     val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
   /**
@@ -573,9 +569,8 @@ object Plot {
     val yAxis = NumericAxis(if (binsOnX) Some(0.0) else None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
 /**
@@ -598,9 +593,8 @@ object Plot {
     val yAxis = NumericAxis(if (binsOnX) Some(0.0) else None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
   
   /**
@@ -632,9 +626,8 @@ object Plot {
         Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear))
     }
     val grid = PlotGrid(plots, (("x" -> xAxis) +: yAxes).toMap, (0 until valsAndColors.map(_.length).max).map(_ => 1.0), valsAndColors.map(_ => 1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
   /**
@@ -655,9 +648,8 @@ object Plot {
     val yAxis = NumericAxis(Some(0.0), None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
   /**
@@ -681,9 +673,8 @@ object Plot {
     val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
   /**
@@ -706,9 +697,12 @@ object Plot {
     val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
     val grid = PlotGrid(Seq(Seq(Seq(Plot2D(style, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
-    Plot(
-      Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))),
-      Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
   }
 
+  private def titleAndGridMaps(text: PlotText, grid: PlotGrid): (Map[String, TextData], Map[String, GridData]) = {
+    if (text.text.isEmpty) (Map(), Map("Main" -> GridData(grid, Bounds(0, 0, 0.98, 0.98))))
+    else (Map("Title" -> TextData(text, Bounds(0, 0, 1.0, 0.1))), Map("Main" -> GridData(grid, Bounds(0, 0.1, 0.98, 0.9))))
+  }
 }

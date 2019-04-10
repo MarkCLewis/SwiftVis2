@@ -8,14 +8,14 @@ import java.io.BufferedOutputStream
 import scala.collection.mutable.ArrayStack
 import java.io.ByteArrayOutputStream
 
-class SVGRenderer(ps: PrintStream) extends Renderer {
+class SVGRenderer(ps: PrintStream, width: Double, height: Double) extends Renderer {
   import SVGRenderer.Options
 
   private var copt = Options("#000000", Renderer.StrokeData(1.0, Nil), Renderer.FontData("Ariel", Renderer.FontStyle.Plain), 10.0, None)
   private val stack = ArrayStack[Options]()
   private var clipCnt = 0
 
-  ps.println(s"""<svg xmlns="http://www.w3.org/2000/svg" version="1.1">""")
+  ps.println(s"""<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="$width" height="$height">""")
 
   def drawEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit = {
     ps.println(s"""<ellipse cx="$cx" cy="$cy" rx="${width * 0.5}" ry="${height * 0.5}" stroke="${copt.color}" stroke-width="$strokeWidth" fill="none" $clipPath/>""")
@@ -49,7 +49,7 @@ class SVGRenderer(ps: PrintStream) extends Renderer {
       case Renderer.HorizontalAlign.Right => "end"
     }
 
-    ps.println(s"""<text x="0.0" y="${fontSize / 3}" font-family="$fontFamily" font-size="${fontSize}px" text-anchor="$anchor" transform="translate($x, $y) rotate($angle)" $clipPath>$s</text>""")
+    ps.println(s"""<text x="0.0" y="${fontSize / 3}" fill="${copt.color}" font-family="$fontFamily" font-size="${fontSize}px" text-anchor="$anchor" transform="translate($x, $y) rotate($angle)" $clipPath>$s</text>""")
   }
 
   def setColor(argb: Int): Unit = copt = copt.copy(color = {
@@ -105,7 +105,7 @@ object SVGRenderer {
    */
   def apply(plot: Plot, filename: String, width: Double, height: Double): Unit = {
     val ps = new PrintStream(new BufferedOutputStream(new FileOutputStream(filename)))
-    val r = new SVGRenderer(ps)
+    val r = new SVGRenderer(ps, width, height)
     plot.render(r, Bounds(0, 0, width, height))
     ps.close
   }
@@ -115,8 +115,8 @@ object SVGRenderer {
    */
   def stringValue(plot: Plot, width: Double, height: Double): String = {
     val baos = new ByteArrayOutputStream
-    val r = new SVGRenderer(new PrintStream(baos))
-    plot.render(r, Bounds(0, 0, 800, 600))
+    val r = new SVGRenderer(new PrintStream(baos), width, height)
+    plot.render(r, Bounds(0, 0, width, height))
     baos.toString()
   }
 }

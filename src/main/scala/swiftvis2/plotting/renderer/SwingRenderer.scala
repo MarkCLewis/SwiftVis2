@@ -38,7 +38,7 @@ object SwingRenderer {
    * Options used by the Swing renderer for the settings stack.
    */
   case class Options(color: Paint, stroke: Stroke, font: Font, clip: Shape)
-  
+
   class SwingPanelUpdater(private var plot: Plot) extends Updater {
     val panel = new JPanel() {
       override def paint(gr: Graphics) {
@@ -49,7 +49,7 @@ object SwingRenderer {
         plot.render(renderer, Bounds(0, 0, getWidth(), getHeight()))
       }
     }
-    
+
     def update(newPlot: Plot): Unit = {
       plot = newPlot
       panel.repaint()
@@ -109,6 +109,21 @@ object SwingRenderer {
     if (makeMain) frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
     frame.setVisible(true)
     updater
+  }
+
+  def saveToImage(plot: Plot, fileName: String, format: String = "PNG", width: Int = 800, height: Int = 800): Unit = {
+    val img = renderToImage(plot, width, height)
+    ImageIO.write(img, format, new java.io.File(fileName))
+  }
+
+  def renderToImage(plot: Plot, width: Int = 800, height: Int = 800): BufferedImage = {
+    val img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
+    val g = img.createGraphics()
+    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
+    val renderer = new SwingRenderer(g)
+    plot.render(renderer, new Bounds(0, 0, width, height))
+    img
   }
 }
 
