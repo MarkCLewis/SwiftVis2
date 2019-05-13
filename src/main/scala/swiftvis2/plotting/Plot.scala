@@ -19,7 +19,7 @@ import swiftvis2.plotting.styles.CategoryCategoryPlotStyle
  * This allows the user to place multiple plots with separate axes or multiple labels. Text is drawn
  * after all plot grids so it will appear on top of them.
  */
-case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String, Plot.GridData] = Map.empty) {
+case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String, Plot.GridData] = Map.empty, legends: Seq[PlotLegend] = Seq.empty) {
   import Plot._
   
   /**
@@ -32,6 +32,7 @@ case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String
     r.fillRectangle(bounds)
     grids.foreach { case (_, g) => g.grid.render(r, bounds.subXY(g.bounds)) }
     texts.foreach { case (_, t) => t.text.render(r, bounds.subXY(t.bounds)) }
+    legends.foreach(x => x.render(r, bounds.subXY(x.bounds)))
     r.finish()
   }
   

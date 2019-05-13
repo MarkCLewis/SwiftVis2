@@ -54,7 +54,7 @@ class KDTreeGeometry(geometry: Seq[Geometry], val MaxGeom: Int = 5) extends Geom
           }
         }
       }
-      (if(level < 8) Future(body()) else Future.successful(body())).flatten
+      (if(level < 8) Future(body()) else Future.successful(body())).flatMap(x => x)
     }
     Await.result(helper(geom, geom.map(g => g.boundingSphere.center.offsetAll(-g.boundingSphere.radius)).reduceLeft(_ min _),
       geom.map(g => g.boundingSphere.center.offsetAll(g.boundingSphere.radius)).reduceLeft(_ max _), 0), scala.concurrent.duration.Duration.Inf)
