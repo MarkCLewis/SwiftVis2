@@ -23,7 +23,11 @@ object PlotTesting {
   def scatter1(): Plot = {
     val xPnt = 1 to 10
     val yPnt = xPnt.map(a => a * a)
-    Plot.scatterPlot(xPnt, yPnt, title = "Quadratic", xLabel = xLabel, yLabel = yLabel)
+    val cg = (x: Int) => if(x < 5) RedARGB else BlackARGB
+    val colors = xPnt.map(cg)
+    val sp = Plot.scatterPlot(xPnt, yPnt, title = "Quadratic", xLabel = xLabel, yLabel = yLabel, symbolColor = colors)
+    val grid = sp.grids("Main").grid
+    new Plot(sp.texts, sp.grids, Seq(PlotLegend.legend(grid, Seq("Red", "Black"))))
   }
 
   /**

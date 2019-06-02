@@ -297,8 +297,8 @@ class FXRenderer(gc: GraphicsContext, maxQueue: Int = 1000) extends Renderer {
   }
 
   private def clearQueue(): Unit = {
-    //    println("Clearing "+queue.size)
-    //    println(Thread.currentThread)
+    println("Clearing "+queue.size)
+    println(Thread.currentThread)
     val latch = new CountDownLatch(1)
     val runner = Runner(queue, latch)
     queue = mutable.Queue[() => Unit]()
