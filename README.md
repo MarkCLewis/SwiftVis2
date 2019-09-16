@@ -36,7 +36,7 @@ the SwingRenderer over the FXRenderer. It is easier to use, faster, and produces
 import scalafx.application.JFXApp
 import swiftvis2.plotting
 import swiftvis2.plotting.Plot
-import swiftvis2.plotting.renderer.FXRenderer
+import swiftvis2.plotting.fxrenderer.FXRenderer
 
 object PlotTesting extends JFXApp {
   val xPnt = 1 to 10
@@ -57,7 +57,7 @@ If you want to use SwiftVis2 in a shell/REPL, including the spark-shell, you can
 ```scala
 import swiftvis2.plotting
 import swiftvis2.plotting.Plot
-import swiftvis2.plotting.renderer.FXRenderer
+import swiftvis2.plotting.fxrenderer.FXRenderer
 
 FXRenderer.shellStart()
 val xPnt = 1 to 10
