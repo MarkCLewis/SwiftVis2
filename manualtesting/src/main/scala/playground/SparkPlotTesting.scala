@@ -3,7 +3,7 @@ package playground
 import org.apache.spark.sql.SparkSession
 import scalafx.application.JFXApp
 import swiftvis2.plotting._
-import swiftvis2.plotting.fxrenderer.FXRenderer
+import swiftvis2.plotting.renderer.FXRenderer
 import swiftvis2.plotting.renderer.Renderer
 import swiftvis2.plotting.styles.ScatterStyle
 import swiftvis2.spark._

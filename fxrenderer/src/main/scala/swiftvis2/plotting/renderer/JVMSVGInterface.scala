@@ -1,4 +1,4 @@
-package swiftvis2.plotting.fxrenderer
+package swiftvis2.plotting.renderer
 
 import java.io.{BufferedOutputStream, ByteArrayOutputStream, FileOutputStream, PrintStream}
 

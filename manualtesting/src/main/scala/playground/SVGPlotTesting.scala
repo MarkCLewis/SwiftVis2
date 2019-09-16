@@ -1,6 +1,6 @@
 package playground
 
-import swiftvis2.plotting.fxrenderer.JVMSVGInterface
+import swiftvis2.plotting.renderer.JVMSVGInterface
 
 object SVGPlotTesting extends App {
   import PlotTesting._

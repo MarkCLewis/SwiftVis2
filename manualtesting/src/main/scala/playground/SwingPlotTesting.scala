@@ -1,6 +1,6 @@
 package playground
 
-import swiftvis2.plotting.swingrenderer.SwingRenderer
+import swiftvis2.plotting.renderer.SwingRenderer
 
 object SwingPlotTesting extends App {
   import PlotTesting._

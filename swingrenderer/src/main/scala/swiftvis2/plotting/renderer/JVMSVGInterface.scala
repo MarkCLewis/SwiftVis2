@@ -1,8 +1,7 @@
-package swiftvis2.plotting.swingrenderer
+package swiftvis2.plotting.renderer
 
 import java.io.{BufferedOutputStream, ByteArrayOutputStream, FileOutputStream, PrintStream}
 
-import swiftvis2.plotting.renderer.{Renderer, SVGRenderer}
 import swiftvis2.plotting.{Bounds, Plot}
 
 class JVMSVGInterface(ps: PrintStream, width: Double, height: Double) extends Renderer {

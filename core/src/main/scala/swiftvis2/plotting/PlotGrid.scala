@@ -196,6 +196,7 @@ case class PlotGrid(
   }
 
   private def extremeAxisFunction(hm: mutable.HashMap[Axis, Double], nameFunc: Plot2D => String, styleFunc: PlotStyle => Option[Double], combine: Seq[Double] => Double)(axis: Axis): Double = {
+    println(s"Current thread: ${Thread.currentThread().getName}")
     if (hm.contains(axis)) hm(axis) else {
       val extr = for {
         row <- plots

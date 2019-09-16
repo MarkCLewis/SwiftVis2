@@ -1,7 +1,7 @@
 package playground
 
 import scalafx.application.JFXApp
-import swiftvis2.plotting.fxrenderer.{FXRenderer, JVMSVGInterface}
+import swiftvis2.plotting.renderer.{FXRenderer, JVMSVGInterface}
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global

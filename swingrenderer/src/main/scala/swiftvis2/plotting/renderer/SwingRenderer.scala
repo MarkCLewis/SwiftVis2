@@ -1,4 +1,4 @@
-package swiftvis2.plotting.swingrenderer
+package swiftvis2.plotting.renderer
 
 import java.awt._
 import java.awt.event.{ActionEvent, ActionListener}
@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import javax.swing._
 import swiftvis2.plotting.{Bounds, Plot}
-import swiftvis2.plotting.renderer.{Renderer, Updater}
 
 import scala.collection.mutable.ArrayStack
 

@@ -1,22 +1,21 @@
-package swiftvis2.plotting.fxrenderer
+package swiftvis2.plotting.renderer
 
 import java.io.{File, FileOutputStream}
 import java.util.concurrent.{CountDownLatch, Executors}
 
 import javax.imageio.ImageIO
+import scalafx.Includes._
 import scalafx.application.{JFXApp, Platform}
 import scalafx.embed.swing.SwingFXUtils
 import scalafx.event.ActionEvent
 import scalafx.geometry.VPos
-import scalafx.scene.{Scene, SceneAntialiasing}
 import scalafx.scene.canvas.{Canvas, GraphicsContext}
 import scalafx.scene.control.{ChoiceDialog, Menu, MenuBar, MenuItem}
 import scalafx.scene.layout.{BorderPane, Pane}
 import scalafx.scene.paint.Color
 import scalafx.scene.text.{Font, Text, TextAlignment}
+import scalafx.scene.{Scene, SceneAntialiasing}
 import scalafx.stage.{FileChooser, Stage, StageStyle, WindowEvent}
-import scalafx.Includes._
-import swiftvis2.plotting.renderer.Renderer
 import swiftvis2.plotting.{Bounds, Plot}
 
 import scala.collection.mutable
