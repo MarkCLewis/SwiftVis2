@@ -1,5 +1,7 @@
 fork := true
 
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
+
 lazy val commonSettings = Seq(
   organization := "edu.trinity",
   version := "0.1.0-SNAPSHOT",
@@ -23,7 +25,7 @@ lazy val commonSettings = Seq(
 	)
 )
 
-lazy val core = (project in file("core"))
+lazy val core = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure) in file("core"))
   .settings(
 		commonSettings,
     name         := "Core",
@@ -37,6 +39,9 @@ lazy val core = (project in file("core"))
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
   )
 
+lazy val coreJVM = core.jvm
+lazy val coreJS = core.js
+
 lazy val fxrenderer = (project in file("fxrenderer"))
   .settings(
                 commonSettings,
@@ -48,7 +53,7 @@ lazy val fxrenderer = (project in file("fxrenderer"))
     libraryDependencies += "org.scalafx" %% "scalafx" % "8.0.144-R12",
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.4",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
-  ).dependsOn(core)
+  ).dependsOn(coreJVM)
 
 lazy val swingrenderer = (project in file("swingrenderer"))
   .settings(
@@ -61,7 +66,7 @@ lazy val swingrenderer = (project in file("swingrenderer"))
     libraryDependencies += "org.scala-lang.modules" % "scala-swing_2.12" % "2.0.3",
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.4",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
-  ).dependsOn(core)
+  ).dependsOn(coreJVM)
 
 lazy val spark = (project in file("spark"))
   .settings(
@@ -71,7 +76,7 @@ lazy val spark = (project in file("spark"))
     scalacOptions := Seq("-unchecked", "-deprecation"),
     libraryDependencies += "org.apache.spark" % "spark-core_2.12" % "2.4.0",
     libraryDependencies += "org.apache.spark" % "spark-sql_2.12" % "2.4.0"
-  ).dependsOn(core)
+  ).dependsOn(coreJVM)
 
 lazy val manTests = (project in file("manualtesting"))
   .settings(
@@ -82,4 +87,16 @@ lazy val manTests = (project in file("manualtesting"))
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value
-  ).dependsOn(core, fxrenderer, swingrenderer, spark)
+  ).dependsOn(coreJVM, fxrenderer, swingrenderer, spark)
+
+lazy val jsrenderer = (project in file("jsrenderer"))
+  .settings(commonSettings,
+    name         := "SwiftVis2JSRenderer",
+    crossScalaVersions := Seq("2.11.12", "2.12.8"),
+    scalacOptions := Seq("-unchecked", "-deprecation"),
+    libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
+    libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
+    libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7"
+  ).dependsOn(coreJS)
+  .enablePlugins(ScalaJSPlugin)
