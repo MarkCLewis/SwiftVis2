@@ -31,10 +31,11 @@ lazy val core = (project in file("core"))
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value, 
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value, 
     libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    libraryDependencies += "org.scalafx" %% "scalafx" % "8.0.144-R12",
-    libraryDependencies += "org.scala-lang.modules" % "scala-swing_2.12" % "2.0.3",
-    libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.4",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
+    libraryDependencies += "org.scalafx" %% "scalafx" % "8.0.192-R14",
+    libraryDependencies += "org.scala-lang.modules" % "scala-swing_2.12" % "2.1.1",
+
+    libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.8",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.8" % "test"
   )
 
 lazy val fxrenderer = (project in file("fxrenderer"))
@@ -69,8 +70,8 @@ lazy val spark = (project in file("spark"))
     name         := "SwiftVis2Spark",
     scalaVersion := "2.12.8",
     scalacOptions := Seq("-unchecked", "-deprecation"),
-    libraryDependencies += "org.apache.spark" % "spark-core_2.12" % "2.4.0",
-    libraryDependencies += "org.apache.spark" % "spark-sql_2.12" % "2.4.0"
+    libraryDependencies += "org.apache.spark" % "spark-core_2.12" % "2.4.4",
+    libraryDependencies += "org.apache.spark" % "spark-sql_2.12" % "2.4.4"
   ).dependsOn(core)
 
 lazy val manTests = (project in file("manualtesting"))
