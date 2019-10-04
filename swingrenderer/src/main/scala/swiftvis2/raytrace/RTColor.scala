@@ -9,9 +9,6 @@ case class RTColor(r: Double, g: Double, b: Double, a: Double = 1.0) {
   def toAWTColor: java.awt.Color = {
     new java.awt.Color(range(r), range(g), range(b), range(a))
   }
-  def toFXColor: scalafx.scene.paint.Color = {
-    scalafx.scene.paint.Color(r min 0 max 1.0, g min 0 max 1.0, b min 0 max 1.0, a min 0 max 1.0)
-  }
   def toARGB: Int = {
     (b * 255 min 255 max 0).toInt | ((g * 255 min 255 max 0).toInt << 8) | ((r * 255 min 255 max 0).toInt << 16) | ((a * 255 min 255 max 0).toInt << 24)
   }
@@ -20,7 +17,6 @@ case class RTColor(r: Double, g: Double, b: Double, a: Double = 1.0) {
 
 object RTColor {
   def apply(c: java.awt.Color) = new RTColor(c.getRed() / 255.0, c.getGreen() / 255.0, c.getBlue() / 255.0, c.getAlpha() / 255.0)
-  def apply(c: scalafx.scene.paint.Color) = new RTColor(c.red / 255.0, c.green / 255.0, c.blue / 255.0, c.opacity / 255.0)
   def apply(argb: Int) = {
     val a = (argb >> 24) / 255.0
     val r = ((argb >> 16) & 0xFF) / 255.0
