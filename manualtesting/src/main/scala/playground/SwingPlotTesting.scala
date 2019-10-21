@@ -12,7 +12,7 @@ object SwingPlotTesting extends App {
   // SwingRenderer(scatterGrid(), medDim, medDim)
   // SwingRenderer(scatterWithErrorBars(), medDim, medDim)
   // SwingRenderer(scatterMultidata(), medDim, medDim)
-  SwingRenderer(scatterWithSizeandColor(), medDim, medDim)
+  // SwingRenderer(scatterWithSizeandColor(), medDim, medDim)
   // SwingRenderer(scatterLogLog(), medDim, medDim)
 //  SwingRenderer(fullScatter(), medDim, medDim)
 //  SwingRenderer(stackedNNTest(), medDim, medDim)
@@ -26,12 +26,13 @@ object SwingPlotTesting extends App {
   // SwingRenderer(histogram2(), smallDim, smallDim)
   // SwingRenderer(histogramGrid(), medDim, medDim)
    SwingRenderer(longForm(), 1200, 1000)
+   SwingRenderer(ringPlotGridBug(), 1200, 1000, true)
   // SwingRenderer(boxPlot(), smallDim, smallDim)
   // SwingRenderer(violinPlot(), smallDim, smallDim)
-  val rowPlot = rowOfDists()
-  SwingRenderer(rowPlot, 1200, smallDim)
-  val ptPlot = pressureTempPlot
-  SwingRenderer(ptPlot, smallDim, smallDim)
+  // val rowPlot = rowOfDists()
+  // SwingRenderer(rowPlot, 1200, smallDim)
+  // val ptPlot = pressureTempPlot
+  // SwingRenderer(ptPlot, smallDim, smallDim)
   // SwingRenderer(colorTest(), largeDim, largeDim)
   // SwingRenderer(simpleFull(), smallDim, smallDim)
 }

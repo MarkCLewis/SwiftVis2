@@ -57,7 +57,7 @@ case class PlotGrid(
     val minXAxisBounds = Bounds(bounds.x + drawYAxisSizeMin, bounds.y + bounds.height - drawXAxisSizeMin, bounds.width - drawYAxisSizeMin - drawYAxisSizeMax, drawXAxisSizeMin)
     val maxXAxisBounds = Bounds(bounds.x + drawYAxisSizeMin, bounds.y, bounds.width - drawYAxisSizeMin - drawYAxisSizeMax, drawXAxisSizeMax)
     val minYAxisBounds = Bounds(bounds.x, bounds.y + drawXAxisSizeMax, drawYAxisSizeMin, bounds.height - drawXAxisSizeMin - drawXAxisSizeMax)
-    val maxYAxisBounds = Bounds(bounds.x + bounds.width - drawYAxisSizeMax, bounds.y + drawXAxisSizeMax, drawXAxisSizeMax, bounds.height - drawXAxisSizeMin - drawXAxisSizeMax)
+    val maxYAxisBounds = Bounds(bounds.x + bounds.width - drawYAxisSizeMax, bounds.y + drawXAxisSizeMax, drawYAxisSizeMax, bounds.height - drawXAxisSizeMin - drawXAxisSizeMax)
     val fullGridBounds = bounds.subXYBorder(drawYAxisSizeMin, drawYAxisSizeMax, drawXAxisSizeMax, drawXAxisSizeMin)
 
     val xminhm = new mutable.HashMap[Axis, Double]()
@@ -196,7 +196,6 @@ case class PlotGrid(
   }
 
   private def extremeAxisFunction(hm: mutable.HashMap[Axis, Double], nameFunc: Plot2D => String, styleFunc: PlotStyle => Option[Double], combine: Seq[Double] => Double)(axis: Axis): Double = {
-    println(s"Current thread: ${Thread.currentThread().getName}")
     if (hm.contains(axis)) hm(axis) else {
       val extr = for {
         row <- plots
@@ -224,9 +223,9 @@ object PlotGrid {
    */
   def oneByOne(xLabel: String, xType: Axis.ScaleStyle.Value, yLabel: String, yType: Axis.ScaleStyle.Value, styles: PlotStyle*): PlotGrid = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
+    val xAxis = NumericAxis("x", None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min, xType)
-    val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
+    val yAxis = NumericAxis("y", None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
     PlotGrid(Seq(Seq(styles.map(s => Plot2D(s, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
   }
