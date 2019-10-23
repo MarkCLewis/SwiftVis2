@@ -28,7 +28,7 @@ lazy val commonSettings = Seq(
 lazy val core = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure) in file("core"))
   .settings(
 		commonSettings,
-    name         := "Core",
+    name         := "SwiftVis2Core",
     crossScalaVersions := Seq("2.11.12", "2.12.8"),
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value, 
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value, 
@@ -43,7 +43,7 @@ lazy val coreJS = core.js
 lazy val fxrenderer = (project in file("fxrenderer"))
   .settings(
                 commonSettings,
-    name         := "ScalaFXRenderer",
+    name         := "SwiftVis2ScalaFX",
     crossScalaVersions := Seq("2.11.12", "2.12.8"),
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
@@ -56,7 +56,7 @@ lazy val fxrenderer = (project in file("fxrenderer"))
 lazy val swingrenderer = (project in file("swingrenderer"))
   .settings(
                 commonSettings,
-    name         := "SwingRenderer",
+    name         := "SwiftVis2Swing",
     crossScalaVersions := Seq("2.11.12", "2.12.8"),
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
@@ -89,7 +89,7 @@ lazy val manTests = (project in file("manualtesting"))
 
 lazy val jsrenderer = (project in file("jsrenderer"))
   .settings(commonSettings,
-    name         := "SwiftVis2JSRenderer",
+    name         := "SwiftVis2JS",
     crossScalaVersions := Seq("2.11.12", "2.12.8"),
     scalacOptions := Seq("-unchecked", "-deprecation"),
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
