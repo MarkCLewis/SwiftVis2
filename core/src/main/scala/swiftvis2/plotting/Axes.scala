@@ -18,6 +18,7 @@ sealed trait Axis {
  * the tickSpacing will be ignored, even if it is provided.
  */
 case class NumericAxis(
+  key:           String,
   min:           Option[Double]                      = None,
   max:           Option[Double]                      = None,
   tickSpacing:   Option[Double]                      = None,
@@ -185,6 +186,7 @@ case class NumericAxis(
  * Axis with text categories for labels instead of numeric values.
  */
 case class CategoryAxis(
+  key:           String,
   tickStyle:        Axis.TickStyle.Value,
   labelOrientation: Double, // angle in degrees
   labelFont:        Renderer.FontData,

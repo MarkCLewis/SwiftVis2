@@ -3,6 +3,9 @@ package playground
 import swiftvis2.plotting.renderer.Renderer
 import swiftvis2.plotting.styles._
 import swiftvis2.plotting.{Axis, BlackARGB, BlueARGB, Bounds, CategoryAxis, ColorGradient, CyanARGB, Ellipse, GreenARGB, MagentaARGB, NoSymbol, NumericAxis, Plot, Plot2D, PlotDoubleSeries, PlotGrid, PlotIntSeries, PlotLegend, PlotSymbol, PlotText, Rectangle, RedARGB, YellowARGB, WhiteARGB}
+import swiftvis2.plotting.styles.ScatterStyle.LineData
+import swiftvis2.plotting.Plot.TextData
+import swiftvis2.plotting.Plot.GridData
 
 object PlotTesting {
   val xLabel = "x"
@@ -170,16 +173,16 @@ object PlotTesting {
    */
   def longForm(): Plot = {
     val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    val xAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)),
+    val xAxis1 = new NumericAxis("x1", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)),
         Some(Axis.NameSettings("X1", font)))
-    val xAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)),
+    val xAxis2 = new NumericAxis("x2", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)),
         Some(Axis.NameSettings("X2", font)))
-    val xAxisCat = new CategoryAxis(Axis.TickStyle.Both, 0, font, Some(Axis.NameSettings("Categories", font)), Axis.DisplaySide.Max)
-    val yAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, numberFormat)),
+    val xAxisCat = new CategoryAxis("xcat", Axis.TickStyle.Both, 0, font, Some(Axis.NameSettings("Categories", font)), Axis.DisplaySide.Max)
+    val yAxis1 = new NumericAxis("y1", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, numberFormat)),
         Some(Axis.NameSettings("Y1", font)))
-    val yAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")),
+    val yAxis2 = new NumericAxis("y2", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")),
         Some(Axis.NameSettings("Y2", font)))
-    val yAxis3 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")),
+    val yAxis3 = new NumericAxis("y3", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")),
         Some(Axis.NameSettings("Y3", font)), Axis.DisplaySide.Max)
 
     // Main Scatter plot
@@ -333,14 +336,47 @@ object PlotTesting {
         updatedStyleXAxis("pressure", stack = 1)
   }
 
+  def ringPlotGridBug(): Plot = {
+    val numParts = 10000
+    val plotStyles = (1 to 3).map { p =>
+      val cg = ColorGradient(0.0 -> BlueARGB, 90.0 -> GreenARGB)
+      val radii = (1 to numParts).map(_ => 0.01 * math.random + 0.005)
+      (ScatterStyle((0 until numParts).map(_ => math.random), (0 until numParts).map(_ => p + math.random), symbolWidth = radii, symbolHeight = radii, xSizing = PlotSymbol.Sizing.Scaled,
+          ySizing = PlotSymbol.Sizing.Scaled, colors = BlackARGB),
+        (5 to 75 by 15).map { case b =>
+            ScatterStyle(0.0 to 1.0 by 0.05, (1 to 20).map(i => math.random * 100),
+              symbol = NoSymbol, 
+              lines = Some(LineData(0)),
+              colors = cg(b))
+        }
+      )
+    }
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    val photonCountAxis = NumericAxis("Count", None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings("Photon Count", font)), Axis.DisplaySide.Max)
+    val yAxes = plotStyles.zipWithIndex.map { case (_, i) => NumericAxis("Y"+i, None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings("Azimuthal Position", font)), Axis.DisplaySide.Min) }
+    val xAxis = NumericAxis("X", None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings("Radial Position", font)), Axis.DisplaySide.Min)
+    val grid = PlotGrid(plotStyles.zipWithIndex.map { case ((cart, scans), i) =>
+      Seq(Seq(Plot2D(cart, "X", "Y"+i)), scans.map(scan => Plot2D(scan, "X", "Count"))) },
+      Map("X" -> xAxis, "Count" -> photonCountAxis) ++ yAxes.zipWithIndex.map { case (a, i) => ("Y"+i) -> a },
+      Seq(1.0, 1.0),
+      plotStyles.map(_ => 1.0)
+    )
+    println(grid)
+    Plot(Map("Title" -> TextData(PlotText("Funky Plot Test"), Bounds(0, 0, 1.0, 0.05))),
+      Map("Main" -> GridData(grid, Bounds(0.01, 0.05, 0.99, 0.95))))
+  }
+
   def simpleFull(): Plot = {
     val x = 1.0 to 10.0 by 0.5
     val y = x.map(a => a * a)
     val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val style = ScatterStyle(x, y)
     val p2d = Plot2D(style, "x", "y")
-    val xAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(90, font, numberFormat)), name = Some(Axis.NameSettings("X", font)))
-    val yAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(0, font, numberFormat)), name = Some(Axis.NameSettings("Y", font)))
+    val xAxis = NumericAxis("x", tickLabelInfo = Some(Axis.LabelSettings(90, font, numberFormat)), name = Some(Axis.NameSettings("X", font)))
+    val yAxis = NumericAxis("y", tickLabelInfo = Some(Axis.LabelSettings(0, font, numberFormat)), name = Some(Axis.NameSettings("Y", font)))
     val grid = PlotGrid(Seq(Seq(Seq(p2d))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0))
     Plot(grids = Map("main" -> Plot.GridData(grid, Bounds(0.0, 0.05, 0.95, 0.95))))
   }
