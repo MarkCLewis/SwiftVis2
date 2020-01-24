@@ -1,8 +1,11 @@
-This project is an updated version of SwiftVis written in Scala with better support for parallelism, support for JavaFX rendering,
+# SwiftVis
+
+This project is an updated version of SwiftVis written in Scala with better support for parallelism, support for rendering with diverse platforms,
 and a programming interface. I try to keep a reasonably up to date API posted [on my personal site](http://www.cs.trinity.edu/~mlewis/SwiftVis2/api/).
 
 SwiftVis2 is still in the early stages. I am focusing on adding basic plotting capability with the programming interface currently.
-The graphical dataflow interface and other features will follow.
+The graphical dataflow interface and other features will follow. Currently I also have a research student, Nick Smoker, working on making
+the code cross-compile for Scala.js and Scala Native so that plotting works on all available platforms.
 
 ## Installation
 
