@@ -1,12 +1,7 @@
 package swiftvis2.raytrace
 
-class GeomCylinder(p0: Point, p1: Point, r: Double, col: (Point) => RTColor, ref: (Point) => Double) extends Geometry {
-  val c0 = p0
-  val c1 = p1
-  val radius = r
+class GeomCylinder(c0: Point, c1: Point, radius: Double, color: (Point) => RTColor, reflect: (Point) => Double) extends Geometry {
   val l = c1 - c0
-  val color = col
-  val reflect = ref
 
   override def intersect(r: Ray): Option[IntersectData] = {
     val A = ((r.p0 - c0) dot l) / (l dot l)
@@ -47,4 +42,9 @@ class GeomCylinder(p0: Point, p1: Point, r: Double, col: (Point) => RTColor, ref
   }
 
   override val boundingSphere: Sphere = new BoundingSphere(c0 + l * 0.5, Math.sqrt((l dot l) + radius * radius))
+
+  // This current implementation gives an overly conservative box, but it is easier and faster than getting a more accurate bounds.
+  override def boundingBox: Box = {
+    BoundingBox((c0 min c1) - radius, (c0 max c1) + radius) 
+  }
 }

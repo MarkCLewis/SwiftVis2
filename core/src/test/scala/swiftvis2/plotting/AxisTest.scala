@@ -4,9 +4,9 @@ import org.scalatest.FlatSpec
 
 class AxisTest extends FlatSpec {
   def fixture = new {
-    val axis = NumericAxis(Some(0), Some(100), tickSpacing = Some(2))
-    val logAxis = NumericAxis(Some(0), Some(100), tickSpacing = Some(1), style = Axis.ScaleStyle.LogDense)
-    val sparseLogAxis = NumericAxis(Some(0), Some(100), tickSpacing = Some(1), style = Axis.ScaleStyle.LogSparse)
+    val axis = NumericAxis("axis", Some(0), Some(100), tickSpacing = Some(2))
+    val logAxis = NumericAxis("log", Some(0), Some(100), tickSpacing = Some(1), style = Axis.ScaleStyle.LogDense)
+    val sparseLogAxis = NumericAxis("sparse", Some(0), Some(100), tickSpacing = Some(1), style = Axis.ScaleStyle.LogSparse)
   }
   
   "A linear axis" should "do conversions" in {

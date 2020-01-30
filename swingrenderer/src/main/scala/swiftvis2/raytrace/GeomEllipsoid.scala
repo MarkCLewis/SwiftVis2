@@ -2,8 +2,7 @@ package swiftvis2.raytrace
 
 import java.awt.Color
 
-class GeomEllipsoid(c: Point, axis1: Vect, axis2: Vect, axis3: Vect, col: (Point) => RTColor, ref: (Point) => Double) extends Geometry {
-  val center = c;
+class GeomEllipsoid(center: Point, axis1: Vect, axis2: Vect, axis3: Vect, color: (Point) => RTColor, reflect: (Point) => Double) extends Geometry {
   val r1 = axis1.magnitude
   val r2 = axis2.magnitude
   val r3 = axis3.magnitude
@@ -11,8 +10,6 @@ class GeomEllipsoid(c: Point, axis1: Vect, axis2: Vect, axis3: Vect, col: (Point
   val a2 = axis2.normalize
   val a3 = axis3.normalize
   val mag = r1 * r1 + r2 * r2 + r3 * r3
-  val color = col
-  val reflect = ref
 
   override def intersect(ray: Ray): Option[IntersectData] = {
     val r = ray.dir
@@ -42,4 +39,11 @@ class GeomEllipsoid(c: Point, axis1: Vect, axis2: Vect, axis3: Vect, col: (Point
   }
 
   override val boundingSphere: Sphere = new BoundingSphere(center, r1 max r2 max r3)
+
+  // This is overly conservative and assumes a sphere with a radius of the largest axis
+  override def boundingBox: Box = {
+    val radius = r1 max r2 max r3
+    BoundingBox(center - radius, center + radius)
+  }
+
 }

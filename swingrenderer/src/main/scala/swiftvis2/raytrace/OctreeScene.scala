@@ -38,7 +38,7 @@ class OctreeScene(c: Point, s: Double) extends Geometry with Scene {
     })
     val childOID = if (children == null) None else children.foldLeft(None: Option[IntersectData])((oid, oct) => {
       oct.boundingSphere.intersectParam(r).flatMap {
-        case (_, exit) =>
+        case (_, _, exit, _) =>
           if (exit < 0) oid
           else {
             val goid = oct.intersect(r)
@@ -58,4 +58,6 @@ class OctreeScene(c: Point, s: Double) extends Geometry with Scene {
   }
 
   override val boundingSphere: Sphere = new BoundingSphere(center, size * 0.5 * (1 + Math.sqrt(3)))
+
+  override val boundingBox: Box = BoundingBox(c - s/2, c + s/2)
 }

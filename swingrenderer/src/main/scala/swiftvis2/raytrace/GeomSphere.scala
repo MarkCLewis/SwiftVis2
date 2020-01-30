@@ -4,7 +4,7 @@ case class GeomSphere(center: Point, radius: Double, color: (Point) => RTColor, 
   def movedBy(v: Vect): Sphere = copy(center = center+v)
   
   override def intersect(r: Ray): Option[IntersectData] = {
-    intersectParam(r).flatMap { case (enter, exit) =>
+    intersectParam(r).flatMap { case (enter, _, exit, _) =>
       val inter = if (enter < 0) exit else enter
       if (inter < 0) None
       else {
@@ -17,4 +17,5 @@ case class GeomSphere(center: Point, radius: Double, color: (Point) => RTColor, 
 
   override def boundingSphere: Sphere = this
 
+  override def boundingBox: Box = BoundingBox(center - radius, center + radius)
 }

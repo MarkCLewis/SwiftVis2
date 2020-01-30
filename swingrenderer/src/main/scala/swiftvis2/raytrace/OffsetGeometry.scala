@@ -7,4 +7,6 @@ case class OffsetGeometry(original: Geometry, offset: Vect) extends Geometry {
     }
   }
   def boundingSphere : Sphere = original.boundingSphere.movedBy(offset)
+
+  def boundingBox : Box = original.boundingBox.movedBy(offset)
 }

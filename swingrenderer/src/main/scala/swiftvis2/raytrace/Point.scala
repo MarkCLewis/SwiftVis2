@@ -4,6 +4,9 @@ case class Point(x:Double, y:Double, z:Double) {
   def +(v:Vect) = Point(x+v.x,y+v.y,z+v.z)
   def -(v:Vect) = Point(x-v.x,y-v.y,z-v.z)
   def -(p:Point) = Vect(x-p.x,y-p.y,z-p.z)
+  def /(c: Double) = Point(x / c, y / c, z / c)
+  def -(c: Double) = Point(x - c, y - c, z - c)
+  def +(c: Double) = Point(x + c, y + c, z + c)
   def toVect = Vect(x,y,z)
   def distanceTo(p:Point) = {
     val dx=x-p.x

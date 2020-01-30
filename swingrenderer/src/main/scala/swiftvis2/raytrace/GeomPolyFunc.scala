@@ -1,25 +1,22 @@
 package swiftvis2.raytrace
 
 class GeomPolyFunc(pnts: Array[Point], normal: (Point) => Vect, colors: (Point) => RTColor, reflect: (Point) => Double) extends Geometry {
-  val t = pnts
-  val n = (t(2) - t(1)) cross (t(0) - t(1)) normalize
-  val cols = colors
-  val ref = reflect
+  val n = (pnts(2) - pnts(1)) cross (pnts(0) - pnts(1)) normalize
 
   override def intersect(r: Ray): Option[IntersectData] = {
-    val s = ((t(0) - r.p0) dot n) / (r.dir dot n)
+    val s = ((pnts(0) - r.p0) dot n) / (r.dir dot n)
     if (s < 0) None
     else {
       val pnt = r point s
-      val firstSgn = (t(0) - t(t.length - 1)) cross (pnt - t(t.length - 1)) dot n
-      val compSigns = for (i <- 0 until t.length - 1)
-        yield ((t(i + 1) - t(i)) cross (pnt - t(i)) dot n) * firstSgn
+      val firstSgn = (pnts(0) - pnts(pnts.length - 1)) cross (pnt - pnts(pnts.length - 1)) dot n
+      val compSigns = for (i <- 0 until pnts.length - 1)
+        yield ((pnts(i + 1) - pnts(i)) cross (pnt - pnts(i)) dot n) * firstSgn
       if (compSigns forall (_ > 0)) {
         val drawNorm = normal(pnt).normalize
-        val drawRef = ref(pnt)
-        val color = cols(pnt)
+        val drawRef = reflect(pnt)
+        val color = colors(pnt)
         if (color.a == 0) None else
-          Some(new IntersectData(s, pnt, drawNorm, cols(pnt), drawRef, this))
+          Some(new IntersectData(s, pnt, drawNorm, colors(pnt), drawRef, this))
       } else {
         None
       }
@@ -27,10 +24,14 @@ class GeomPolyFunc(pnts: Array[Point], normal: (Point) => Vect, colors: (Point) 
   }
 
   override val boundingSphere: Sphere = {
-    val (xmin, xmax, ymin, ymax, zmin, zmax) = ((t(0).x, t(0).x, t(0).y, t(0).y, t(0).z, t(0).z) /: t)((b, p) =>
+    val (xmin, xmax, ymin, ymax, zmin, zmax) = ((pnts(0).x, pnts(0).x, pnts(0).y, pnts(0).y, pnts(0).z, pnts(0).z) /: pnts)((b, p) =>
       b match { case (xi, xa, yi, ya, zi, za) => (xi min p.x, xa max p.x, yi min p.y, ya max p.y, zi min p.z, za max p.z) })
     val center = new Point(0.5 * (xmin + xmax), 0.5 * (ymin + ymax), 0.5 * (zmin + zmax))
-    val radius = (0.0 /: t)((r, p) => (r max (p distanceTo center)))
+    val radius = (0.0 /: pnts)((r, p) => (r max (p distanceTo center)))
     new BoundingSphere(center, radius)
+  }
+
+  override def boundingBox: Box = {
+    BoundingBox(pnts.reduceLeft(_ min _), pnts.reduceLeft(_ max _))
   }
 }

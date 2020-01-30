@@ -6,7 +6,7 @@ trait Sphere {
   
   def movedBy(v: Vect): Sphere
 
-  def intersectParam(r: Ray): Option[(Double, Double)] = {
+  def intersectParam(r: Ray): Option[(Double, Vect, Double, Vect)] = {
     val dr = r.dir
     val dc = center - r.p0
     val a = dr dot dr
@@ -16,12 +16,13 @@ trait Sphere {
     if (root < 0) None
     else {
       val sroot = Math.sqrt(root)
-      Some((-b - sroot) / (2 * a), (-b + sroot) / (2 * a))
+      Some((-b - sroot) / (2 * a), Sphere.v, (-b + sroot) / (2 * a), Sphere.v)
     }
   }
 }
 
 object Sphere {
+  val v = Vect(1, 0, 0)
   def smallerPositiveParam(param: (Double, Double)): Double = {
     val (enter, exit) = param
     if (enter < 0) exit else enter

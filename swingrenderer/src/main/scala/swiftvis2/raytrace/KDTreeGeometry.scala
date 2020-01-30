@@ -4,23 +4,23 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Await
 
-class KDTreeGeometry(geometry: Seq[Geometry], val MaxGeom: Int = 5) extends Geometry {
+class KDTreeGeometry[B <: Bounds](geometry: Seq[Geometry], val MaxGeom: Int = 5, builder: BoundsBuilder[B] = SphereBoundsBuilder) extends Geometry {
   import KDTreeGeometry._
 
   private val root = buildTree(geometry)
   def intersect(r: Ray): Option[IntersectData] = {
-    def helper(n: Node): Option[IntersectData] = n match {
+    def helper(n: Node[B]): Option[IntersectData] = n match {
       case InternalNode(g, splitDim, splitValue, left, right, bounds) =>
-        //        println(s"leftb = ${left.bounds}, lefti = ${left.bounds.intersectParam(r)}")
-        //        println(s"rightb = ${right.bounds}, righti = ${right.bounds.intersectParam(r)}")
-        val leftHit = left.bounds.intersectParam(r).filter(_._2 >= 0).map(p => left -> p._1)
-        val rightHit = right.bounds.intersectParam(r).filter(_._2 >= 0).map(p => right -> p._1)
+        //        println(s"leftb = ${left.boundingSphere}, lefti = ${left.boundingSphere.intersectParam(r)}")
+        //        println(s"rightb = ${right.boundingSphere}, righti = ${right.boundingSphere.intersectParam(r)}")
+        val leftHit = left.bounds.intersectParam(r).filter(_._3 >= 0).map(p => left -> p._1)
+        val rightHit = right.bounds.intersectParam(r).filter(_._3 >= 0).map(p => right -> p._1)
         val hits = (leftHit.toList ++ rightHit.toList).sortBy(_._2)
         //        println(hits)
         hits.foldLeft(None: Option[IntersectData]) {
           case (None, (child, param)) => helper(child)
           case (oid @ Some(id), (child, param)) =>
-            if (id.time < param) oid // There was a hit in the first child before we cross the bounds of the second child.
+            if (id.time < param) oid // There was a hit in the first child before we cross the boundingSphere of the second child.
             else helper(child) match {
               case None             => oid
               case coid @ Some(cid) => if (id.time < cid.time) oid else coid
@@ -32,25 +32,29 @@ class KDTreeGeometry(geometry: Seq[Geometry], val MaxGeom: Int = 5) extends Geom
     }
     helper(root)
   }
-  def boundingSphere: Sphere = root.bounds
 
-  private def buildTree(geom: Seq[Geometry]): Node = {
-    def helper(g: Seq[Geometry], min: Point, max: Point, level: Int): Future[Node] = {
+  override def boundingSphere: Sphere = root.bounds.boundingSphere
+
+  override def boundingBox: Box = root.bounds.boundingBox
+
+  private def buildTree(geom: Seq[Geometry]): Node[B] = {
+    def helper(g: Seq[Geometry], min: Point, max: Point, level: Int): Future[Node[B]] = {
       val body = () => {
         val size = (max - min).magnitude
         val (here, children) = g.partition(_.boundingSphere.radius > size)
         val actualMin = g.map(g => g.boundingSphere.center.offsetAll(-g.boundingSphere.radius)).reduceLeft(_ min _)
         val actualMax = g.map(g => g.boundingSphere.center.offsetAll(g.boundingSphere.radius)).reduceLeft(_ max _)
-        val rad = (actualMax - actualMin) / 2
         if (children.isEmpty || g.length <= MaxGeom) {
-          Future.successful(LeafNode(g, new BoundingSphere(actualMin + rad, rad.magnitude)))
+          val bounds = builder.fromMinMax(actualMin, actualMax)
+          Future.successful(LeafNode[B](g, bounds))
         } else {
           val splitDim = (max - min).maxDim
           val (splitValue, before, after) = partitionOnDim(g.toArray, splitDim)
           val leftF = helper(before, min, max.updateDim(splitDim, splitValue), level + 1)
           val rightF = helper(after, min.updateDim(splitDim, splitValue), max, level + 1)
           for (left <- leftF; right <- rightF) yield {
-            InternalNode(here, splitDim, splitValue, left, right, new BoundingSphere(actualMin + rad, rad.magnitude))
+            val bounds = builder.fromMinMax(actualMin, actualMax)
+            InternalNode[B](here, splitDim, splitValue, left, right, bounds)
           }
         }
       }
@@ -83,10 +87,10 @@ class KDTreeGeometry(geometry: Seq[Geometry], val MaxGeom: Int = 5) extends Geom
 }
 
 object KDTreeGeometry {
-  private sealed trait Node {
+  private sealed trait Node[B] {
     val g: Seq[Geometry]
-    val bounds: Sphere
+    val bounds: B
   }
-  private case class InternalNode(g: Seq[Geometry], splitDim: Int, splitValue: Double, left: Node, right: Node, bounds: Sphere) extends Node
-  private case class LeafNode(g: Seq[Geometry], bounds: Sphere) extends Node
+  private case class InternalNode[B](g: Seq[Geometry], splitDim: Int, splitValue: Double, left: Node[B], right: Node[B], bounds: B) extends Node[B]
+  private case class LeafNode[B](g: Seq[Geometry], bounds: B) extends Node[B]
 }
