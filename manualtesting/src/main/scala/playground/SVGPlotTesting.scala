@@ -12,5 +12,6 @@ object SVGPlotTesting extends App {
   val ptPlot = pressureTempPlot
   JVMSVGInterface(ptPlot, "pressureTempPlot.svg", pubDim, pubDim)
   JVMSVGInterface(simpleFull(), "simpleFull.svg", pubDim, pubDim)
+  JVMSVGInterface(longForm(), "longForm.svg", 1200, 1000)
 
 }
