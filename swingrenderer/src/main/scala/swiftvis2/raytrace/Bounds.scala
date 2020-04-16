@@ -7,7 +7,7 @@ trait Bounds {
   def boundingBox: BoundingBox
 }
 
-trait BoundsBuilder[B] {
+trait BoundsBuilder[B] extends Serializable {
   def fromMinMax(min: Point, max: Point): B
   def mutual(b1: B, b2: B): B
 }
