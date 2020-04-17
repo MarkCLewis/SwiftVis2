@@ -97,6 +97,6 @@ lazy val jsrenderer = (project in file("jsrenderer"))
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.0.0"
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7"
   ).dependsOn(coreJS)
   .enablePlugins(ScalaJSPlugin)
