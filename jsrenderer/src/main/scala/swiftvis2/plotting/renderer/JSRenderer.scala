@@ -77,8 +77,8 @@ class JSRenderer(canvas: Canvas) extends Renderer {
   def drawLinePath(x: Seq[Double], y: Seq[Double]): Unit = {
     ctx2D.beginPath()
     ctx2D.moveTo(x.head, y.head)
-    for(xp <- x; yp <- y) {
-      ctx2D.lineTo(xp, yp)
+    for(p <- x.zip(y)) {
+      ctx2D.lineTo(p._1,p._2)
     }
     ctx2D.stroke()
   }

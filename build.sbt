@@ -25,7 +25,7 @@ lazy val commonSettings = Seq(
 	)
 )
 
-lazy val core = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure) in file("core"))
+lazy val core = (crossProject(JSPlatform, JVMPlatform, NativePlatform).crossType(CrossType.Pure) in file("core"))
   .settings(
 		commonSettings,
     name         := "SwiftVis2Core",
@@ -39,6 +39,7 @@ lazy val core = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure)
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
+lazy val coreNative = core.native
 
 lazy val jvm = (project in file("jvm"))
   .settings(
@@ -100,3 +101,18 @@ lazy val jsrenderer = (project in file("jsrenderer"))
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7"
   ).dependsOn(coreJS)
   .enablePlugins(ScalaJSPlugin)
+
+lazy val nativeRenderer = (project in file("nativerenderer"))
+   .settings(commonSettings,
+     name         := "SwiftVis2Native",
+     crossScalaVersions := Seq("2.11.12"),
+     scalacOptions := Seq("-unchecked", "-deprecation"),
+     libraryDependencies += "org.scala-lang" % "scala-library" % "2.11.12",
+     libraryDependencies += "org.scala-lang" % "scala-compiler" % "2.11.12",
+     libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.11.12",
+     libraryDependencies += "com.regblanc" %%% "native-sdl2" % "0.1",
+     libraryDependencies += "com.regblanc" %%% "native-sdl2-image" % "0.1",
+     libraryDependencies += "com.regblanc" %%% "native-sdl2-ttf" % "0.1"
+   ).dependsOn(coreNative)
+  .enablePlugins(ScalaNativePlugin)
+

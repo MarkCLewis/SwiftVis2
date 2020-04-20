@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Example Scala.js application</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body style="margin: 0px">
+
+<div>
+    <canvas style="display: block" id="canvas" width="1000" height="1000"/>
+</div>
+
+<script type="text/javascript" src="jsrenderer/target/scala-2.12/swiftvis2js-fastopt.js"></script>
+<script>
+    swiftvis2.plotting.renderer.Example().main(document.getElementById('canvas'));
+</script>
+</body>
+</html>
