@@ -87,7 +87,7 @@ class KDTreeGeometry[B <: Bounds](geometry: Seq[Geometry], val MaxGeom: Int = 5,
 }
 
 object KDTreeGeometry {
-  private sealed trait Node[B] {
+  private sealed trait Node[B] extends Serializable {
     val g: Seq[Geometry]
     val bounds: B
   }

@@ -13,7 +13,7 @@ class JSRenderer(canvas: Canvas) extends Renderer {
   val ctx2D = ctx.asInstanceOf[CanvasRenderingContext2D]
   def drawEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit = {
     ctx.beginPath()
-    ctx.ellipse(cx, cy, width, height, 0, 0, math.Pi * 2)
+    ctx.ellipse(cx, cy, width / 2, height / 2, 0, 0, math.Pi * 2)
     ctx.stroke()
   }
 
@@ -41,7 +41,7 @@ class JSRenderer(canvas: Canvas) extends Renderer {
 
   def fillEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit = {
     ctx.beginPath()
-    ctx.ellipse(cx, cy, width, height, 0, 0, math.Pi * 2)
+    ctx.ellipse(cx, cy, width / 2, height / 2, 0, 0, math.Pi * 2)
     ctx.fill()
   }
 
