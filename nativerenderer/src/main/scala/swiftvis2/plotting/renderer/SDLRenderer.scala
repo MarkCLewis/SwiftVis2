@@ -12,7 +12,7 @@ class SDLRenderer(rend: Ptr[SDL_Renderer]) extends Renderer {
   private var fontSize = 25
   private var lineScale = 1.0
   def drawEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit = {
-    val plt = pointsOnEllipse(cx, cy, width, height)
+    val plt = pointsOnEllipse(cx, cy, width/2, height/2)
     plt.foreach { case (x, y) => plotEllipse(cx, cy, x, y)}
   }
   private def pointsOnEllipse(cx: Double, cy: Double, width: Double, height: Double): collection.mutable.Buffer[(Double, Double)] = {
@@ -21,9 +21,9 @@ class SDLRenderer(rend: Ptr[SDL_Renderer]) extends Renderer {
     var y = height
     var p = math.pow(height, 2) + (math.pow(width, 2) * (1 - 4 * height) - 2)/4
     var deltaE = 3 * math.pow(height, 2)
-    var delta2E = 2 * math.pow(height, 2)
-    var deltaSE = deltaE - 2 * math.pow(width, 2) * (height - 1)
-    var delta2SE = delta2E + 2 * math.pow(width, 2)
+    var delta2E = math.pow(height, 2)
+    var deltaSE = deltaE - math.pow(width, 2) * (height - 1)
+    var delta2SE = delta2E + math.pow(width, 2)
     res.append((x, y))
     while(deltaSE < 2 * math.pow(width, 2) + 3 * math.pow(height, 2)) {
       if(p < 0) {
@@ -86,7 +86,7 @@ class SDLRenderer(rend: Ptr[SDL_Renderer]) extends Renderer {
     SDL_RenderDrawLines(rend, arr, pnts.length - 1)
   }
   def fillEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit = {
-    val plt = pointsOnEllipse(cx, cy, width, height)
+    val plt = pointsOnEllipse(cx, cy, width/2, height/2)
     plt.foreach { case (x, y) => plotFillEllipse(cx, cy, x, y)}
   }
   def fillRectangle(x: Double, y: Double, width: Double, height: Double): Unit = {
