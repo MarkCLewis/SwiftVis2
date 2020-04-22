@@ -7,6 +7,7 @@ import sdl2.Extras._
 import sdl2.ttf.SDL_ttf._
 import sdl2.ttf.Extras._
 import swiftvis2.plotting.Bounds
+import swiftvis2.plotting.Plot
 
 class SDLRenderer(rend: Ptr[SDL_Renderer]) extends Renderer {
   private var fontSize = 25
@@ -164,5 +165,45 @@ class SDLRenderer(rend: Ptr[SDL_Renderer]) extends Renderer {
   // Called when a plot is fully rendered to close/flush things
   def finish(): Unit = {
     TTF_Quit()
+  }
+  def quit(): Unit = {
+    SDL_DestroyRenderer(rend)
+    SDL_Quit()
+  }
+}
+
+object SDLRenderer {
+  def apply(plot: Plot, pwidth: Double = 1000, pheight: Double = 1000): SDLRenderer = {
+    SDL_Init(SDL_INIT_VIDEO)
+    val window = SDL_CreateWindow(
+      c"Test",
+      SDL_WINDOWPOS_CENTERED,
+      SDL_WINDOWPOS_CENTERED,
+      1200,
+      1000,
+      SDL_WINDOW_RESIZABLE)
+    val rend = SDL_CreateRenderer(window, -1, 0.toUInt)
+    SDL_SetRenderDrawColor(rend, 255.toUByte, 255.toUByte, 255.toUByte, 255.toUByte)
+    SDL_RenderClear(rend)
+    SDL_SetRenderDrawColor(rend, 0.toUByte, 0.toUByte, 0.toUByte, 255.toUByte)
+    val swiftRend = new SDLRenderer(rend)
+    plot.render(swiftRend, Bounds(0,0,1200,1000))
+    SDL_RenderPresent(rend)
+    def loop(): Unit = {
+      val event = stackalloc[SDL_Event]
+      while (true) {
+        while (SDL_PollEvent(event) != 0) {
+          event.type_ match {
+            case SDL_QUIT =>
+              return
+            case _ =>
+              ()
+          }
+        }
+      }
+    }
+    loop()
+    SDL_DestroyWindow(window)
+    swiftRend
   }
 }

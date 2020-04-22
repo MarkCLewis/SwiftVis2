@@ -20,19 +20,6 @@ object HelloWorld extends App {
   val yLabel = "y"
   val numberFormat = "%1.1f"
   println("Hello world!")
-  SDL_Init(SDL_INIT_VIDEO)
-  val window = SDL_CreateWindow(
-    c"Test",
-    SDL_WINDOWPOS_CENTERED,
-    SDL_WINDOWPOS_CENTERED,
-    1200,
-    1000,
-    SDL_WINDOW_RESIZABLE)
-  val rend = SDL_CreateRenderer(window, -1, 0.toUInt)
-  SDL_SetRenderDrawColor(rend, 255.toUByte, 255.toUByte, 255.toUByte, 255.toUByte)
-  SDL_RenderClear(rend)
-  SDL_SetRenderDrawColor(rend, 0.toUByte, 0.toUByte, 0.toUByte, 255.toUByte)
-  val swiftRend = new SDLRenderer(rend)
   //swiftRend.drawLine(200, 200, 300, 300)
   //swiftRend.drawRectangle(50, 50, 50, 50)
   //swiftRend.drawEllipse(150, 150, 25, 25)
@@ -107,23 +94,6 @@ object HelloWorld extends App {
 
     Plot(Map("title" -> Plot.TextData(title, Bounds(0, 0, 1.0, 0.1))), Map("grid1" -> Plot.GridData(grid1, Bounds(0, 0.1, 1.0, 0.9))))
   }
-  longForm().render(swiftRend, Bounds(0,0,1200,1000))
-  SDL_RenderPresent(rend)
-  def loop(): Unit = {
-    val event = stackalloc[SDL_Event]
-    while (true) {
-      while (SDL_PollEvent(event) != 0) {
-        event.type_ match {
-          case SDL_QUIT =>
-            return
-          case _ =>
-            ()
-        }
-      }
-    }
-  }
-  loop()
-  SDL_DestroyRenderer(rend)
-  SDL_DestroyWindow(window)
-  SDL_Quit()
+  val rend = SDLRenderer(longForm(), 1200, 1000)
+  rend.quit()
 }

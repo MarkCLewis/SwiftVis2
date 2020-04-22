@@ -21,7 +21,6 @@ object Example {
     val xLabel = "x"
     val yLabel = "y"
     val numberFormat = "%1.1f"
-    val swiftRend = new JSRenderer(canvas)
     //swiftRend.drawLine(200, 200, 300, 300)
     //swiftRend.drawRectangle(50, 50, 50, 50)
     //swiftRend.drawEllipse(150, 150, 25, 25)
@@ -96,6 +95,6 @@ object Example {
 
       Plot(Map("title" -> Plot.TextData(title, Bounds(0, 0, 1.0, 0.1))), Map("grid1" -> Plot.GridData(grid1, Bounds(0, 0.1, 1.0, 0.9))))
     }
-    longForm().render(swiftRend, Bounds(0,0,1000,800))
+    JSRenderer(longForm(), canvas)
   }
 }

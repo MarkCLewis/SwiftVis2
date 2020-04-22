@@ -5,6 +5,7 @@ import swiftvis2.plotting.Bounds
 import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.CanvasRenderingContext2D
 import swiftvis2.plotting.renderer.Renderer.FontStyle
+import swiftvis2.plotting.Plot
 
 import scala.scalajs.js
 
@@ -146,4 +147,12 @@ class JSRenderer(canvas: Canvas) extends Renderer {
   def restore(): Unit = ctx2D.restore()
 
   def finish(): Unit = {}
+}
+
+object JSRenderer {
+  def apply(plot: Plot, canvas: Canvas, pwidth: Double = 1200, pheight: Double = 1000): JSRenderer = {
+    val swiftRend = new JSRenderer(canvas)
+    plot.render(swiftRend, Bounds(0,0,pwidth,pheight))
+    swiftRend
+  }
 }
