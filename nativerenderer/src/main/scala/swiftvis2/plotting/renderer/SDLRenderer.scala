@@ -87,8 +87,12 @@ class SDLRenderer(rend: Ptr[SDL_Renderer]) extends Renderer {
     SDL_RenderDrawLines(rend, arr, pnts.length - 1)
   }
   def fillEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit = {
-    val plt = pointsOnEllipse(cx, cy, width/2, height/2)
-    plt.foreach { case (x, y) => plotFillEllipse(cx, cy, x, y)}
+    if (width > 1 || height > 1) {
+      val plt = pointsOnEllipse(cx, cy, width/2, height/2)
+      plt.foreach { case (x, y) => plotFillEllipse(cx, cy, x, y)}
+    } else {
+      SDL_RenderDrawPoint(rend, cx.toInt, cy.toInt)
+    }
   }
   def fillRectangle(x: Double, y: Double, width: Double, height: Double): Unit = {
     val rect = stackalloc[SDL_Rect]
@@ -115,7 +119,7 @@ class SDLRenderer(rend: Ptr[SDL_Renderer]) extends Renderer {
       println(fromCString(c"TTF_Init error: {TTF_GetError}"))
     } else {
       val col: SDL_Color = ((0 << 24) + (0 << 16) + (0 << 8) + 0).toUInt
-      val fontPtr = TTF_OpenFont(c"/home/nick/Programming/LewisResearch/SwiftVis2/nativerenderer/fonts/arial.ttf",
+      val fontPtr = TTF_OpenFont(c"nativerenderer/fonts/arial.ttf",
         fontSize)
       Zone { implicit z =>
         val buffer = alloc[Byte](s.length + 1)

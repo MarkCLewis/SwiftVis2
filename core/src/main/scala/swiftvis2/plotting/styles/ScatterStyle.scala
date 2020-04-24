@@ -39,49 +39,53 @@ final case class ScatterStyle(
     for (i <- start until end) {
       val x = xSource(i)
       val y = ySource(i)
-      val width = symbolWidth(i)
-      val height = symbolHeight(i)
-      val (pminx, pmaxx) = PlotSymbol.sizing(xSizing, x, width, xConv, bounds.width)
-      val (pminy, pmaxy) = PlotSymbol.sizing(ySizing, y, height, yConv, bounds.height)
-      val px = (pminx+pmaxx)/2
-      val py = (pminy+pmaxy)/2
-      val pwidth = pmaxx-pminx
-      val pheight = pmaxy-pminy
-      val color = colors(i)
+      // val width = symbolWidth(i)
+      // val height = symbolHeight(i)
+      // val (pminx, pmaxx) = PlotSymbol.sizing(xSizing, x, width, xConv, bounds.width)
+      // val (pminy, pmaxy) = PlotSymbol.sizing(ySizing, y, height, yConv, bounds.height)
+      // val px = (pminx+pmaxx)/2
+      // val py = (pminy+pmaxy)/2
+      // val pwidth = pmaxx-pminx
+      // val pheight = pmaxy-pminy
+      val px = xConv(x)
+      val py = yConv(y)
+      val pwidth = 1.0
+      val pheight = 1.0
+      // val color = colors(i)
 //      ScatterData(i, x, y, px, py, pwidth, pheight, color)
 //    }
 //    for(ScatterData(i, x, y, px, py, pwidth, pheight, color) <- pdata.seq) {
-      r.setColor(color)
-      xErrorBars.foreach { ex =>
-        val error = ex(i)
-        r.setStroke(Renderer.StrokeData(1, Nil))
-        r.setColor(BlackARGB)
-        r.drawLine(xConv(x - error), py, xConv(x + error), py)
-      }
-      yErrorBars.foreach { ey =>
-        val error = ey(i)
-        r.setStroke(Renderer.StrokeData(1, Nil))
-        r.setColor(BlackARGB)
-        r.drawLine(px, yConv(y - error), px, yConv(y + error))
-      }
-      (lines, connectMap).zipped.foreach {
-        case (ScatterStyle.LineData(groupFunc, stroke), cm) =>
-          val group = groupFunc(i)
-          cm.get(group) match {
-            case Some(Nil) => // Shouldn't get here.
-            case Some(lst @ ((lastx, lasty, lastc) :: t)) =>
-              if (lastc == color) {
-                cm(group) ::= (px, py, color)
-              } else {
-                r.setColor(lastc)
-                r.setStroke(stroke)
-                r.drawLinePath(lst.map(_._1), lst.map(_._2))
-                cm(group) = (px, py, color) :: (lastx, lasty, color) :: Nil
-              }
-            case None =>
-              cm(group) = (px, py, color) :: Nil
-          }
-      }
+      // r.setColor(color)
+      // xErrorBars.foreach { ex =>
+      //   val error = ex(i)
+      //   r.setStroke(Renderer.StrokeData(1, Nil))
+      //   r.setColor(BlackARGB)
+      //   r.drawLine(xConv(x - error), py, xConv(x + error), py)
+      // }
+      // yErrorBars.foreach { ey =>
+      //   val error = ey(i)
+      //   r.setStroke(Renderer.StrokeData(1, Nil))
+      //   r.setColor(BlackARGB)
+      //   r.drawLine(px, yConv(y - error), px, yConv(y + error))
+      // }
+      // (lines, connectMap).zipped.foreach {
+      //   case (ScatterStyle.LineData(groupFunc, stroke), cm) =>
+      //     val group = groupFunc(i)
+      //     cm.get(group) match {
+      //       case Some(Nil) => // Shouldn't get here.
+      //       case Some(lst @ ((lastx, lasty, lastc) :: t)) =>
+      //         if (lastc == color) {
+      //           cm(group) ::= (px, py, color)
+      //         } else {
+      //           r.setColor(lastc)
+      //           r.setStroke(stroke)
+      //           r.drawLinePath(lst.map(_._1), lst.map(_._2))
+      //           cm(group) = (px, py, color) :: (lastx, lasty, color) :: Nil
+      //         }
+      //       case None =>
+      //         cm(group) = (px, py, color) :: Nil
+      //     }
+      // }
       symbol.drawSymbol(px, py, pwidth, pheight, r)
     }
     (lines, connectMap).zipped.foreach {

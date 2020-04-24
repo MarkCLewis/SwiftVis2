@@ -8,7 +8,8 @@ import swiftvis2.plotting._
 
 object NativeRingRenderer extends App {
   def read() = {
-    val stream = fopen(c"/home/nick/Downloads/CartAndRad.88840.bin", c"rb")
+    println("Start load.")
+    val stream = fopen(c"/home/mlewis/workspaceResearch/Play-SwiftVis2/data/CartAndRad.88840.bin", c"rb")
 
     val nBuff = stackalloc[Byte](4)
 
@@ -18,22 +19,25 @@ object NativeRingRenderer extends App {
 
     val n = byteBuff.getInt()
 
-    val doubleBuff = malloc(n * 7 * 8)
+    val doubleBuff = malloc(n * 6 * 8)
 
-    fread(doubleBuff, 1, n * 7 * 8, stream)
+    fread(doubleBuff, 1, n * 6 * 8, stream)
 
-    val arr = new Array[Byte](n * 7 * 8)
+    val arr = new Array[Byte](n * 6 * 8)
 
     for(i <- arr.indices) arr(i) = doubleBuff(i)
+
+    free(doubleBuff)
 
     val doublebytebuff = ByteBuffer.wrap(arr)
 
     doublebytebuff.order(ByteOrder.LITTLE_ENDIAN)
-
-    val xs = (0 until 2000000).map(i => doublebytebuff.getDouble(i*8*6))
-    val ys = (0 until 2000000).map(i => doublebytebuff.getDouble(i*8*6 + 8))
-    val rs = (0 until 2000000).map(i => doublebytebuff.getDouble(n*8*6 + i*8))
+    val numParts = 6000000
+    val xs = (0 until numParts).map(i => doublebytebuff.getDouble(i*8*6))
+    val ys = (0 until numParts).map(i => doublebytebuff.getDouble(i*8*6 + 8))
+    val rs = (0 until numParts).map(i => 1.0)
     fclose(stream)
+    println("Finish load.")
     (xs, ys, rs)
   }
   val (xs, ys, rs) = read()
