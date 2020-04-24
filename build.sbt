@@ -107,6 +107,7 @@ lazy val nativeRenderer = (project in file("nativerenderer"))
      name         := "SwiftVis2Native",
      crossScalaVersions := Seq("2.11.12"),
      scalacOptions := Seq("-unchecked", "-deprecation"),
+     nativeMode := "release",
      libraryDependencies += "org.scala-lang" % "scala-library" % "2.11.12",
      libraryDependencies += "org.scala-lang" % "scala-compiler" % "2.11.12",
      libraryDependencies += "org.scala-lang" % "scala-reflect" % "2.11.12",
