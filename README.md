@@ -12,17 +12,23 @@ the code cross-compile for Scala.js and Scala Native so that plotting works on a
 SwiftVis2 is not yet at the point where it belongs in a Maven repository. Until SwiftVis2 is stable enough to put in a Maven repository 
 you can use it in one of two ways.
 
-1. Run `publishLocal` in sbt and include the appropriate dependency in your `build.sbt` file.
-  * `libraryDependencies += "edu.trinity" %% "swiftvis2" % "0.1.0-SNAPSHOT"`
+1. Run `publishLocal` in sbt and include the appropriate dependencies in your `build.sbt` file. Note that you probably don't need both the JavaFX and the Swing libraries. Pick whichever you are using.
+  * `libraryDependencies += "edu.trinity" %% "swiftvis2core" % "0.1.0-SNAPSHOT"`
+  * `libraryDependencies += "edu.trinity" %% "swiftvis2jvm" % "0.1.0-SNAPSHOT"`
+  * `libraryDependencies += "edu.trinity" %% "swiftvis2fx" % "0.1.0-SNAPSHOT"`
+  * `libraryDependencies += "edu.trinity" %% "swiftvis2swing" % "0.1.0-SNAPSHOT"`
 2. Compile and package this project and put the JAR file in the `lib` directory of your sbt project.
 
 If you want to use SwiftVis2 with Spark, you should probably use the `publishLocal` option, but with some modifications.
 
-1. Run `++2.11.12` to set the Scala version to 2.11. You can update the last value to whatever the latest release is. This is required because Spark currently doesn't work with Scala 2.12 or newer.
+1. Spark can now support Scala 2.12, but many versions don't do so by default. Check your version. If your Spark is using Scala 2.11 then run `++2.11.12` to set the Scala version to 2.11. You can update the last value to whatever the latest release is.
 2. Run `publishLocal` to publish the 2.11 version of the main SwiftVis2 library.
 3. Run `spark/publishLocal` to publish the Spark integration library.
-4. Add the following lines to your build.sbt
-  * `libraryDependencies += "edu.trinity" %% "swiftvis2" % "0.1.0-SNAPSHOT"`
+4. Add the following lines to your build.sbt. Again, you probably won't use both JavaFX and Swing so leave out the one you don't need.
+  * `libraryDependencies += "edu.trinity" %% "swiftvis2core" % "0.1.0-SNAPSHOT"`
+  * `libraryDependencies += "edu.trinity" %% "swiftvis2jvm" % "0.1.0-SNAPSHOT"`
+  * `libraryDependencies += "edu.trinity" %% "swiftvis2fx" % "0.1.0-SNAPSHOT"`
+  * `libraryDependencies += "edu.trinity" %% "swiftvis2swing" % "0.1.0-SNAPSHOT"`
   * `libraryDependencies += "edu.trinity" %% "swiftvis2spark" % "0.1.0-SNAPSHOT"`
   
 Note that the `sbt` commands can all be done at onced from the command line with `sbt ++2.11.12 publishLocal spark/publishLocal`.
@@ -35,11 +41,13 @@ two facade methods to generate a scatter plot and display it. Note that you need
 to use the FXRenderer. That isn't needed for other renderers. Based on our expereince, at this point we would recommend using 
 the SwingRenderer over the FXRenderer. It is easier to use, faster, and produces slightly nicer output.
 
+A sample application using JavaFX might look like the following.
+
 ```scala
 import scalafx.application.JFXApp
 import swiftvis2.plotting
 import swiftvis2.plotting.Plot
-import swiftvis2.plotting.fxrenderer.FXRenderer
+import swiftvis2.plotting.renderer.FXRenderer
 
 object PlotTesting extends JFXApp {
   val xPnt = 1 to 10
@@ -52,8 +60,26 @@ object PlotTesting extends JFXApp {
 }
 ```
 
-Currently scatter plots, bar charts, and histograms are the only plotting styles that are implemented. I'm building up [some examples](examples/examples.md) 
-that can help you see how to do things.
+This same example using Swing would look like the following.
+
+```scala
+import swiftvis2.plotting
+import swiftvis2.plotting.Plot
+import swiftvis2.plotting.renderer.SwingRenderer
+
+object PlotTesting extends App {
+  val xPnt = 1 to 10
+  val yPnt = xPnt.map(a => a * a)
+  val plot = Plot.scatterPlot(xPnt, yPnt, "Quadratic", "x", "y")
+  SwingRenderer(plot)
+
+  val plot2 = Plot.scatterPlot((1 to 1000).map(_ => math.random * math.random), (1 to 1000).map(_ => math.random * math.random), "Random Points", "x", "y")
+  SwingRenderer(plot2, 1500, 500, true)  // The true at the end means that closing this window terminates the application.
+}
+```
+
+Currently scatter plots, bar charts, histograms, box and whisker plots, and violin plots are the only plotting styles that are implemented. I'm building up 
+[some examples](examples/examples.md) that can help you see how to do things.
 
 If you want to use SwiftVis2 in a shell/REPL, including the spark-shell, you can specify the SwiftVis2 JAR file on the command line with the -cp option. Once in the shell you need to import a few things probably including `swiftvis2.plotting._` and `swiftvis2.plotting.renderer._`.  If you are using the FXRenderer you then run `FXRenderer.startShell()`. This is shown in the following example. You can then repeatedly call `FXRenderer` on various plots as long as you don't close the small window that comes up with `startShell`. If you are using the SwingRenderer, you can skip that step and just display plots. There won't be extra windows, but you need to be careful not to have your windows exit on close.
 
