@@ -321,7 +321,7 @@ object PlotTesting {
       ViolinPlotStyle(Array("Distrib"), Array(ys))), "Distributions", "Num X", "Categories", "Y")
   }
 
-  def pressureTempPlot: Plot = {
+  def pressureTempPlot(): Plot = {
     val alt = Array(-0.6, 11, 20, 32, 47, 51, 71, 84.852)
     val temp = Array(19.0, -56.5, -56.5, -44.5, -2.5, -2.5, -58.5, -86.38)
     val pressure = Array(108900, 22632, 5474.9, 868.02, 110.91, 66.939, 3.9564, 0.3734)
@@ -334,6 +334,16 @@ object PlotTesting {
              .updatedScaleStyle(Axis.ScaleStyle.LogSparse)
              .updatedName("Pressure [Pa]")).
         updatedStyleXAxis("pressure", stack = 1)
+  }
+
+  def coloredSurfacePlot(): Plot = {
+    val n = 20
+    val xs = (0 to n).map(_ / n.toDouble)
+    val ys = (0 to n).map(_ / n.toDouble)
+    val allX = for(x <- xs; y <- ys) yield x
+    val allY = for(x <- xs; y <- ys) yield y
+    val allC = for(x <- xs; y <- ys) yield (0xff << 24) | ((x*255).toInt << 16) | (y*255).toInt
+    Plot.simple(ColoredSurfaceStyle(allX, allY, allX, allC), "Surface Plot", "X", "Y")
   }
 
   def ringPlotGridBug(): Plot = {
