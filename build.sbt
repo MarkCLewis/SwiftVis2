@@ -100,3 +100,19 @@ lazy val jsrenderer = (project in file("jsrenderer"))
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7"
   ).dependsOn(coreJS)
   .enablePlugins(ScalaJSPlugin)
+
+lazy val reactrenderer = (project in file("reactrenderer"))
+  .settings(commonSettings,
+    name         := "SwiftVis2React",
+    crossScalaVersions := Seq("2.11.12", "2.12.11"),
+    scalacOptions := Seq("-unchecked", "-deprecation"),
+    libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
+    libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
+    libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7",
+    libraryDependencies += "me.shadaj" %%% "slinky-core" % "0.6.5",
+    libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.6.5",
+    scalacOptions += "-P:scalajs:sjsDefinedByDefault",
+    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
+  ).dependsOn(coreJS)
+  .enablePlugins(ScalaJSPlugin)
