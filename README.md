@@ -7,6 +7,11 @@ SwiftVis2 is still in the early stages. I am focusing on adding basic plotting c
 The graphical dataflow interface and other features will follow. Currently I also have a research student, Nick Smoker, working on making
 the code cross-compile for Scala.js and Scala Native so that plotting works on all available platforms.
 
+## Updates
+
+- 6/21/2020: Pushed an update to use JavaFX for Java 11. If you had built previously, you might need to manually delete fxrenderer/target
+for this to compile and run nicely. Doing a 'clean' in sbt doesn't remove some files that need to be updated.
+
 ## Installation
 
 SwiftVis2 is not yet at the point where it belongs in a Maven repository. Until SwiftVis2 is stable enough to put in a Maven repository 
