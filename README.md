@@ -1,7 +1,7 @@
 # SwiftVis
 
 This project is an updated version of SwiftVis written in Scala with better support for parallelism, support for rendering with diverse platforms,
-and a programming interface. I try to keep a reasonably up to date API posted [on my personal site](http://www.cs.trinity.edu/~mlewis/SwiftVis2/api/).
+and a programming interface. I try to keep a reasonably up to date API posted [on my personal site](http://www.cs.trinity.edu/~mlewis/SwiftVis2/).
 
 SwiftVis2 is still in the early stages. I am focusing on adding basic plotting capability with the programming interface currently.
 The graphical dataflow interface and other features will follow. Currently I also have a research student, Nick Smoker, working on making
@@ -17,11 +17,11 @@ you can use it in one of two ways.
   * `libraryDependencies += "edu.trinity" %% "swiftvis2jvm" % "0.1.0-SNAPSHOT"`
   * `libraryDependencies += "edu.trinity" %% "swiftvis2fx" % "0.1.0-SNAPSHOT"`
   * `libraryDependencies += "edu.trinity" %% "swiftvis2swing" % "0.1.0-SNAPSHOT"`
-2. Compile and package this project and put the JAR file in the `lib` directory of your sbt project.
+2. Compile and package this project and put the JAR files in the `lib` directory of your sbt project.
 
 If you want to use SwiftVis2 with Spark, you should probably use the `publishLocal` option, but with some modifications.
 
-1. Spark can now support Scala 2.12, but many versions don't do so by default. Check your version. If your Spark is using Scala 2.11 then run `++2.11.12` to set the Scala version to 2.11. You can update the last value to whatever the latest release is.
+1. Spark now supports Scala 2.12, but many versions don't do so by default. Check your version. If your Spark is using Scala 2.11 then run `++2.11.12` to set the Scala version to 2.11. You can update the last value to whatever the latest release is.
 2. Run `publishLocal` to publish the 2.11 version of the main SwiftVis2 library.
 3. Run `spark/publishLocal` to publish the Spark integration library.
 4. Add the following lines to your build.sbt. Again, you probably won't use both JavaFX and Swing so leave out the one you don't need.
