@@ -30,7 +30,8 @@ lazy val core = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure)
   .settings(
 		commonSettings,
     name         := "SwiftVis2Core",
-    crossScalaVersions := Seq("2.11.12", "2.12.11"),
+    crossScalaVersions := Seq("2.12.11"),
+    javaOptions += "-Dio.netty.tryReflectionSetAccessible=true",
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value, 
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value, 
     libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
@@ -45,10 +46,7 @@ lazy val jvm = (project in file("jvm"))
   .settings(
     commonSettings,
     name         := "SwiftVis2JVM",
-    crossScalaVersions := Seq("2.11.12", "2.12.11"),
-    libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
-    libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
-    libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
+    crossScalaVersions := Seq("2.12.11")
   ).dependsOn(coreJVM)
 
 // Determine OS version of JavaFX binaries
@@ -64,7 +62,7 @@ lazy val fxrenderer = (project in file("fxrenderer"))
   .settings(
     commonSettings,
     name         := "SwiftVis2FX",
-    crossScalaVersions := Seq("2.11.12", "2.12.11"),
+    crossScalaVersions := Seq("2.12.11"),
     libraryDependencies += "org.scalafx" %% "scalafx" % "11-R16",
     libraryDependencies ++= javaFXModules.map( m =>
       "org.openjfx" % s"javafx-$m" % "11" classifier osName
@@ -75,7 +73,7 @@ lazy val swingrenderer = (project in file("swingrenderer"))
   .settings(
     commonSettings,
     name         := "SwiftVis2Swing",
-    crossScalaVersions := Seq("2.11.12", "2.12.11"),
+    crossScalaVersions := Seq("2.12.11"),
     libraryDependencies += "org.scala-lang.modules" % "scala-swing_2.12" % "2.0.3",
     libraryDependencies += "org.scalactic" %% "scalactic" % "3.0.4",
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
@@ -87,15 +85,15 @@ lazy val spark = (project in file("spark"))
     name         := "SwiftVis2Spark",
     scalaVersion := "2.12.11",
     scalacOptions := Seq("-unchecked", "-deprecation"),
-    libraryDependencies += "org.apache.spark" % "spark-core_2.12" % "2.4.4",
-    libraryDependencies += "org.apache.spark" % "spark-sql_2.12" % "2.4.4"
+    libraryDependencies += "org.apache.spark" %% "spark-core" % "3.0.0",
+    libraryDependencies += "org.apache.spark" %% "spark-sql" % "3.0.0"
   ).dependsOn(coreJVM)
 
 lazy val manTests = (project in file("manualtesting"))
   .settings(
     commonSettings,
     name         := "SwiftVis2ManualTests",
-    crossScalaVersions := Seq("2.11.12", "2.12.11"),
+    crossScalaVersions := Seq("2.12.11"),
     scalacOptions := Seq("-unchecked", "-deprecation"),
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
@@ -105,7 +103,7 @@ lazy val manTests = (project in file("manualtesting"))
 lazy val jsrenderer = (project in file("jsrenderer"))
   .settings(commonSettings,
     name         := "SwiftVis2JS",
-    crossScalaVersions := Seq("2.11.12", "2.12.11"),
+    crossScalaVersions := Seq("2.12.11"),
     scalacOptions := Seq("-unchecked", "-deprecation"),
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
@@ -117,7 +115,7 @@ lazy val jsrenderer = (project in file("jsrenderer"))
 lazy val reactrenderer = (project in file("reactrenderer"))
   .settings(commonSettings,
     name         := "SwiftVis2React",
-    crossScalaVersions := Seq("2.11.12", "2.12.11"),
+    crossScalaVersions := Seq("2.12.11"),
     scalacOptions := Seq("-unchecked", "-deprecation"),
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,

@@ -10,7 +10,9 @@ the code cross-compile for Scala.js and Scala Native so that plotting works on a
 ## Updates
 
 - 6/21/2020: Pushed an update to use JavaFX for Java 11. If you had built previously, you might need to manually delete fxrenderer/target
-for this to compile and run nicely. Doing a 'clean' in sbt doesn't remove some files that need to be updated.
+for this to compile and run nicely. Doing a 'clean' in sbt doesn't remove some files that need to be updated. Unfortunately, this does break
+the Spark tests, even after updating to Spark 3.0.0, which is supposed to work with Java 11. We'll have to look into this more, but the spark
+extentions probably aren't safe to use right now. More testing is needed with manual pulling of the data.
 
 ## Installation
 
