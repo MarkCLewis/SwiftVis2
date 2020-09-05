@@ -82,6 +82,17 @@ case class NumericAxis(
   // TODO - More matching methods go here.
   
   // TODO - More fluent interface here.
+  def min(x: Double): NumericAxis = copy(min = Some(x))
+  def max(x: Double): NumericAxis = copy(max = Some(x))
+  def scaleStyle(ss: Axis.ScaleStyle.Value): NumericAxis = copy(style = ss)
+  def numberFormat(f: String): NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(numberFormat = f))
+      .orElse(Some(Axis.LabelSettings(0.0, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), f))))
+  def spacing(space: Double): NumericAxis = copy(tickSpacing = Some(space))
+  def ticks(tstyle: Axis.TickStyle.Value): NumericAxis = copy(tickStyle = tstyle)
+  def label(n: String): NumericAxis = copy(name = name.map(_.copy(name = n))
+      .orElse(Some(Axis.NameSettings(n, Renderer.FontData("Ariel", Renderer.FontStyle.Plain)))))
+  def minSide: NumericAxis = copy(displaySide = Axis.DisplaySide.Min)
+  def maxSide: NumericAxis = copy(displaySide = Axis.DisplaySide.Max)
   
   // Private methods
 
