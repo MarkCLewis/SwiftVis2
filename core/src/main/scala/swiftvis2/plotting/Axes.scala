@@ -70,29 +70,187 @@ case class NumericAxis(
   
   // Fluent Interface
   
+  /**
+    * Sets the rotations and display side to the default of a min-side X-axis.
+    *
+    * @return Modified axis.
+    */
   def asMinSideXAxis: NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = 90)), displaySide = Axis.DisplaySide.Min)
+
+  /**
+    * Sets the rotations and display side to the default of a max-side X-axis.
+    *
+    * @return Modified axis.
+    */
   def asMaxSideXAxis: NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = -90)), displaySide = Axis.DisplaySide.Max)
+
+  /**
+    * Sets the rotations and display side to the default of a min-side Y-axis.
+    *
+    * @return Modified axis.
+    */
   def asMinSideYAxis: NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = 90)), displaySide = Axis.DisplaySide.Min)
+
+  /**
+    * Sets the rotations and display side to the default of a max-side Y-axis.
+    *
+    * @return Modified axis.
+    */
   def asMaxSideYAxis: NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = 90)), displaySide = Axis.DisplaySide.Max)
   
+  /**
+    * Gives back a new axis with a fixed minimum value.
+    *
+    * @param newMin New fixed minimum value.
+    * @return Modified axis.
+    */
+  def updatedMin(newMin: Double): NumericAxis = copy(min = Some(newMin))
+
+  /**
+    * Gives back a new axis with a min that is automatically set by the data.
+    *
+    * @return Modified axis.
+    */
+  def autoMin: NumericAxis = copy(min = None)
+
+  /**
+    * Gives back a new axis with a fixed maximum value.
+    *
+    * @param newMin New fixed maximum value.
+    * @return Modified axis.
+    */
+  def updatedMax(newMax: Double): NumericAxis = copy(max = Some(newMax))
+
+  /**
+    * Gives back a new axis with a max that is automatically set by the data.
+    *
+    * @return Modified axis.
+    */
+  def autoMax: NumericAxis = copy(max = None)
+
+  /**
+    * Gives back a modified axis with the specified scale style.
+    *
+    * @param newStyle The new scale style.
+    * @return Modified axis.
+    */
   def updatedScaleStyle(newStyle: Axis.ScaleStyle.Value): NumericAxis = copy(style = newStyle) 
-  def updatedScaleStyle(f: Axis.ScaleStyle.Value => Axis.ScaleStyle.Value): NumericAxis = copy(style = f(style))
-  
-  def updatedName(newName: String): NumericAxis = copy(name = name.map(_.copy(name = newName)))
-  // TODO - More matching methods go here.
-  
-  // TODO - More fluent interface here.
-  def min(x: Double): NumericAxis = copy(min = Some(x))
-  def max(x: Double): NumericAxis = copy(max = Some(x))
-  def scaleStyle(ss: Axis.ScaleStyle.Value): NumericAxis = copy(style = ss)
-  def numberFormat(f: String): NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(numberFormat = f))
+
+  /**
+    * Gives back a modified axis with the specified number format. If the label setting had been empty, a new one with defaults for other values will be created.
+    *
+    * @param f The new format string. This uses the format method in java.lang.String which takes roughly C-style format strings.
+    * @return Modified axis.
+    */
+  def updatedNumberFormat(f: String): NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(numberFormat = f))
       .orElse(Some(Axis.LabelSettings(0.0, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), f))))
-  def spacing(space: Double): NumericAxis = copy(tickSpacing = Some(space))
-  def ticks(tstyle: Axis.TickStyle.Value): NumericAxis = copy(tickStyle = tstyle)
-  def label(n: String): NumericAxis = copy(name = name.map(_.copy(name = n))
-      .orElse(Some(Axis.NameSettings(n, Renderer.FontData("Ariel", Renderer.FontStyle.Plain)))))
+
+
+  /**
+    * Gives back a modified axis with the angle on the labels set to the given value. If the label setting had been empty, 
+    * a new one with defaults for other values will be created.
+    *
+    * @param newAngle The new value for the angle of rotation for the tick lables.
+    * @return The modified axis.
+    */
+  def updatedLabelAngle(newAngle: Double): NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = newAngle))
+      .orElse(Some(Axis.LabelSettings(newAngle, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), "%1.1f"))))
+
+  /**
+    * Gives back an updated axis with the specified spacing between tick marks.
+    *
+    * @param space New spacing between tick marks.
+    * @return Modified axis.
+    */
+  def updatedTickSpacing(space: Double): NumericAxis = copy(tickSpacing = Some(space))
+
+  /**
+    * Gives back an updated axis where the spacing between tick marks is determined automatically.
+    *
+    * @return Modified axis.
+    */
+  def autoTickSpacing: NumericAxis = copy(tickSpacing = None)
+
+  /**
+    * Gives back a modified axis with the specified tick style.
+    *
+    * @param tickStyle The new tick style.
+    * @return The modified axis.
+    */
+  def updatedTickStyle(tickStyle: Axis.TickStyle.Value): NumericAxis = copy(tickStyle = tickStyle)
+
+  /**
+    * Gives back a modified axis with the specified name. If the name setting had been empty, a new one with defaults for other values will be created.
+    *
+    * @param newName The new string to use for the name of the axis.
+    * @return The modified axis.
+    */
+  def updatedName(newName: String): NumericAxis = copy(name = name.map(_.copy(name = newName))
+      .orElse(Some(Axis.NameSettings(newName, Renderer.FontData("Ariel", Renderer.FontStyle.Plain)))))
+
+  /**
+    * Returns a modifed axis that displays on the minimum side of the graph (left or bottom). Note that this method does not change the rotation
+    * angle of the labels.
+    *
+    * @return the modified axis.
+    */
   def minSide: NumericAxis = copy(displaySide = Axis.DisplaySide.Min)
+
+  /**
+    * Returns a modifed axis that displays on the maximum side of the graph (left or bottom). Note that this method does not change the rotation
+    * angle of the labels.
+    *
+    * @return the modified axis.
+    */
   def maxSide: NumericAxis = copy(displaySide = Axis.DisplaySide.Max)
+  
+  /**
+    * Shortened alias for updatedMin.
+    *
+    * @param newMin New fixed minimum value.
+    * @return The modified axis.
+    */
+  def min(newMin: Double): NumericAxis = updatedMin(newMin)
+
+  /**
+    * Shortened alias for updatedMax.
+    *
+    * @param newMax New fixed maximum value.
+    * @return The modified axis.
+    */
+  def max(newMax: Double): NumericAxis = updatedMax(newMax)
+
+  /**
+    * Alias for updatedScaleStyle.
+    *
+    * @param newStyle The new scale style.
+    * @return The modified axis.
+    */
+  def scaleStyle(newStyle: Axis.ScaleStyle.Value): NumericAxis = updatedScaleStyle(newStyle)
+
+  /**
+    * Alias for updatedNumberFormat.
+    *
+    * @param f The new format string.
+    * @return The modified axis.
+    */
+  def numberFormat(f: String): NumericAxis = updatedNumberFormat(f)
+
+  /**
+    * Alias for updatedTickSpacing.
+    *
+    * @param space The new spacing between ticks.
+    * @return The modified axis.
+    */
+  def spacing(space: Double): NumericAxis = updatedTickSpacing(space)
+
+  /**
+    * Alias for updatedTickStyle.
+    *
+    * @param tstyle The new tick style.
+    * @return The modified axis.
+    */
+  def ticks(tstyle: Axis.TickStyle.Value): NumericAxis = updatedTickStyle(tstyle)
   
   // Private methods
 
