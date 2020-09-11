@@ -325,7 +325,35 @@ object Plot {
     Plot(tMap, gMap)
   }
   
-  // TODO - add column
+  /**
+   * This will create a column of styles with a mix of numeric axes and categorical axes.
+   * @param styles The sequence of plot styles that you want along the row.
+   * @param title The title put on the plot.
+   * @param xNumLabel The label drawn on the x-axis of numbered axes.
+   * @param xCatLabel The label drawn on the x-axis of categorical axes.
+   * @param yLabel The label drawn on the y-axis.
+   * @param xType The type of the x-axis if it is numeric. This argument isn't used for a categorical x-axis.
+   * @param yType The type of the y-axis if it is numeric.
+   */
+  def column(styles: Seq[PlotStyle], title: String = "", xNumLabel: String = "", xCatLabel: String = "", yLabel: String = "",
+      xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear, yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): Plot = {
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
+    val xAxis = NumericAxis("x", None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
+    val yNumAxis = NumericAxis("ny", None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xNumLabel, font)), Axis.DisplaySide.Min, xType)
+    val yCatAxis = CategoryAxis("cy", Axis.TickStyle.Both, 0.0, font, Some(Axis.NameSettings(xCatLabel, font)), Axis.DisplaySide.Min)
+    val plots = styles.map { 
+      case style: NumberNumberPlotStyle =>
+          Seq(Seq(Plot2D(style, "x", "ny")))
+      case style: CategoryNumberPlotStyle =>
+          Seq(Seq(Plot2D(style, "x", "cy")))
+    }
+    val grid = PlotGrid(plots, Map("x" -> xAxis, "ny" -> yNumAxis, "cy" -> yCatAxis), styles.map(_ => 1.0), Seq(1.0), 0.15)
+    val (tMap, gMap) = titleAndGridMaps(text, grid)
+    Plot(tMap, gMap)
+  }
 
   /**
    * This makes an MxN grid of scatter plots that all share the same axes.

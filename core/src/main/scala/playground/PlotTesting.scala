@@ -321,6 +321,20 @@ object PlotTesting {
       ViolinPlotStyle(Array("Distrib"), Array(ys))), "Distributions", "Num X", "Categories", "Y")
   }
 
+  def colOfDists(): Plot = {
+    val xs = Array.fill(900)(math.random * 100)
+    val ys = xs.map(_ => (math.random - 0.5) * (math.random - 0.5) * 4 + 1)
+    val bins = 0.0 to 2.0 by 0.05
+    val cnts = Array.fill(bins.length - 1)(0.0)
+    for (y <- ys) {
+      val bin = (y / 0.05).toInt
+      if (bin >= 0 && bin < cnts.length) cnts(bin) += 1
+    }
+    Plot.row(Seq(
+      ScatterStyle(xs, ys, symbolWidth = 5, symbolHeight = 5),
+      HistogramStyle(bins, Seq(HistogramStyle.DataAndColor(cnts, GreenARGB)), binsOnX = false)))
+  }
+
   def pressureTempPlot(): Plot = {
     val alt = Array(-0.6, 11, 20, 32, 47, 51, 71, 84.852)
     val temp = Array(19.0, -56.5, -56.5, -44.5, -2.5, -2.5, -58.5, -86.38)
