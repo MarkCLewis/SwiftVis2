@@ -79,6 +79,14 @@ lazy val swingrenderer = (project in file("swingrenderer"))
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
   ).dependsOn(jvm)
 
+lazy val polynote = (project in file("polynoteintegration"))
+  .settings(
+    commonSettings,
+    name         := "SwiftVis2Polynote",
+    crossScalaVersions := Seq("2.12.11"),
+    libraryDependencies += "org.polynote" %% "polynote-runtime" % "0.3.8"
+  ).dependsOn(swingrenderer)
+
 lazy val spark = (project in file("spark"))
   .settings(
 		commonSettings,

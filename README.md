@@ -101,3 +101,23 @@ val yPnt = xPnt.map(a => a * a)
 val plot = Plot.scatterPlot(xPnt, yPnt, "Quadratic", "x", "y")
 FXRenderer(plot)
 ```
+
+### Polynote Integration
+
+SwiftVis2 integrates with [the Polynote Scala notebook](https://polynote.org/). To use SwiftVis2 with Polynote, you will first need to publishLocal the dependencies with `coreJVM/publishLocal`, `swing/publishLocal` and `polynote/publishLocal`. After this, add the following lines to the `config.yml` file in your polynote directory: 
+  * `- edu.trinity:swiftvis2polynote_2.12:0.1.0-SNAPSHOT`
+  * `- edu.trinity:edu.trinity:swiftvis2core_2.12:0.1.0-SNAPSHOT`
+  * `- edu.trinity:swiftvis2swing_2.12:0.1.0-SNAPSHOT`
+
+More information on the formatting of the config.yml file can be found in the `config-template.yml` file included with polynote.
+
+After this, you should make sure the integration is running by inputting this code into a notebook:
+```scala
+import swiftvis2.plotting.Plot
+
+val data = 1 to 10
+
+Plot.scatterPlot(data, data, title = "Hooray, it works!")
+```
+
+A plot should then pop up, and you should be able to use SwiftVis2 just as you would in any other setting (minus the rendering calls).
