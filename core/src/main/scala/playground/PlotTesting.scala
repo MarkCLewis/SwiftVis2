@@ -388,7 +388,7 @@ object PlotTesting {
       Seq(1.0, 1.0),
       plotStyles.map(_ => 1.0)
     )
-    println(grid)
+    // println(grid)
     Plot(Map("Title" -> TextData(PlotText("Funky Plot Test"), Bounds(0, 0, 1.0, 0.05))),
       Map("Main" -> GridData(grid, Bounds(0.01, 0.05, 0.99, 0.95))))
   }
@@ -409,6 +409,14 @@ object PlotTesting {
     val x = Array.fill(1000000)((math.random-0.5)*(math.random-0.5))
     val y = x.map(_ => math.cos(math.random*math.random*6.28))
     Plot.scatterPlot(x, y, "Big", xLabel, yLabel, 0.001, BlackARGB, xSizing = PlotSymbol.Sizing.Scaled, ySizing = PlotSymbol.Sizing.Scaled)
+  }
+
+  def gridSkipAxisLabels(): Plot = {
+    val x = (0 to 10).map(_.toDouble) :+ 10.3
+    val y = (0 to 10).map(x => x*x) :+ 101
+    val scatter = ScatterStyle(x, y)
+    val scatter2 = ScatterStyle(x, x)
+    Plot.gridNN(Seq(Seq(scatter, scatter), Seq(scatter, scatter2)))
   }
 
   val largeDim = 1000

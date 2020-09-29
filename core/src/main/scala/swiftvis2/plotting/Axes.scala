@@ -39,7 +39,7 @@ case class NumericAxis(
     val toPixels = toPixelFunc(pmin, pmax, amin, amax)
     val whichBounds = (if (orient == Axis.RenderOrientation.YAxis) 2 else 0) + (if (displaySide == Axis.DisplaySide.Max) 1 else 0)
     val (tickBounds, tickSize, nameBounds, nameSize, tickLocs) = boundsAndSizing(r, bounds(whichBounds), orient, amin, amax)
-    (toPixels, tickSize, nameSize, (tfs, nfs, aggBounds, nextAxis) => render(r, tickBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, tickLocs, toPixels))
+    (toPixels, tickSize, nameSize, (tfs, nfs, aggBounds, nextAxis, hasAdjacentCell) => render(r, tickBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, tickLocs, toPixels, hasAdjacentCell))
   }
 
   def toPixelFunc(pmin: Double, pmax: Double, amin: Double, amax: Double): Double => Double = {
@@ -273,7 +273,7 @@ case class NumericAxis(
   }
 
   private def render(r: Renderer, tickBounds: Bounds, tickFontSize: Double, nameBounds: Bounds, aggBounds: Option[Bounds], nextAxis: Option[Axis], 
-      nameFontSize: Double, orient: Axis.RenderOrientation.Value, tickLocs: Seq[Double], toPixels: Axis.UnitConverter): Option[Bounds] = {
+      nameFontSize: Double, orient: Axis.RenderOrientation.Value, tickLocs: Seq[Double], toPixels: Axis.UnitConverter, hasAdjacentCell: Boolean): Option[Bounds] = {
 
     // Draw ticks and labels
     orient match {
@@ -287,7 +287,7 @@ case class NumericAxis(
           Axis.TickStyle.drawTick(r, tickStyle, orient, px, cy, displaySide, tickLen)
           tickLabelInfo.foreach { tli =>
             val textAlign = if (tli.angle % 180.0 == 0) Renderer.HorizontalAlign.Center else Renderer.HorizontalAlign.Left
-            r.drawText(tli.numberFormat.format(x), px, labelY, textAlign, tli.angle)
+            if (!hasAdjacentCell || px < tickBounds.x + tickBounds.width - tickFontSize) r.drawText(tli.numberFormat.format(x), px, labelY, textAlign, tli.angle)
           }
         }
       case Axis.RenderOrientation.YAxis =>
@@ -300,7 +300,7 @@ case class NumericAxis(
           Axis.TickStyle.drawTick(r, tickStyle, orient, cx, py, displaySide, tickLen)
           tickLabelInfo.foreach { tli =>
             val textAlign = if ((tli.angle + 90) % 180.0 == 0) Renderer.HorizontalAlign.Center else if (displaySide == Axis.DisplaySide.Min) Renderer.HorizontalAlign.Right else Renderer.HorizontalAlign.Left
-            r.drawText(tli.numberFormat.format(y), labelX, py, textAlign, tli.angle)
+            if (!hasAdjacentCell || py > tickBounds.y + tickFontSize) r.drawText(tli.numberFormat.format(y), labelX, py, textAlign, tli.angle)
           }
         }
     }
@@ -351,6 +351,21 @@ case class NumericAxis(
   }
 }
 
+object NumericAxis {
+  def defaultHorizontalAxis(key: String, xLabel: String, format: String = "%1.1f", xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): NumericAxis = {
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    NumericAxis("x", None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min, xType)
+  }
+
+  def defaultVerticalAxis(key: String, yLabel: String, format: String = "%1.1f", yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): NumericAxis = {
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    NumericAxis("y", None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
+  }
+
+}
+
 /**
  * Axis with text categories for labels instead of numeric values.
  */
@@ -378,7 +393,7 @@ case class CategoryAxis(
         }
         c -> range
     }.toMap
-    (catLocs, catSize, nameSize, (tfs, nfs, aggBounds, nextAxis) => render(r, catBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, categories, catLocs))
+    (catLocs, catSize, nameSize, (tfs, nfs, aggBounds, nextAxis, hasAdjacentCell) => render(r, catBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, categories, catLocs))
   }
 
   def boundsAndSizing(r: Renderer, bounds: Bounds, orient: Axis.RenderOrientation.Value, categories: Seq[String]): (Bounds, Double, Bounds, Double) = {
@@ -445,7 +460,7 @@ object Axis {
   type UnitConverter = Double => Double
   type CategoryLoc = String => (Double, Double)
   type FontSizer = (Renderer, Bounds, Axis.RenderOrientation.Value) => (Double, Double)
-  type AxisRenderer = (Double, Double, Option[Bounds], Option[Axis]) => Option[Bounds]
+  type AxisRenderer = (Double, Double, Option[Bounds], Option[Axis], Boolean) => Option[Bounds]
   case class LabelSettings(angle: Double, font: Renderer.FontData, numberFormat: String)
   case class NameSettings(name: String, font: Renderer.FontData)
 

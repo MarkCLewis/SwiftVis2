@@ -105,6 +105,11 @@ case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String
     copy(grids = grids + (gridName -> grids(gridName).copy(grid = grid.updatedStyleXAxis(axisName, row, col, stack))))
   }
   
+  def updatedStyleYAxis(axisName: String, row: Int = 0, col: Int = 0, stack: Int = 0, gridName: String = "Main"): Plot = {
+    val grid = grids(gridName).grid
+    copy(grids = grids + (gridName -> grids(gridName).copy(grid = grid.updatedStyleYAxis(axisName, row, col, stack))))
+  }
+
   // TODO - Add methods for updating and adding different elements.
   
   // withRow
