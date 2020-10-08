@@ -155,7 +155,10 @@ case class NumericAxis(
           }
           val firstTickApprox = (amin / majorSep).toInt * majorSep
           val firstTick = firstTickApprox + (if ((amax - amin).abs < (amax - firstTickApprox).abs) majorSep else 0)
-          firstTick to amax by majorSep
+          val numTicks = ((amax - firstTick).abs / majorSep).toInt
+          println(firstTick, amax, majorSep, numTicks)
+          (0 to numTicks).map(i => firstTick + i * majorSep)
+          // firstTick to amax by majorSep
         case Axis.ScaleStyle.LogDense =>
           var pos = Math.pow(10, Math.floor(Math.log10(Math.min(amin, amax))))
           var ret = List[Double]()
@@ -179,6 +182,20 @@ case class NumericAxis(
           ret.reverse
       }
     } else Seq.empty
+  }
+}
+
+object NumericAxis {
+  def defaultHorizontalAxis(key: String, text: String, numFormat: String = "%1.1f") = {
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    NumericAxis(key, None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(90.0, font, numFormat)), Some(Axis.NameSettings(text, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+  }
+
+  def defaultVerticalAxis(key: String, text: String, numFormat: String = "%1.1f") = {
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    NumericAxis(key, None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(0.0, font, numFormat)), Some(Axis.NameSettings(text, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
   }
 }
 

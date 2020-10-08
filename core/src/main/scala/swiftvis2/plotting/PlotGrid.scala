@@ -24,14 +24,14 @@ case class PlotGrid(
   axes:     Map[String, Axis],
   xWeights: Seq[Double],
   yWeights: Seq[Double],
-  axisFrac: Double                = 0.15) extends Plottable {
+  axisFrac: Double = 0.15) extends Plottable {
 
   if (yWeights.length != plots.length) println(s"Warning!!! Rows in plots not matched by yWeights. ${plots.length} != ${yWeights.length}")
   if (plots.nonEmpty && xWeights.length != plots.head.length) println(s"Warning!!! Columns in plots not matched by xWeights. ${plots.head.length} != ${xWeights.length}")
   
   {
-    val xAxes = plots.flatMap(_.flatMap(_.flatMap(_.xAxisName)))
-    val yAxes = plots.flatMap(_.flatMap(_.flatMap(_.yAxisName)))
+    val xAxes = plots.flatMap(_.flatMap(_.map(_.xAxisName)))
+    val yAxes = plots.flatMap(_.flatMap(_.map(_.yAxisName)))
     if ((xAxes ++ yAxes).toSet != axes.keySet) println(s"Warning!!! Used axes don't match provided axes.\nxAxes = $xAxes\nyAxes = $yAxes\naxis keys = ${axes.keys}")
   }
 

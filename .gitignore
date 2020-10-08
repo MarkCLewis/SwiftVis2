@@ -1,5 +1,6 @@
 .metals/
 .bloop/
+.vscode/
 
 # Created by https://www.gitignore.io/api/sbt,scala,eclipse
 
