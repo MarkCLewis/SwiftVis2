@@ -40,7 +40,7 @@ object FXRenderer {
       try {
         val stage = new Stage(StageStyle.Decorated)
         stage.onCloseRequest = (e: WindowEvent) => ec.shutdown()
-        stage.title = "Plotting Test"
+        stage.title = "SwiftVis2 Plot"
         stage.scene = new Scene(pwidth, pheight + 30, false, SceneAntialiasing.Balanced) {
           val border = new BorderPane
           val menuBar = new MenuBar

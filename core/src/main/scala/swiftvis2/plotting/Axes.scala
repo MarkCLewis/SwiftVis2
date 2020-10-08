@@ -39,7 +39,7 @@ case class NumericAxis(
     val toPixels = toPixelFunc(pmin, pmax, amin, amax)
     val whichBounds = (if (orient == Axis.RenderOrientation.YAxis) 2 else 0) + (if (displaySide == Axis.DisplaySide.Max) 1 else 0)
     val (tickBounds, tickSize, nameBounds, nameSize, tickLocs) = boundsAndSizing(r, bounds(whichBounds), orient, amin, amax)
-    (toPixels, tickSize, nameSize, (tfs, nfs, aggBounds, nextAxis) => render(r, tickBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, tickLocs, toPixels))
+    (toPixels, tickSize, nameSize, (tfs, nfs, aggBounds, nextAxis, hasAdjacentCell) => render(r, tickBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, tickLocs, toPixels, hasAdjacentCell))
   }
 
   def toPixelFunc(pmin: Double, pmax: Double, amin: Double, amax: Double): Double => Double = {
@@ -70,18 +70,187 @@ case class NumericAxis(
   
   // Fluent Interface
   
+  /**
+    * Sets the rotations and display side to the default of a min-side X-axis.
+    *
+    * @return Modified axis.
+    */
   def asMinSideXAxis: NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = 90)), displaySide = Axis.DisplaySide.Min)
+
+  /**
+    * Sets the rotations and display side to the default of a max-side X-axis.
+    *
+    * @return Modified axis.
+    */
   def asMaxSideXAxis: NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = -90)), displaySide = Axis.DisplaySide.Max)
+
+  /**
+    * Sets the rotations and display side to the default of a min-side Y-axis.
+    *
+    * @return Modified axis.
+    */
   def asMinSideYAxis: NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = 90)), displaySide = Axis.DisplaySide.Min)
+
+  /**
+    * Sets the rotations and display side to the default of a max-side Y-axis.
+    *
+    * @return Modified axis.
+    */
   def asMaxSideYAxis: NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = 90)), displaySide = Axis.DisplaySide.Max)
   
+  /**
+    * Gives back a new axis with a fixed minimum value.
+    *
+    * @param newMin New fixed minimum value.
+    * @return Modified axis.
+    */
+  def updatedMin(newMin: Double): NumericAxis = copy(min = Some(newMin))
+
+  /**
+    * Gives back a new axis with a min that is automatically set by the data.
+    *
+    * @return Modified axis.
+    */
+  def autoMin: NumericAxis = copy(min = None)
+
+  /**
+    * Gives back a new axis with a fixed maximum value.
+    *
+    * @param newMin New fixed maximum value.
+    * @return Modified axis.
+    */
+  def updatedMax(newMax: Double): NumericAxis = copy(max = Some(newMax))
+
+  /**
+    * Gives back a new axis with a max that is automatically set by the data.
+    *
+    * @return Modified axis.
+    */
+  def autoMax: NumericAxis = copy(max = None)
+
+  /**
+    * Gives back a modified axis with the specified scale style.
+    *
+    * @param newStyle The new scale style.
+    * @return Modified axis.
+    */
   def updatedScaleStyle(newStyle: Axis.ScaleStyle.Value): NumericAxis = copy(style = newStyle) 
-  def updatedScaleStyle(f: Axis.ScaleStyle.Value => Axis.ScaleStyle.Value): NumericAxis = copy(style = f(style))
+
+  /**
+    * Gives back a modified axis with the specified number format. If the label setting had been empty, a new one with defaults for other values will be created.
+    *
+    * @param f The new format string. This uses the format method in java.lang.String which takes roughly C-style format strings.
+    * @return Modified axis.
+    */
+  def updatedNumberFormat(f: String): NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(numberFormat = f))
+      .orElse(Some(Axis.LabelSettings(0.0, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), f))))
+
+
+  /**
+    * Gives back a modified axis with the angle on the labels set to the given value. If the label setting had been empty, 
+    * a new one with defaults for other values will be created.
+    *
+    * @param newAngle The new value for the angle of rotation for the tick lables.
+    * @return The modified axis.
+    */
+  def updatedLabelAngle(newAngle: Double): NumericAxis = copy(tickLabelInfo = tickLabelInfo.map(_.copy(angle = newAngle))
+      .orElse(Some(Axis.LabelSettings(newAngle, Renderer.FontData("Ariel", Renderer.FontStyle.Plain), "%1.1f"))))
+
+  /**
+    * Gives back an updated axis with the specified spacing between tick marks.
+    *
+    * @param space New spacing between tick marks.
+    * @return Modified axis.
+    */
+  def updatedTickSpacing(space: Double): NumericAxis = copy(tickSpacing = Some(space))
+
+  /**
+    * Gives back an updated axis where the spacing between tick marks is determined automatically.
+    *
+    * @return Modified axis.
+    */
+  def autoTickSpacing: NumericAxis = copy(tickSpacing = None)
+
+  /**
+    * Gives back a modified axis with the specified tick style.
+    *
+    * @param tickStyle The new tick style.
+    * @return The modified axis.
+    */
+  def updatedTickStyle(tickStyle: Axis.TickStyle.Value): NumericAxis = copy(tickStyle = tickStyle)
+
+  /**
+    * Gives back a modified axis with the specified name. If the name setting had been empty, a new one with defaults for other values will be created.
+    *
+    * @param newName The new string to use for the name of the axis.
+    * @return The modified axis.
+    */
+  def updatedName(newName: String): NumericAxis = copy(name = name.map(_.copy(name = newName))
+      .orElse(Some(Axis.NameSettings(newName, Renderer.FontData("Ariel", Renderer.FontStyle.Plain)))))
+
+  /**
+    * Returns a modifed axis that displays on the minimum side of the graph (left or bottom). Note that this method does not change the rotation
+    * angle of the labels.
+    *
+    * @return the modified axis.
+    */
+  def minSide: NumericAxis = copy(displaySide = Axis.DisplaySide.Min)
+
+  /**
+    * Returns a modifed axis that displays on the maximum side of the graph (left or bottom). Note that this method does not change the rotation
+    * angle of the labels.
+    *
+    * @return the modified axis.
+    */
+  def maxSide: NumericAxis = copy(displaySide = Axis.DisplaySide.Max)
   
-  def updatedName(newName: String): NumericAxis = copy(name = name.map(_.copy(name = newName)))
-  // TODO - More matching methods go here.
-  
-  // TODO - More fluent interface here.
+  /**
+    * Shortened alias for updatedMin.
+    *
+    * @param newMin New fixed minimum value.
+    * @return The modified axis.
+    */
+  def min(newMin: Double): NumericAxis = updatedMin(newMin)
+
+  /**
+    * Shortened alias for updatedMax.
+    *
+    * @param newMax New fixed maximum value.
+    * @return The modified axis.
+    */
+  def max(newMax: Double): NumericAxis = updatedMax(newMax)
+
+  /**
+    * Alias for updatedScaleStyle.
+    *
+    * @param newStyle The new scale style.
+    * @return The modified axis.
+    */
+  def scaleStyle(newStyle: Axis.ScaleStyle.Value): NumericAxis = updatedScaleStyle(newStyle)
+
+  /**
+    * Alias for updatedNumberFormat.
+    *
+    * @param f The new format string.
+    * @return The modified axis.
+    */
+  def numberFormat(f: String): NumericAxis = updatedNumberFormat(f)
+
+  /**
+    * Alias for updatedTickSpacing.
+    *
+    * @param space The new spacing between ticks.
+    * @return The modified axis.
+    */
+  def spacing(space: Double): NumericAxis = updatedTickSpacing(space)
+
+  /**
+    * Alias for updatedTickStyle.
+    *
+    * @param tstyle The new tick style.
+    * @return The modified axis.
+    */
+  def ticks(tstyle: Axis.TickStyle.Value): NumericAxis = updatedTickStyle(tstyle)
   
   // Private methods
 
@@ -104,7 +273,7 @@ case class NumericAxis(
   }
 
   private def render(r: Renderer, tickBounds: Bounds, tickFontSize: Double, nameBounds: Bounds, aggBounds: Option[Bounds], nextAxis: Option[Axis], 
-      nameFontSize: Double, orient: Axis.RenderOrientation.Value, tickLocs: Seq[Double], toPixels: Axis.UnitConverter): Option[Bounds] = {
+      nameFontSize: Double, orient: Axis.RenderOrientation.Value, tickLocs: Seq[Double], toPixels: Axis.UnitConverter, hasAdjacentCell: Boolean): Option[Bounds] = {
 
     // Draw ticks and labels
     orient match {
@@ -118,7 +287,7 @@ case class NumericAxis(
           Axis.TickStyle.drawTick(r, tickStyle, orient, px, cy, displaySide, tickLen)
           tickLabelInfo.foreach { tli =>
             val textAlign = if (tli.angle % 180.0 == 0) Renderer.HorizontalAlign.Center else Renderer.HorizontalAlign.Left
-            r.drawText(tli.numberFormat.format(x), px, labelY, textAlign, tli.angle)
+            if (!hasAdjacentCell || px < tickBounds.x + tickBounds.width - tickFontSize) r.drawText(tli.numberFormat.format(x), px, labelY, textAlign, tli.angle)
           }
         }
       case Axis.RenderOrientation.YAxis =>
@@ -131,7 +300,7 @@ case class NumericAxis(
           Axis.TickStyle.drawTick(r, tickStyle, orient, cx, py, displaySide, tickLen)
           tickLabelInfo.foreach { tli =>
             val textAlign = if ((tli.angle + 90) % 180.0 == 0) Renderer.HorizontalAlign.Center else if (displaySide == Axis.DisplaySide.Min) Renderer.HorizontalAlign.Right else Renderer.HorizontalAlign.Left
-            r.drawText(tli.numberFormat.format(y), labelX, py, textAlign, tli.angle)
+            if (!hasAdjacentCell || py > tickBounds.y + tickFontSize) r.drawText(tli.numberFormat.format(y), labelX, py, textAlign, tli.angle)
           }
         }
     }
@@ -186,6 +355,7 @@ case class NumericAxis(
 }
 
 object NumericAxis {
+<<<<<<< HEAD
   def defaultHorizontalAxis(key: String, text: String, numFormat: String = "%1.1f") = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     NumericAxis(key, None, None, None, Axis.TickStyle.Both,
@@ -197,6 +367,20 @@ object NumericAxis {
     NumericAxis(key, None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, numFormat)), Some(Axis.NameSettings(text, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
   }
+=======
+  def defaultHorizontalAxis(key: String, xLabel: String, format: String = "%1.1f", xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): NumericAxis = {
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    NumericAxis("x", None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min, xType)
+  }
+
+  def defaultVerticalAxis(key: String, yLabel: String, format: String = "%1.1f", yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): NumericAxis = {
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    NumericAxis("y", None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
+  }
+
+>>>>>>> d78d469f7afae1b593cc9f17421c4f152e7d44ba
 }
 
 /**
@@ -226,7 +410,7 @@ case class CategoryAxis(
         }
         c -> range
     }.toMap
-    (catLocs, catSize, nameSize, (tfs, nfs, aggBounds, nextAxis) => render(r, catBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, categories, catLocs))
+    (catLocs, catSize, nameSize, (tfs, nfs, aggBounds, nextAxis, hasAdjacentCell) => render(r, catBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, categories, catLocs))
   }
 
   def boundsAndSizing(r: Renderer, bounds: Bounds, orient: Axis.RenderOrientation.Value, categories: Seq[String]): (Bounds, Double, Bounds, Double) = {
@@ -293,7 +477,7 @@ object Axis {
   type UnitConverter = Double => Double
   type CategoryLoc = String => (Double, Double)
   type FontSizer = (Renderer, Bounds, Axis.RenderOrientation.Value) => (Double, Double)
-  type AxisRenderer = (Double, Double, Option[Bounds], Option[Axis]) => Option[Bounds]
+  type AxisRenderer = (Double, Double, Option[Bounds], Option[Axis], Boolean) => Option[Bounds]
   case class LabelSettings(angle: Double, font: Renderer.FontData, numberFormat: String)
   case class NameSettings(name: String, font: Renderer.FontData)
 

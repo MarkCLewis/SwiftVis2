@@ -1,11 +1,18 @@
 # SwiftVis
 
 This project is an updated version of SwiftVis written in Scala with better support for parallelism, support for rendering with diverse platforms,
-and a programming interface. I try to keep a reasonably up to date API posted [on my personal site](http://www.cs.trinity.edu/~mlewis/SwiftVis2/api/).
+and a programming interface. I try to keep a reasonably up to date API posted [on my personal site](https://www.cs.trinity.edu/~mlewis/SwiftVis2/).
 
 SwiftVis2 is still in the early stages. I am focusing on adding basic plotting capability with the programming interface currently.
 The graphical dataflow interface and other features will follow. Currently I also have a research student, Nick Smoker, working on making
 the code cross-compile for Scala.js and Scala Native so that plotting works on all available platforms.
+
+## Updates
+
+- 6/21/2020: Pushed an update to use JavaFX for Java 11. If you had built previously, you might need to manually delete fxrenderer/target
+for this to compile and run nicely. Doing a 'clean' in sbt doesn't remove some files that need to be updated. Unfortunately, this does break
+the Spark tests, even after updating to Spark 3.0.0, which is supposed to work with Java 11. We'll have to look into this more, but the spark
+extentions probably aren't safe to use right now. More testing is needed with manual pulling of the data.
 
 ## Installation
 
@@ -17,11 +24,11 @@ you can use it in one of two ways.
   * `libraryDependencies += "edu.trinity" %% "swiftvis2jvm" % "0.1.0-SNAPSHOT"`
   * `libraryDependencies += "edu.trinity" %% "swiftvis2fx" % "0.1.0-SNAPSHOT"`
   * `libraryDependencies += "edu.trinity" %% "swiftvis2swing" % "0.1.0-SNAPSHOT"`
-2. Compile and package this project and put the JAR file in the `lib` directory of your sbt project.
+2. Compile and package this project and put the JAR files in the `lib` directory of your sbt project.
 
 If you want to use SwiftVis2 with Spark, you should probably use the `publishLocal` option, but with some modifications.
 
-1. Spark can now support Scala 2.12, but many versions don't do so by default. Check your version. If your Spark is using Scala 2.11 then run `++2.11.12` to set the Scala version to 2.11. You can update the last value to whatever the latest release is.
+1. Spark now supports Scala 2.12, but many versions don't do so by default. Check your version. If your Spark is using Scala 2.11 then run `++2.11.12` to set the Scala version to 2.11. You can update the last value to whatever the latest release is.
 2. Run `publishLocal` to publish the 2.11 version of the main SwiftVis2 library.
 3. Run `spark/publishLocal` to publish the Spark integration library.
 4. Add the following lines to your build.sbt. Again, you probably won't use both JavaFX and Swing so leave out the one you don't need.
@@ -94,3 +101,23 @@ val yPnt = xPnt.map(a => a * a)
 val plot = Plot.scatterPlot(xPnt, yPnt, "Quadratic", "x", "y")
 FXRenderer(plot)
 ```
+
+### Polynote Integration
+
+SwiftVis2 integrates with [the Polynote Scala notebook](https://polynote.org/). To use SwiftVis2 with Polynote, you will first need to publishLocal the dependencies with `coreJVM/publishLocal`, `swing/publishLocal` and `polynote/publishLocal`. After this, add the following lines to the scala dependencies section of the `config.yml` file in your polynote directory: 
+  * `- edu.trinity:swiftvis2polynote_2.12:0.1.0-SNAPSHOT`
+  * `- edu.trinity:edu.trinity:swiftvis2core_2.12:0.1.0-SNAPSHOT`
+  * `- edu.trinity:swiftvis2swing_2.12:0.1.0-SNAPSHOT`
+
+More information on the formatting of the config.yml file can be found in the `config-template.yml` file included with polynote.
+
+After this, you should make sure the integration is running by inputting the following code into a notebook:
+```scala
+import swiftvis2.plotting.Plot
+
+val data = 1 to 10
+
+Plot.scatterPlot(data, data, title = "Hooray, it works!")
+```
+
+If a plot pops up, you're good to use SwiftVis2 with Polynote, the same as you would in any other setting (minus the rendering calls). Note that Polynote does not update dependencies for existing notebooks, so if you want to use SwiftVis2 with a notebook you've already made, you'll need to add the dependencies to that notebook manually.

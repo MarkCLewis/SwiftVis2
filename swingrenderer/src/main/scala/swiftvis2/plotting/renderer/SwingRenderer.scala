@@ -40,7 +40,7 @@ object SwingRenderer {
 
   def apply(plot: Plot, width: Double = 800, height: Double = 800, makeMain: Boolean = false): Updater = {
     val updater = new SwingPanelUpdater(plot)
-    val frame = new JFrame("Plot Testing")
+    val frame = new JFrame("SwiftVis2 Plot")
     frame.add(updater.panel)
     val menuBar = new JMenuBar()
     val fileMenu = new JMenu("File")
@@ -88,7 +88,7 @@ object SwingRenderer {
     frame.setJMenuBar(menuBar)
     // TODO - Add a menubar with printing options.
     frame.setSize(width.toInt, height.toInt)
-    if (makeMain) frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+    if (makeMain) frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setVisible(true)
     updater
   }

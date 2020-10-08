@@ -114,7 +114,7 @@ case class PlotGrid(
         //      for (i <- 0 until minXAxisCount; if i < axisSeq.size) {
         if (axisSeq.nonEmpty) {
           val nextAxis = if (index >= minXAxes.length - 1 || minXAxes(index + 1).isEmpty) None else Some(axes(minXAxes(index + 1)(0)))
-          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis)
+          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis, index < minXAxes.length - 1)
         } else None
     }
     val maxXAxisCount = maxXAxes.maxBy(_.size).size
@@ -124,7 +124,7 @@ case class PlotGrid(
         //      for (i <- 0 until maxXAxisCount; if i < axisSeq._1.size) {
         if (axisSeq.nonEmpty) {
           val nextAxis = if (index >= maxXAxes.length - 1 || maxXAxes(index + 1).isEmpty) None else Some(axes(maxXAxes(index + 1)(0)))
-          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis)
+          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis, index < minXAxes.length - 1)
         } else None
     }
 
@@ -136,7 +136,7 @@ case class PlotGrid(
         //      for (i <- 0 until minYAxisCount; if i < axisSeq._1.size) {
         if (axisSeq.nonEmpty) {
           val nextAxis = if (index >= minYAxes.length - 1 || minYAxes(index + 1).isEmpty) None else Some(axes(minYAxes(index + 1)(0)))
-          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis)
+          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis, index > 0)
         } else None
     }
     val maxYAxisCount = maxYAxes.maxBy(_.size).size
@@ -146,7 +146,7 @@ case class PlotGrid(
         //      for (i <- 0 until maxYAxisCount; if i < axisSeq._1.size) {
         if (axisSeq.nonEmpty) {
           val nextAxis = if (index >= maxYAxes.length - 1 || maxYAxes(index + 1).isEmpty) None else Some(axes(maxYAxes(index + 1)(0)))
-          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis)
+          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis, index > 0)
         } else None
     }
   }
@@ -185,6 +185,13 @@ case class PlotGrid(
     val pcell = prow(col)
     val p2d = pcell(stack)
     copy(plots = plots.updated(row, prow.updated(col, pcell.updated(stack, p2d.copy(xAxisName = axisName)))))
+  }
+
+  def updatedStyleYAxis(axisName: String, row: Int = 0, col: Int = 0, stack: Int = 0): PlotGrid = {
+    val prow = plots(row)
+    val pcell = prow(col)
+    val p2d = pcell(stack)
+    copy(plots = plots.updated(row, prow.updated(col, pcell.updated(stack, p2d.copy(yAxisName = axisName)))))
   }
 
   // Private Methods
