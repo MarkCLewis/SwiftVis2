@@ -355,32 +355,17 @@ case class NumericAxis(
 }
 
 object NumericAxis {
-<<<<<<< HEAD
-  def defaultHorizontalAxis(key: String, text: String, numFormat: String = "%1.1f") = {
+  def defaultHorizontalAxis(text: String, key: String = "x", numFormat: String = "%1.1f", xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear) = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     NumericAxis(key, None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(90.0, font, numFormat)), Some(Axis.NameSettings(text, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(90.0, font, numFormat)), Some(Axis.NameSettings(text, font)), Axis.DisplaySide.Min, xType)
   }
 
-  def defaultVerticalAxis(key: String, text: String, numFormat: String = "%1.1f") = {
+  def defaultVerticalAxis(text: String, key: String = "y", numFormat: String = "%1.1f", yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear) = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     NumericAxis(key, None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, numFormat)), Some(Axis.NameSettings(text, font)), Axis.DisplaySide.Min, Axis.ScaleStyle.Linear)
+      Some(Axis.LabelSettings(0.0, font, numFormat)), Some(Axis.NameSettings(text, font)), Axis.DisplaySide.Min, yType)
   }
-=======
-  def defaultHorizontalAxis(key: String, xLabel: String, format: String = "%1.1f", xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): NumericAxis = {
-    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    NumericAxis("x", None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min, xType)
-  }
-
-  def defaultVerticalAxis(key: String, yLabel: String, format: String = "%1.1f", yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear): NumericAxis = {
-    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    NumericAxis("y", None, None, None, Axis.TickStyle.Both,
-      Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
-  }
-
->>>>>>> d78d469f7afae1b593cc9f17421c4f152e7d44ba
 }
 
 /**
