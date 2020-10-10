@@ -24,7 +24,7 @@ case class PlotGrid(
   axes:     Map[String, Axis],
   xWeights: Seq[Double],
   yWeights: Seq[Double],
-  axisFrac: Double                = 0.15) extends Plottable {
+  axisFrac: Double = 0.15) extends Plottable {
 
   if (yWeights.length != plots.length) println(s"Warning!!! Rows in plots not matched by yWeights. ${plots.length} != ${yWeights.length}")
   if (plots.nonEmpty && xWeights.length != plots.head.length) println(s"Warning!!! Columns in plots not matched by xWeights. ${plots.head.length} != ${xWeights.length}")
