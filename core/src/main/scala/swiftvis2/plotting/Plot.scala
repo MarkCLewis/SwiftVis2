@@ -67,6 +67,13 @@ case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String
   }
   
   /**
+   * Generate a new plot with an updated grid data.
+   */
+  def updatedPlotGrid(f: PlotGrid => PlotGrid, gridName: String = "Main"): Plot = {
+    copy(grids = grids + (gridName -> grids(gridName).copy(grid = f(grids(gridName).grid))))
+  }
+  
+  /**
    * Generate a new plot with an updated bounds for a grid. 
    */
   def updatedGridBounds(f: Bounds => Bounds, gridName: String = "Main"): Plot = {

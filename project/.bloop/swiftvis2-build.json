@@ -1,1756 +1,2246 @@
 {
-    "version" : "1.1.2",
-    "project" : {
-        "name" : "swiftvis2-build",
-        "directory" : "/home/mlewis/workspace/SwiftVis2/project",
-        "sources" : [
-            "/home/mlewis/workspace/SwiftVis2/project/src/main/scala-2.12",
+    "version": "1.4.0",
+    "project": {
+        "name": "swiftvis2-build",
+        "directory": "/home/mlewis/workspace/SwiftVis2/project",
+        "workspaceDir": "/home/mlewis/workspace/SwiftVis2/project",
+        "sources": [
             "/home/mlewis/workspace/SwiftVis2/project/src/main/scala",
+            "/home/mlewis/workspace/SwiftVis2/project/src/main/scala-2.12",
+            "/home/mlewis/workspace/SwiftVis2/project/src/main/scala-2",
             "/home/mlewis/workspace/SwiftVis2/project/src/main/java",
             "/home/mlewis/workspace/SwiftVis2/project/src/main/scala-sbt-1.0",
             "/home/mlewis/workspace/SwiftVis2/project/target/scala-2.12/sbt-1.0/src_managed/main"
         ],
-        "dependencies" : [
+        "dependencies": [
+            
         ],
-        "classpath" : [
-            "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/ch.epfl.scala/sbt-bloop/jars/sbt-bloop-1.3.2.jar",
-            "/home/mlewis/.ivy2/cache/ch.epfl.scala/bloop-config_2.12/jars/bloop-config_2.12-1.3.2.jar",
-            "/home/mlewis/.sbt/boot/scala-2.12.7/lib/scala-library.jar",
-            "/home/mlewis/.ivy2/cache/io.circe/circe-parser_2.12/jars/circe-parser_2.12-0.9.3.jar",
-            "/home/mlewis/.ivy2/cache/io.circe/circe-jawn_2.12/jars/circe-jawn_2.12-0.9.3.jar",
-            "/home/mlewis/.ivy2/cache/io.circe/circe-core_2.12/jars/circe-core_2.12-0.9.3.jar",
-            "/home/mlewis/.ivy2/cache/io.circe/circe-numbers_2.12/jars/circe-numbers_2.12-0.9.3.jar",
-            "/home/mlewis/.ivy2/cache/org.typelevel/cats-core_2.12/jars/cats-core_2.12-1.0.1.jar",
-            "/home/mlewis/.ivy2/cache/org.typelevel/cats-macros_2.12/jars/cats-macros_2.12-1.0.1.jar",
-            "/home/mlewis/.ivy2/cache/org.typelevel/machinist_2.12/jars/machinist_2.12-0.6.2.jar",
-            "/home/mlewis/.sbt/boot/scala-2.12.7/lib/scala-reflect.jar",
-            "/home/mlewis/.ivy2/cache/org.typelevel/cats-kernel_2.12/jars/cats-kernel_2.12-1.0.1.jar",
-            "/home/mlewis/.ivy2/cache/org.spire-math/jawn-parser_2.12/jars/jawn-parser_2.12-0.11.1.jar",
-            "/home/mlewis/.ivy2/cache/io.circe/circe-derivation_2.12/jars/circe-derivation_2.12-0.9.0-M3.jar",
-            "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.scalameta/sbt-metals/jars/sbt-metals-0.7.6.jar",
-            "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/com.typesafe.sbteclipse/sbteclipse-plugin/jars/sbteclipse-plugin-5.2.4.jar",
-            "/home/mlewis/.ivy2/cache/org.scalaz/scalaz-core_2.12/bundles/scalaz-core_2.12-7.2.14.jar",
-            "/home/mlewis/.ivy2/cache/org.scalaz/scalaz-effect_2.12/bundles/scalaz-effect_2.12-7.2.14.jar",
-            "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.scalastyle/scalastyle-sbt-plugin/jars/scalastyle-sbt-plugin-1.0.0.jar",
-            "/home/mlewis/.ivy2/cache/org.scalastyle/scalastyle_2.12/jars/scalastyle_2.12-1.0.0.jar",
-            "/home/mlewis/.ivy2/cache/org.scalariform/scalariform_2.12/jars/scalariform_2.12-0.2.0.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-lang.modules/scala-xml_2.12/bundles/scala-xml_2.12-1.0.6.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-lang.modules/scala-parser-combinators_2.12/bundles/scala-parser-combinators_2.12-1.0.6.jar",
-            "/home/mlewis/.ivy2/cache/com.typesafe/config/bundles/config-1.2.0.jar",
-            "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.xerial.sbt/sbt-sonatype/jars/sbt-sonatype-2.3.jar",
-            "/home/mlewis/.ivy2/cache/org.apache.httpcomponents/httpclient/jars/httpclient-4.2.6.jar",
-            "/home/mlewis/.ivy2/cache/org.apache.httpcomponents/httpcore/jars/httpcore-4.2.5.jar",
-            "/home/mlewis/.ivy2/cache/commons-logging/commons-logging/jars/commons-logging-1.1.1.jar",
-            "/home/mlewis/.ivy2/cache/commons-codec/commons-codec/jars/commons-codec-1.6.jar",
-            "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/com.jsuereth/sbt-pgp/jars/sbt-pgp-1.1.1.jar",
-            "/home/mlewis/.ivy2/cache/com.jsuereth/pgp-library_2.12/jars/pgp-library_2.12-1.1.1.jar",
-            "/home/mlewis/.ivy2/cache/org.bouncycastle/bcpg-jdk15on/jars/bcpg-jdk15on-1.51.jar",
-            "/home/mlewis/.ivy2/cache/org.bouncycastle/bcprov-jdk15on/jars/bcprov-jdk15on-1.51.jar",
-            "/home/mlewis/.ivy2/cache/com.eed3si9n/gigahorse-okhttp_2.12/jars/gigahorse-okhttp_2.12-0.3.0.jar",
-            "/home/mlewis/.ivy2/cache/com.eed3si9n/gigahorse-core_2.12/jars/gigahorse-core_2.12-0.3.0.jar",
-            "/home/mlewis/.ivy2/cache/com.typesafe/ssl-config-core_2.12/bundles/ssl-config-core_2.12-0.2.2.jar",
-            "/home/mlewis/.ivy2/cache/org.reactivestreams/reactive-streams/jars/reactive-streams-1.0.0.jar",
-            "/home/mlewis/.ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.7.25.jar",
-            "/home/mlewis/.ivy2/cache/com.squareup.okhttp3/okhttp/jars/okhttp-3.7.0.jar",
-            "/home/mlewis/.ivy2/cache/com.squareup.okio/okio/jars/okio-1.12.0.jar",
-            "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.scala-js/sbt-scalajs/jars/sbt-scalajs-0.6.29.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-js/scalajs-tools_2.12/jars/scalajs-tools_2.12-0.6.29.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-js/scalajs-ir_2.12/jars/scalajs-ir_2.12-0.6.29.jar",
-            "/home/mlewis/.ivy2/cache/com.google.javascript/closure-compiler/jars/closure-compiler-v20190513.jar",
-            "/home/mlewis/.ivy2/cache/com.google.javascript/closure-compiler-externs/jars/closure-compiler-externs-v20190513.jar",
-            "/home/mlewis/.ivy2/cache/args4j/args4j/bundles/args4j-2.0.26.jar",
-            "/home/mlewis/.ivy2/cache/com.google.errorprone/error_prone_annotations/jars/error_prone_annotations-2.3.1.jar",
-            "/home/mlewis/.ivy2/cache/com.google.guava/guava/bundles/guava-25.1-jre.jar",
-            "/home/mlewis/.ivy2/cache/com.google.code.findbugs/jsr305/jars/jsr305-3.0.1.jar",
-            "/home/mlewis/.ivy2/cache/org.checkerframework/checker-qual/jars/checker-qual-2.0.0.jar",
-            "/home/mlewis/.ivy2/cache/com.google.j2objc/j2objc-annotations/jars/j2objc-annotations-1.1.jar",
-            "/home/mlewis/.ivy2/cache/org.codehaus.mojo/animal-sniffer-annotations/jars/animal-sniffer-annotations-1.14.jar",
-            "/home/mlewis/.ivy2/cache/com.google.code.gson/gson/jars/gson-2.7.jar",
-            "/home/mlewis/.ivy2/cache/com.google.jsinterop/jsinterop-annotations/jars/jsinterop-annotations-1.0.0.jar",
-            "/home/mlewis/.ivy2/cache/com.googlecode.json-simple/json-simple/bundles/json-simple-1.1.1.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-js/scalajs-js-envs_2.12/jars/scalajs-js-envs_2.12-0.6.29.jar",
-            "/home/mlewis/.ivy2/cache/org.mozilla/rhino/jars/rhino-1.7.6.jar",
-            "/home/mlewis/.ivy2/cache/org.webjars/envjs/jars/envjs-1.2.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-js/scalajs-sbt-test-adapter_2.12/jars/scalajs-sbt-test-adapter_2.12-0.6.29.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/test-interface/jars/test-interface-1.0.jar",
-            "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.portable-scala/sbt-platform-deps/jars/sbt-platform-deps-1.0.0.jar",
-            "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.portable-scala/sbt-scalajs-crossproject/jars/sbt-scalajs-crossproject-0.6.1.jar",
-            "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.portable-scala/sbt-crossproject/jars/sbt-crossproject-0.6.1.jar",
-            "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.scala-native/sbt-scala-native/jars/sbt-scala-native-0.3.9.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-native/tools_2.12/jars/tools_2.12-0.3.9.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-native/nir_2.12/jars/nir_2.12-0.3.9.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-native/util_2.12/jars/util_2.12-0.3.9.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-native/test-runner_2.12/jars/test-runner_2.12-0.3.9.jar",
-            "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.portable-scala/sbt-scala-native-crossproject/jars/sbt-scala-native-crossproject-0.6.1.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/sbt/jars/sbt-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/main_2.12/jars/main_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/logic_2.12/jars/logic_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/collections_2.12/jars/collections_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/com.eed3si9n/sjson-new-scalajson_2.12/jars/sjson-new-scalajson_2.12-0.8.2.jar",
-            "/home/mlewis/.ivy2/cache/com.eed3si9n/sjson-new-core_2.12/jars/sjson-new-core_2.12-0.8.2.jar",
-            "/home/mlewis/.ivy2/cache/com.eed3si9n/shaded-scalajson_2.12/jars/shaded-scalajson_2.12-1.0.0-M4.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/util-position_2.12/jars/util-position_2.12-1.2.4.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/util-relation_2.12/jars/util-relation_2.12-1.2.4.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/actions_2.12/jars/actions_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/completion_2.12/jars/completion_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/jline/jline/jars/jline-2.14.6.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/io_2.12/jars/io_2.12-1.2.2.jar",
-            "/home/mlewis/.ivy2/cache/com.swoval/apple-file-events/jars/apple-file-events-1.3.2.jar",
-            "/home/mlewis/.ivy2/cache/net.java.dev.jna/jna/jars/jna-4.5.0.jar",
-            "/home/mlewis/.ivy2/cache/net.java.dev.jna/jna-platform/jars/jna-platform-4.5.0.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/util-control_2.12/jars/util-control_2.12-1.2.4.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/run_2.12/jars/run_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/util-logging_2.12/jars/util-logging_2.12-1.2.4.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/util-interface/jars/util-interface-1.2.4.jar",
-            "/home/mlewis/.ivy2/cache/org.apache.logging.log4j/log4j-api/jars/log4j-api-2.11.1.jar",
-            "/home/mlewis/.ivy2/cache/org.apache.logging.log4j/log4j-core/jars/log4j-core-2.11.1.jar",
-            "/home/mlewis/.ivy2/cache/com.lmax/disruptor/jars/disruptor-3.4.2.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-classpath_2.12/jars/zinc-classpath_2.12-1.2.5.jar",
-            "/home/mlewis/.sbt/boot/scala-2.12.7/lib/scala-compiler.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/compiler-interface/jars/compiler-interface-1.2.5.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/launcher-interface/jars/launcher-interface-1.0.4.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/task-system_2.12/jars/task-system_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/tasks_2.12/jars/tasks_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/util-cache_2.12/jars/util-cache_2.12-1.2.4.jar",
-            "/home/mlewis/.ivy2/cache/com.eed3si9n/sjson-new-murmurhash_2.12/jars/sjson-new-murmurhash_2.12-0.8.2.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/testing_2.12/jars/testing_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/test-agent/jars/test-agent-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/util-tracking_2.12/jars/util-tracking_2.12-1.2.4.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-apiinfo_2.12/jars/zinc-apiinfo_2.12-1.2.5.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/compiler-bridge_2.12/jars/compiler-bridge_2.12-1.2.5.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-classfile_2.12/jars/zinc-classfile_2.12-1.2.5.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/librarymanagement-core_2.12/jars/librarymanagement-core_2.12-1.2.4.jar",
-            "/home/mlewis/.ivy2/cache/com.jcraft/jsch/jars/jsch-0.1.54.jar",
-            "/home/mlewis/.ivy2/cache/com.squareup.okhttp3/okhttp-urlconnection/jars/okhttp-urlconnection-3.7.0.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-ivy-integration_2.12/jars/zinc-ivy-integration_2.12-1.2.5.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-compile-core_2.12/jars/zinc-compile-core_2.12-1.2.5.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc_2.12/jars/zinc_2.12-1.2.5.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-core_2.12/jars/zinc-core_2.12-1.2.5.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-persist_2.12/jars/zinc-persist_2.12-1.2.5.jar",
-            "/home/mlewis/.ivy2/cache/com.trueaccord.scalapb/scalapb-runtime_2.12/jars/scalapb-runtime_2.12-0.6.0.jar",
-            "/home/mlewis/.ivy2/cache/com.trueaccord.lenses/lenses_2.12/jars/lenses_2.12-0.4.12.jar",
-            "/home/mlewis/.ivy2/cache/com.lihaoyi/fastparse_2.12/jars/fastparse_2.12-0.4.2.jar",
-            "/home/mlewis/.ivy2/cache/com.lihaoyi/fastparse-utils_2.12/jars/fastparse-utils_2.12-0.4.2.jar",
-            "/home/mlewis/.ivy2/cache/com.lihaoyi/sourcecode_2.12/jars/sourcecode_2.12-0.1.3.jar",
-            "/home/mlewis/.ivy2/cache/com.google.protobuf/protobuf-java/bundles/protobuf-java-3.3.1.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/sbinary_2.12/jars/sbinary_2.12-0.5.0.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/main-settings_2.12/jars/main-settings_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/command_2.12/jars/command_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/protocol_2.12/jars/protocol_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt.ipcsocket/ipcsocket/jars/ipcsocket-1.0.0.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/template-resolver/jars/template-resolver-0.1.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/core-macros_2.12/jars/core-macros_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/scripted-sbt-redux_2.12/jars/scripted-sbt-redux_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/util-scripted_2.12/jars/util-scripted_2.12-1.2.4.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/scripted-plugin_2.12/jars/scripted-plugin_2.12-1.2.8.jar",
-            "/home/mlewis/.ivy2/cache/org.apache.logging.log4j/log4j-slf4j-impl/jars/log4j-slf4j-impl-2.11.1.jar",
-            "/home/mlewis/.ivy2/cache/com.github.cb372/scalacache-caffeine_2.12/jars/scalacache-caffeine_2.12-0.20.0.jar",
-            "/home/mlewis/.ivy2/cache/com.github.cb372/scalacache-core_2.12/jars/scalacache-core_2.12-0.20.0.jar",
-            "/home/mlewis/.ivy2/cache/com.github.ben-manes.caffeine/caffeine/jars/caffeine-2.5.6.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/librarymanagement-ivy_2.12/jars/librarymanagement-ivy_2.12-1.2.4.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt.ivy/ivy/jars/ivy-2.3.0-sbt-cb9cc189e9f3af519f9f102e6c5d446488ff6832.jar",
-            "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-compile_2.12/jars/zinc-compile_2.12-1.2.5.jar"
+        "classpath": [
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/sbt/1.4.0/sbt-1.4.0.jar",
+            "/home/mlewis/.sbt/boot/scala-2.12.12/lib/scala-library.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/ch/epfl/scala/sbt-bloop_2.12_1.0/1.4.4-13-408f4d80/sbt-bloop-1.4.4-13-408f4d80.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scalastyle/scalastyle-sbt-plugin_2.12_1.0/1.0.0/scalastyle-sbt-plugin-1.0.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/xerial/sbt/sbt-sonatype_2.12_1.0/2.3/sbt-sonatype-2.3.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/com.jsuereth/sbt-pgp/scala_2.12/sbt_1.0/1.1.1/jars/sbt-pgp.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.scala-js/sbt-scalajs/scala_2.12/sbt_1.0/0.6.32/jars/sbt-scalajs.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-scalajs-crossproject/scala_2.12/sbt_1.0/0.6.1/jars/sbt-scalajs-crossproject.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.scala-native/sbt-scala-native/scala_2.12/sbt_1.0/0.3.9/jars/sbt-scala-native.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-scala-native-crossproject/scala_2.12/sbt_1.0/0.6.1/jars/sbt-scala-native-crossproject.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/main_2.12/1.4.0/main_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/io_2.12/1.4.0/io_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/net/java/dev/jna/jna/5.5.0/jna-5.5.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/net/java/dev/jna/jna-platform/5.5.0/jna-platform-5.5.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/code/gson/gson/2.7/gson-2.7.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scalastyle/scalastyle_2.12/1.0.0/scalastyle_2.12-1.0.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/apache/httpcomponents/httpclient/4.2.6/httpclient-4.2.6.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/com.jsuereth/pgp-library_2.12/1.1.1/jars/pgp-library_2.12.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/gigahorse-okhttp_2.12/0.5.0/gigahorse-okhttp_2.12-0.5.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-js/scalajs-tools_2.12/0.6.32/scalajs-tools_2.12-0.6.32.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-js/scalajs-js-envs_2.12/0.6.32/scalajs-js-envs_2.12-0.6.32.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-js/scalajs-sbt-test-adapter_2.12/0.6.32/scalajs-sbt-test-adapter_2.12-0.6.32.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-platform-deps/scala_2.12/sbt_1.0/1.0.0/jars/sbt-platform-deps.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-crossproject/scala_2.12/sbt_1.0/0.6.1/jars/sbt-crossproject.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/tools_2.12/0.3.9/tools_2.12-0.3.9.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/test-runner_2.12/0.3.9/test-runner_2.12-0.3.9.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/logic_2.12/1.4.0/logic_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/actions_2.12/1.4.0/actions_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/main-settings_2.12/1.4.0/main-settings_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/run_2.12/1.4.0/run_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/command_2.12/1.4.0/command_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/collections_2.12/1.4.0/collections_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/scripted-plugin_2.12/1.4.0/scripted-plugin_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-lm-integration_2.12/1.4.0/zinc-lm-integration_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-logging_2.12/1.4.0/util-logging_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.3.0/scala-xml_2.12-1.3.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/launcher-interface/1.1.5/launcher-interface-1.1.5.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/github/ben-manes/caffeine/caffeine/2.8.5/caffeine-2.8.5.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/io/get-coursier/lm-coursier-shaded_2.12/2.0.0/lm-coursier-shaded_2.12-2.0.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.11.2/log4j-api-2.11.2.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/apache/logging/log4j/log4j-core/2.11.2/log4j-core-2.11.2.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/apache/logging/log4j/log4j-slf4j-impl/2.11.2/log4j-slf4j-impl-2.11.2.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/librarymanagement-core_2.12/1.4.0/librarymanagement-core_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/librarymanagement-ivy_2.12/1.4.0/librarymanagement-ivy_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/compiler-interface/1.4.0/compiler-interface-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-compile_2.12/1.4.0/zinc-compile_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/swoval/file-tree-views/2.1.4/file-tree-views-2.1.4.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scalariform/scalariform_2.12/0.2.0/scalariform_2.12-0.2.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/typesafe/config/1.3.3/config-1.3.3.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/apache/httpcomponents/httpcore/4.2.5/httpcore-4.2.5.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/commons-codec/commons-codec/1.6/commons-codec-1.6.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/bouncycastle/bcpg-jdk15on/1.51/bcpg-jdk15on-1.51.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/gigahorse-core_2.12/0.5.0/gigahorse-core_2.12-0.5.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/squareup/okhttp3/okhttp/3.14.2/okhttp-3.14.2.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-js/scalajs-ir_2.12/0.6.32/scalajs-ir_2.12-0.6.32.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/javascript/closure-compiler/v20190513/closure-compiler-v20190513.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/mozilla/rhino/1.7.6/rhino-1.7.6.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/webjars/envjs/1.2/envjs-1.2.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/nir_2.12/0.3.9/nir_2.12-0.3.9.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/util_2.12/0.3.9/util_2.12-0.3.9.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-relation_2.12/1.4.0/util-relation_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/completion_2.12/1.4.0/completion_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/task-system_2.12/1.4.0/task-system_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/tasks_2.12/1.4.0/tasks_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/testing_2.12/1.4.0/testing_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-tracking_2.12/1.4.0/util-tracking_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/sjson-new-scalajson_2.12/0.9.0/sjson-new-scalajson_2.12-0.9.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/jline3/jline-terminal/3.16.0-sbt-211a082ed6326908dc84ca017ce4430728f18a8a/jline-terminal-3.16.0-sbt-211a082ed6326908dc84ca017ce4430728f18a8a.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-classpath_2.12/1.4.0/zinc-classpath_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-apiinfo_2.12/1.4.0/zinc-apiinfo_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc_2.12/1.4.0/zinc_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/core-macros_2.12/1.4.0/core-macros_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-cache_2.12/1.4.0/util-cache_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-control_2.12/1.4.0/util-control_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/protocol_2.12/1.4.0/protocol_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/sjson-new-core_2.12/0.9.0/sjson-new-core_2.12-0.9.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/template-resolver/0.1/template-resolver-0.1.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-position_2.12/1.4.0/util-position_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-compile-core_2.12/1.4.0/zinc-compile-core_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-interface/1.4.0/util-interface-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/jline/jline/2.14.7-sbt-5e51b9d4f9631ebfa29753ce4accc57808e7fd6b/jline-2.14.7-sbt-5e51b9d4f9631ebfa29753ce4accc57808e7fd6b.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline-terminal-jna/3.16.0/jline-terminal-jna-3.16.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline-terminal-jansi/3.16.0/jline-terminal-jansi-3.16.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/lmax/disruptor/3.4.2/disruptor-3.4.2.jar",
+            "/home/mlewis/.sbt/boot/scala-2.12.12/lib/scala-reflect.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/checkerframework/checker-qual/3.4.1/checker-qual-3.4.1.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.4.0/error_prone_annotations-2.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.26/slf4j-api-1.7.26.jar",
+            "/home/mlewis/.sbt/boot/scala-2.12.12/lib/scala-compiler.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/jcraft/jsch/0.1.54/jsch-0.1.54.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/squareup/okhttp3/okhttp-urlconnection/3.7.0/okhttp-urlconnection-3.7.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/ivy/ivy/2.3.0-sbt-839fad1cdc07cf6fc81364d74c323867230432ad/ivy-2.3.0-sbt-839fad1cdc07cf6fc81364d74c323867230432ad.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/bouncycastle/bcprov-jdk15on/1.51/bcprov-jdk15on-1.51.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/typesafe/ssl-config-core_2.12/0.4.0/ssl-config-core_2.12-0.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/reactivestreams/reactive-streams/1.0.2/reactive-streams-1.0.2.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/squareup/okio/okio/1.17.2/okio-1.17.2.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/javascript/closure-compiler-externs/v20190513/closure-compiler-externs-v20190513.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/args4j/args4j/2.0.26/args4j-2.0.26.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/guava/guava/25.1-jre/guava-25.1-jre.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.0.2/protobuf-java-3.0.2.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/jsinterop/jsinterop-annotations/1.0.0/jsinterop-annotations-1.0.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline-reader/3.16.0/jline-reader-3.16.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/test-agent/1.4.0/test-agent-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/shaded-jawn-parser_2.12/0.9.0/shaded-jawn-parser_2.12-0.9.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/shaded-scalajson_2.12/1.0.0-M4/shaded-scalajson_2.12-1.0.0-M4.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.4.0/compiler-bridge_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-classfile_2.12/1.4.0/zinc-classfile_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-core_2.12/1.4.0/zinc-core_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-persist_2.12/1.4.0/zinc-persist_2.12-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/sjson-new-murmurhash_2.12/0.9.0/sjson-new-murmurhash_2.12-0.9.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/ipcsocket/ipcsocket/1.1.0/ipcsocket-1.1.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/net/openhft/zero-allocation-hashing/0.10.1/zero-allocation-hashing-0.10.1.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/fusesource/jansi/jansi/1.18/jansi-1.18.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline-terminal/3.16.0/jline-terminal-3.16.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-persist-core-assembly/1.4.0/zinc-persist-core-assembly-1.4.0.jar",
+            "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/sbinary_2.12/0.5.1/sbinary_2.12-0.5.1.jar"
         ],
-        "out" : "/home/mlewis/workspace/SwiftVis2/project/.bloop/swiftvis2-build",
-        "classesDir" : "/home/mlewis/workspace/SwiftVis2/project/.bloop/swiftvis2-build/scala-2.12/sbt-1.0/classes",
-        "resources" : [
+        "out": "/home/mlewis/workspace/SwiftVis2/project/.bloop/swiftvis2-build",
+        "classesDir": "/home/mlewis/workspace/SwiftVis2/project/.bloop/swiftvis2-build/scala-2.12/sbt-1.0/classes",
+        "resources": [
             "/home/mlewis/workspace/SwiftVis2/project/src/main/resources",
             "/home/mlewis/workspace/SwiftVis2/project/target/scala-2.12/sbt-1.0/resource_managed/main"
         ],
-        "scala" : {
-            "organization" : "org.scala-lang",
-            "name" : "scala-compiler",
-            "version" : "2.12.7",
-            "options" : [
+        "scala": {
+            "organization": "org.scala-lang",
+            "name": "scala-compiler",
+            "version": "2.12.12",
+            "options": [
                 "-deprecation"
             ],
-            "jars" : [
-                "/home/mlewis/.sbt/boot/scala-2.12.7/lib/scala-compiler.jar",
-                "/home/mlewis/.sbt/boot/scala-2.12.7/lib/scala-reflect.jar",
-                "/home/mlewis/.sbt/boot/scala-2.12.7/lib/jline.jar",
-                "/home/mlewis/.sbt/boot/scala-2.12.7/lib/scala-library.jar",
-                "/home/mlewis/.sbt/boot/scala-2.12.7/lib/scala-xml_2.12.jar"
+            "jars": [
+                "/home/mlewis/.sbt/boot/scala-2.12.12/lib/scala-compiler.jar",
+                "/home/mlewis/.sbt/boot/scala-2.12.12/lib/jansi.jar",
+                "/home/mlewis/.sbt/boot/scala-2.12.12/lib/scala-xml_2.12.jar",
+                "/home/mlewis/.sbt/boot/scala-2.12.12/lib/scala-library.jar",
+                "/home/mlewis/.sbt/boot/scala-2.12.12/lib/scala-reflect.jar",
+                "/home/mlewis/.sbt/boot/scala-2.12.12/lib/jline.jar"
             ],
-            "setup" : {
-                "order" : "mixed",
-                "addLibraryToBootClasspath" : true,
-                "addCompilerToClasspath" : false,
-                "addExtraJarsToClasspath" : false,
-                "manageBootClasspath" : true,
-                "filterLibraryFromClasspath" : true
+            "analysis": "/home/mlewis/workspace/SwiftVis2/project/target/streams/compile/bloopAnalysisOut/_global/streams/inc_compile_2.12.zip",
+            "setup": {
+                "order": "mixed",
+                "addLibraryToBootClasspath": true,
+                "addCompilerToClasspath": false,
+                "addExtraJarsToClasspath": false,
+                "manageBootClasspath": true,
+                "filterLibraryFromClasspath": true
             }
         },
-        "java" : {
-            "options" : [
+        "java": {
+            "options": [
+                
             ]
         },
-        "sbt" : {
-            "sbtVersion" : "1.2.8",
-            "autoImports" : [
+        "sbt": {
+            "sbtVersion": "1.4.0",
+            "autoImports": [
                 "import _root_.scala.xml.{TopScope=>$scope}",
                 "import _root_.sbt._",
                 "import _root_.sbt.Keys._",
-                "import _root_.sbt.ScriptedPlugin.autoImport._, _root_.bloop.integrations.sbt.BloopPlugin.autoImport._, _root_.com.typesafe.sbteclipse.plugin.EclipsePlugin.autoImport._, _root_.org.scalastyle.sbt.ScalastylePlugin.autoImport._, _root_.xerial.sbt.Sonatype.autoImport._, _root_.com.typesafe.sbt.SbtPgp.autoImport._, _root_.org.scalajs.jsdependencies.sbtplugin.JSDependenciesPlugin.autoImport._, _root_.org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._, _root_.org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._, _root_.scalajscrossproject.ScalaJSCrossPlugin.autoImport._, _root_.sbtcrossproject.CrossPlugin.autoImport._, _root_.scala.scalanative.sbtplugin.ScalaNativePlugin.autoImport._, _root_.scalanativecrossproject.ScalaNativeCrossPlugin.autoImport._",
-                "import _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.bloop.integrations.sbt.BloopPlugin, _root_.scala.meta.metals.MetalsPlugin, _root_.com.typesafe.sbteclipse.plugin.EclipsePlugin, _root_.org.scalastyle.sbt.ScalastylePlugin, _root_.xerial.sbt.Sonatype, _root_.com.typesafe.sbt.SbtPgp, _root_.org.scalajs.jsdependencies.sbtplugin.JSDependenciesPlugin, _root_.org.scalajs.sbtplugin.ScalaJSJUnitPlugin, _root_.org.scalajs.sbtplugin.ScalaJSPlugin, _root_.org.scalajs.sbtplugin.internal.ScalaJSGlobalPlugin, _root_.org.portablescala.sbtplatformdeps.PlatformDepsPlugin, _root_.scalajscrossproject.ScalaJSCrossPlugin, _root_.sbtcrossproject.CrossPlugin, _root_.scala.scalanative.sbtplugin.ScalaNativePlugin, _root_.scalanativecrossproject.ScalaNativeCrossPlugin"
+                "import _root_.sbt.nio.Keys._",
+                "import _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.bloop.integrations.sbt.BloopPlugin.autoImport._, _root_.org.scalastyle.sbt.ScalastylePlugin.autoImport._, _root_.xerial.sbt.Sonatype.autoImport._, _root_.com.typesafe.sbt.SbtPgp.autoImport._, _root_.org.scalajs.jsdependencies.sbtplugin.JSDependenciesPlugin.autoImport._, _root_.org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._, _root_.scalajscrossproject.ScalaJSCrossPlugin.autoImport._, _root_.scala.scalanative.sbtplugin.ScalaNativePlugin.autoImport._, _root_.scalanativecrossproject.ScalaNativeCrossPlugin.autoImport._, _root_.org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._, _root_.sbtcrossproject.CrossPlugin.autoImport._",
+                "import _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.bloop.integrations.sbt.BloopPlugin, _root_.org.scalastyle.sbt.ScalastylePlugin, _root_.xerial.sbt.Sonatype, _root_.com.typesafe.sbt.SbtPgp, _root_.org.scalajs.jsdependencies.sbtplugin.JSDependenciesPlugin, _root_.org.scalajs.sbtplugin.ScalaJSJUnitPlugin, _root_.org.scalajs.sbtplugin.ScalaJSPlugin, _root_.org.scalajs.sbtplugin.internal.ScalaJSGlobalPlugin, _root_.scalajscrossproject.ScalaJSCrossPlugin, _root_.scala.scalanative.sbtplugin.ScalaNativePlugin, _root_.scalanativecrossproject.ScalaNativeCrossPlugin, _root_.org.portablescala.sbtplatformdeps.PlatformDepsPlugin, _root_.sbtcrossproject.CrossPlugin"
             ]
         },
-        "test" : {
-            "frameworks" : [
+        "test": {
+            "frameworks": [
                 {
-                    "names" : [
+                    "names": [
                         "org.scalacheck.ScalaCheckFramework"
                     ]
                 },
                 {
-                    "names" : [
+                    "names": [
                         "org.specs2.runner.Specs2Framework",
                         "org.specs2.runner.SpecsFramework"
                     ]
                 },
                 {
-                    "names" : [
+                    "names": [
                         "org.specs.runner.SpecsFramework"
                     ]
                 },
                 {
-                    "names" : [
+                    "names": [
                         "org.scalatest.tools.Framework",
                         "org.scalatest.tools.ScalaTestFramework"
                     ]
                 },
                 {
-                    "names" : [
+                    "names": [
                         "com.novocode.junit.JUnitFramework"
                     ]
                 }
             ],
-            "options" : {
-                "excludes" : [
+            "options": {
+                "excludes": [
+                    
                 ],
-                "arguments" : [
+                "arguments": [
+                    
                 ]
             }
         },
-        "platform" : {
-            "name" : "jvm",
-            "config" : {
-                "home" : "/home/mlewis/graalvm-ee-19.2.0/jre",
-                "options" : [
+        "platform": {
+            "name": "jvm",
+            "config": {
+                "home": "/home/mlewis/graalvm-ee-java11-20.1.0",
+                "options": [
+                    "-Duser.dir=/home/mlewis/workspace/SwiftVis2/project"
                 ]
             },
-            "mainClass" : [
+            "mainClass": [
+                
             ]
         },
-        "resolution" : {
-            "modules" : [
+        "resolution": {
+            "modules": [
                 {
-                    "organization" : "ch.epfl.scala",
-                    "name" : "sbt-bloop",
-                    "version" : "1.3.2",
-                    "artifacts" : [
+                    "organization": "ch.epfl.scala",
+                    "name": "sbt-bloop",
+                    "version": "1.4.4-13-408f4d80",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "sbt-bloop",
-                            "path" : "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/ch.epfl.scala/sbt-bloop/jars/sbt-bloop-1.3.2.jar"
+                            "name": "sbt-bloop",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/ch/epfl/scala/sbt-bloop_2.12_1.0/1.4.4-13-408f4d80/sbt-bloop-1.4.4-13-408f4d80.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "ch.epfl.scala",
-                    "name" : "bloop-config_2.12",
-                    "version" : "1.3.2",
-                    "artifacts" : [
+                    "organization": "org.scalastyle",
+                    "name": "scalastyle-sbt-plugin",
+                    "version": "1.0.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "bloop-config_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/ch.epfl.scala/bloop-config_2.12/jars/bloop-config_2.12-1.3.2.jar"
+                            "name": "scalastyle-sbt-plugin",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scalastyle/scalastyle-sbt-plugin_2.12_1.0/1.0.0/scalastyle-sbt-plugin-1.0.0.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-lang",
-                    "name" : "scala-library",
-                    "version" : "2.12.7",
-                    "artifacts" : [
+                    "organization": "org.xerial.sbt",
+                    "name": "sbt-sonatype",
+                    "version": "2.3",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "scala-library",
-                            "path" : "/home/mlewis/.sbt/boot/scala-2.12.7/lib/scala-library.jar"
+                            "name": "sbt-sonatype",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/xerial/sbt/sbt-sonatype_2.12_1.0/2.3/sbt-sonatype-2.3.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "io.circe",
-                    "name" : "circe-parser_2.12",
-                    "version" : "0.9.3",
-                    "artifacts" : [
+                    "organization": "com.jsuereth",
+                    "name": "sbt-pgp",
+                    "version": "1.1.1",
+                    "configurations": "compile",
+                    "artifacts": [
                         {
-                            "name" : "circe-parser_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/io.circe/circe-parser_2.12/jars/circe-parser_2.12-0.9.3.jar"
+                            "name": "sbt-pgp",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/com.jsuereth/sbt-pgp/scala_2.12/sbt_1.0/1.1.1/jars/sbt-pgp.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "io.circe",
-                    "name" : "circe-jawn_2.12",
-                    "version" : "0.9.3",
-                    "artifacts" : [
+                    "organization": "org.scala-js",
+                    "name": "sbt-scalajs",
+                    "version": "0.6.32",
+                    "configurations": "compile",
+                    "artifacts": [
                         {
-                            "name" : "circe-jawn_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/io.circe/circe-jawn_2.12/jars/circe-jawn_2.12-0.9.3.jar"
+                            "name": "sbt-scalajs",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.scala-js/sbt-scalajs/scala_2.12/sbt_1.0/0.6.32/jars/sbt-scalajs.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "io.circe",
-                    "name" : "circe-core_2.12",
-                    "version" : "0.9.3",
-                    "artifacts" : [
+                    "organization": "org.portable-scala",
+                    "name": "sbt-scalajs-crossproject",
+                    "version": "0.6.1",
+                    "configurations": "compile",
+                    "artifacts": [
                         {
-                            "name" : "circe-core_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/io.circe/circe-core_2.12/jars/circe-core_2.12-0.9.3.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization" : "io.circe",
-                    "name" : "circe-numbers_2.12",
-                    "version" : "0.9.3",
-                    "artifacts" : [
+                            "name": "sbt-scalajs-crossproject",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-scalajs-crossproject/scala_2.12/sbt_1.0/0.6.1/jars/sbt-scalajs-crossproject.jar"
+                        },
                         {
-                            "name" : "circe-numbers_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/io.circe/circe-numbers_2.12/jars/circe-numbers_2.12-0.9.3.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization" : "org.typelevel",
-                    "name" : "cats-core_2.12",
-                    "version" : "1.0.1",
-                    "artifacts" : [
+                            "name": "sbt-scalajs-crossproject",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-scalajs-crossproject/scala_2.12/sbt_1.0/0.6.1/srcs/sbt-scalajs-crossproject-sources.jar"
+                        },
                         {
-                            "name" : "cats-core_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.typelevel/cats-core_2.12/jars/cats-core_2.12-1.0.1.jar"
+                            "name": "sbt-scalajs-crossproject",
+                            "classifier": "javadoc",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-scalajs-crossproject/scala_2.12/sbt_1.0/0.6.1/docs/sbt-scalajs-crossproject-javadoc.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.typelevel",
-                    "name" : "cats-macros_2.12",
-                    "version" : "1.0.1",
-                    "artifacts" : [
+                    "organization": "org.scala-native",
+                    "name": "sbt-scala-native",
+                    "version": "0.3.9",
+                    "configurations": "compile",
+                    "artifacts": [
                         {
-                            "name" : "cats-macros_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.typelevel/cats-macros_2.12/jars/cats-macros_2.12-1.0.1.jar"
+                            "name": "sbt-scala-native",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.scala-native/sbt-scala-native/scala_2.12/sbt_1.0/0.3.9/jars/sbt-scala-native.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.typelevel",
-                    "name" : "machinist_2.12",
-                    "version" : "0.6.2",
-                    "artifacts" : [
+                    "organization": "org.portable-scala",
+                    "name": "sbt-scala-native-crossproject",
+                    "version": "0.6.1",
+                    "configurations": "compile",
+                    "artifacts": [
                         {
-                            "name" : "machinist_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.typelevel/machinist_2.12/jars/machinist_2.12-0.6.2.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization" : "org.scala-lang",
-                    "name" : "scala-reflect",
-                    "version" : "2.12.7",
-                    "artifacts" : [
+                            "name": "sbt-scala-native-crossproject",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-scala-native-crossproject/scala_2.12/sbt_1.0/0.6.1/jars/sbt-scala-native-crossproject.jar"
+                        },
                         {
-                            "name" : "scala-reflect",
-                            "path" : "/home/mlewis/.sbt/boot/scala-2.12.7/lib/scala-reflect.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization" : "org.typelevel",
-                    "name" : "cats-kernel_2.12",
-                    "version" : "1.0.1",
-                    "artifacts" : [
+                            "name": "sbt-scala-native-crossproject",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-scala-native-crossproject/scala_2.12/sbt_1.0/0.6.1/srcs/sbt-scala-native-crossproject-sources.jar"
+                        },
                         {
-                            "name" : "cats-kernel_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.typelevel/cats-kernel_2.12/jars/cats-kernel_2.12-1.0.1.jar"
+                            "name": "sbt-scala-native-crossproject",
+                            "classifier": "javadoc",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-scala-native-crossproject/scala_2.12/sbt_1.0/0.6.1/docs/sbt-scala-native-crossproject-javadoc.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.spire-math",
-                    "name" : "jawn-parser_2.12",
-                    "version" : "0.11.1",
-                    "artifacts" : [
+                    "organization": "com.google.code.gson",
+                    "name": "gson",
+                    "version": "2.7",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "jawn-parser_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.spire-math/jawn-parser_2.12/jars/jawn-parser_2.12-0.11.1.jar"
+                            "name": "gson",
+                            "checksum": {
+                                "type": "sha1",
+                                "digest": "751f548c85fa49f330cecbb1875893f971b33c4e"
+                            },
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/code/gson/gson/2.7/gson-2.7.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "io.circe",
-                    "name" : "circe-derivation_2.12",
-                    "version" : "0.9.0-M3",
-                    "artifacts" : [
+                    "organization": "com.google.code.findbugs",
+                    "name": "jsr305",
+                    "version": "3.0.2",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "circe-derivation_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/io.circe/circe-derivation_2.12/jars/circe-derivation_2.12-0.9.0-M3.jar"
+                            "name": "jsr305",
+                            "checksum": {
+                                "type": "sha1",
+                                "digest": "25ea2e8b0c338a877313bd4672d3fe056ea78f0d"
+                            },
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scalameta",
-                    "name" : "sbt-metals",
-                    "version" : "0.7.6",
-                    "artifacts" : [
+                    "organization": "org.scalastyle",
+                    "name": "scalastyle_2.12",
+                    "version": "1.0.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "sbt-metals",
-                            "path" : "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.scalameta/sbt-metals/jars/sbt-metals-0.7.6.jar"
+                            "name": "scalastyle_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scalastyle/scalastyle_2.12/1.0.0/scalastyle_2.12-1.0.0.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.typesafe.sbteclipse",
-                    "name" : "sbteclipse-plugin",
-                    "version" : "5.2.4",
-                    "artifacts" : [
+                    "organization": "org.apache.httpcomponents",
+                    "name": "httpclient",
+                    "version": "4.2.6",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "sbteclipse-plugin",
-                            "path" : "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/com.typesafe.sbteclipse/sbteclipse-plugin/jars/sbteclipse-plugin-5.2.4.jar"
+                            "name": "httpclient",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/apache/httpcomponents/httpclient/4.2.6/httpclient-4.2.6.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scalaz",
-                    "name" : "scalaz-core_2.12",
-                    "version" : "7.2.14",
-                    "artifacts" : [
+                    "organization": "com.jsuereth",
+                    "name": "pgp-library_2.12",
+                    "version": "1.1.1",
+                    "configurations": "compile",
+                    "artifacts": [
                         {
-                            "name" : "scalaz-core_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scalaz/scalaz-core_2.12/bundles/scalaz-core_2.12-7.2.14.jar"
+                            "name": "pgp-library_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/com.jsuereth/pgp-library_2.12/1.1.1/jars/pgp-library_2.12.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scalaz",
-                    "name" : "scalaz-effect_2.12",
-                    "version" : "7.2.14",
-                    "artifacts" : [
+                    "organization": "org.scala-js",
+                    "name": "scalajs-tools_2.12",
+                    "version": "0.6.32",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "scalaz-effect_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scalaz/scalaz-effect_2.12/bundles/scalaz-effect_2.12-7.2.14.jar"
+                            "name": "scalajs-tools_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-js/scalajs-tools_2.12/0.6.32/scalajs-tools_2.12-0.6.32.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scalastyle",
-                    "name" : "scalastyle-sbt-plugin",
-                    "version" : "1.0.0",
-                    "artifacts" : [
+                    "organization": "org.scala-js",
+                    "name": "scalajs-js-envs_2.12",
+                    "version": "0.6.32",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "scalastyle-sbt-plugin",
-                            "path" : "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.scalastyle/scalastyle-sbt-plugin/jars/scalastyle-sbt-plugin-1.0.0.jar"
+                            "name": "scalajs-js-envs_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-js/scalajs-js-envs_2.12/0.6.32/scalajs-js-envs_2.12-0.6.32.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scalastyle",
-                    "name" : "scalastyle_2.12",
-                    "version" : "1.0.0",
-                    "artifacts" : [
+                    "organization": "org.scala-js",
+                    "name": "scalajs-sbt-test-adapter_2.12",
+                    "version": "0.6.32",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "scalastyle_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scalastyle/scalastyle_2.12/jars/scalastyle_2.12-1.0.0.jar"
+                            "name": "scalajs-sbt-test-adapter_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-js/scalajs-sbt-test-adapter_2.12/0.6.32/scalajs-sbt-test-adapter_2.12-0.6.32.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scalariform",
-                    "name" : "scalariform_2.12",
-                    "version" : "0.2.0",
-                    "artifacts" : [
+                    "organization": "org.portable-scala",
+                    "name": "sbt-platform-deps",
+                    "version": "1.0.0",
+                    "configurations": "compile",
+                    "artifacts": [
                         {
-                            "name" : "scalariform_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scalariform/scalariform_2.12/jars/scalariform_2.12-0.2.0.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization" : "org.scala-lang.modules",
-                    "name" : "scala-xml_2.12",
-                    "version" : "1.0.6",
-                    "artifacts" : [
+                            "name": "sbt-platform-deps",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-platform-deps/scala_2.12/sbt_1.0/1.0.0/jars/sbt-platform-deps.jar"
+                        },
                         {
-                            "name" : "scala-xml_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-lang.modules/scala-xml_2.12/bundles/scala-xml_2.12-1.0.6.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization" : "org.scala-lang.modules",
-                    "name" : "scala-parser-combinators_2.12",
-                    "version" : "1.0.6",
-                    "artifacts" : [
+                            "name": "sbt-platform-deps",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-platform-deps/scala_2.12/sbt_1.0/1.0.0/srcs/sbt-platform-deps-sources.jar"
+                        },
                         {
-                            "name" : "scala-parser-combinators_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-lang.modules/scala-parser-combinators_2.12/bundles/scala-parser-combinators_2.12-1.0.6.jar"
+                            "name": "sbt-platform-deps",
+                            "classifier": "javadoc",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-platform-deps/scala_2.12/sbt_1.0/1.0.0/docs/sbt-platform-deps-javadoc.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.typesafe",
-                    "name" : "config",
-                    "version" : "1.2.0",
-                    "artifacts" : [
+                    "organization": "org.portable-scala",
+                    "name": "sbt-crossproject",
+                    "version": "0.6.1",
+                    "configurations": "compile",
+                    "artifacts": [
                         {
-                            "name" : "config",
-                            "path" : "/home/mlewis/.ivy2/cache/com.typesafe/config/bundles/config-1.2.0.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization" : "org.xerial.sbt",
-                    "name" : "sbt-sonatype",
-                    "version" : "2.3",
-                    "artifacts" : [
+                            "name": "sbt-crossproject",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-crossproject/scala_2.12/sbt_1.0/0.6.1/jars/sbt-crossproject.jar"
+                        },
                         {
-                            "name" : "sbt-sonatype",
-                            "path" : "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.xerial.sbt/sbt-sonatype/jars/sbt-sonatype-2.3.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization" : "org.apache.httpcomponents",
-                    "name" : "httpclient",
-                    "version" : "4.2.6",
-                    "artifacts" : [
+                            "name": "sbt-crossproject",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-crossproject/scala_2.12/sbt_1.0/0.6.1/srcs/sbt-crossproject-sources.jar"
+                        },
                         {
-                            "name" : "httpclient",
-                            "path" : "/home/mlewis/.ivy2/cache/org.apache.httpcomponents/httpclient/jars/httpclient-4.2.6.jar"
+                            "name": "sbt-crossproject",
+                            "classifier": "javadoc",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.portable-scala/sbt-crossproject/scala_2.12/sbt_1.0/0.6.1/docs/sbt-crossproject-javadoc.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.apache.httpcomponents",
-                    "name" : "httpcore",
-                    "version" : "4.2.5",
-                    "artifacts" : [
+                    "organization": "org.scala-native",
+                    "name": "tools_2.12",
+                    "version": "0.3.9",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "httpcore",
-                            "path" : "/home/mlewis/.ivy2/cache/org.apache.httpcomponents/httpcore/jars/httpcore-4.2.5.jar"
+                            "name": "tools_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/tools_2.12/0.3.9/tools_2.12-0.3.9.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "commons-logging",
-                    "name" : "commons-logging",
-                    "version" : "1.1.1",
-                    "artifacts" : [
+                    "organization": "org.scala-native",
+                    "name": "test-runner_2.12",
+                    "version": "0.3.9",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "commons-logging",
-                            "path" : "/home/mlewis/.ivy2/cache/commons-logging/commons-logging/jars/commons-logging-1.1.1.jar"
+                            "name": "test-runner_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/test-runner_2.12/0.3.9/test-runner_2.12-0.3.9.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "commons-codec",
-                    "name" : "commons-codec",
-                    "version" : "1.6",
-                    "artifacts" : [
+                    "organization": "org.scala-lang",
+                    "name": "scala-library",
+                    "version": "2.12.12",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "commons-codec",
-                            "path" : "/home/mlewis/.ivy2/cache/commons-codec/commons-codec/jars/commons-codec-1.6.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization" : "com.jsuereth",
-                    "name" : "sbt-pgp",
-                    "version" : "1.1.1",
-                    "artifacts" : [
+                            "name": "scala-library",
+                            "path": "/home/mlewis/.sbt/boot/scala-2.12.12/lib/scala-library.jar"
+                        },
                         {
-                            "name" : "sbt-pgp",
-                            "path" : "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/com.jsuereth/sbt-pgp/jars/sbt-pgp-1.1.1.jar"
+                            "name": "scala-library",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.12/scala-library-2.12.12-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.jsuereth",
-                    "name" : "pgp-library_2.12",
-                    "version" : "1.1.1",
-                    "artifacts" : [
+                    "organization": "org.scalariform",
+                    "name": "scalariform_2.12",
+                    "version": "0.2.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "pgp-library_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.jsuereth/pgp-library_2.12/jars/pgp-library_2.12-1.1.1.jar"
+                            "name": "scalariform_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scalariform/scalariform_2.12/0.2.0/scalariform_2.12-0.2.0.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.bouncycastle",
-                    "name" : "bcpg-jdk15on",
-                    "version" : "1.51",
-                    "artifacts" : [
+                    "organization": "org.apache.httpcomponents",
+                    "name": "httpcore",
+                    "version": "4.2.5",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "bcpg-jdk15on",
-                            "path" : "/home/mlewis/.ivy2/cache/org.bouncycastle/bcpg-jdk15on/jars/bcpg-jdk15on-1.51.jar"
+                            "name": "httpcore",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/apache/httpcomponents/httpcore/4.2.5/httpcore-4.2.5.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.bouncycastle",
-                    "name" : "bcprov-jdk15on",
-                    "version" : "1.51",
-                    "artifacts" : [
+                    "organization": "commons-logging",
+                    "name": "commons-logging",
+                    "version": "1.1.1",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "bcprov-jdk15on",
-                            "path" : "/home/mlewis/.ivy2/cache/org.bouncycastle/bcprov-jdk15on/jars/bcprov-jdk15on-1.51.jar"
+                            "name": "commons-logging",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.eed3si9n",
-                    "name" : "gigahorse-okhttp_2.12",
-                    "version" : "0.3.0",
-                    "artifacts" : [
+                    "organization": "commons-codec",
+                    "name": "commons-codec",
+                    "version": "1.6",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "gigahorse-okhttp_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.eed3si9n/gigahorse-okhttp_2.12/jars/gigahorse-okhttp_2.12-0.3.0.jar"
+                            "name": "commons-codec",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/commons-codec/commons-codec/1.6/commons-codec-1.6.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.eed3si9n",
-                    "name" : "gigahorse-core_2.12",
-                    "version" : "0.3.0",
-                    "artifacts" : [
+                    "organization": "org.bouncycastle",
+                    "name": "bcpg-jdk15on",
+                    "version": "1.51",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "gigahorse-core_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.eed3si9n/gigahorse-core_2.12/jars/gigahorse-core_2.12-0.3.0.jar"
+                            "name": "bcpg-jdk15on",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/bouncycastle/bcpg-jdk15on/1.51/bcpg-jdk15on-1.51.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.typesafe",
-                    "name" : "ssl-config-core_2.12",
-                    "version" : "0.2.2",
-                    "artifacts" : [
+                    "organization": "org.scala-js",
+                    "name": "scalajs-ir_2.12",
+                    "version": "0.6.32",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "ssl-config-core_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.typesafe/ssl-config-core_2.12/bundles/ssl-config-core_2.12-0.2.2.jar"
+                            "name": "scalajs-ir_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-js/scalajs-ir_2.12/0.6.32/scalajs-ir_2.12-0.6.32.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.reactivestreams",
-                    "name" : "reactive-streams",
-                    "version" : "1.0.0",
-                    "artifacts" : [
+                    "organization": "com.google.javascript",
+                    "name": "closure-compiler",
+                    "version": "v20190513",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "reactive-streams",
-                            "path" : "/home/mlewis/.ivy2/cache/org.reactivestreams/reactive-streams/jars/reactive-streams-1.0.0.jar"
+                            "name": "closure-compiler",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/javascript/closure-compiler/v20190513/closure-compiler-v20190513.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.slf4j",
-                    "name" : "slf4j-api",
-                    "version" : "1.7.25",
-                    "artifacts" : [
+                    "organization": "com.googlecode.json-simple",
+                    "name": "json-simple",
+                    "version": "1.1.1",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "slf4j-api",
-                            "path" : "/home/mlewis/.ivy2/cache/org.slf4j/slf4j-api/jars/slf4j-api-1.7.25.jar"
+                            "name": "json-simple",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.squareup.okhttp3",
-                    "name" : "okhttp",
-                    "version" : "3.7.0",
-                    "artifacts" : [
+                    "organization": "org.mozilla",
+                    "name": "rhino",
+                    "version": "1.7.6",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "okhttp",
-                            "path" : "/home/mlewis/.ivy2/cache/com.squareup.okhttp3/okhttp/jars/okhttp-3.7.0.jar"
+                            "name": "rhino",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/mozilla/rhino/1.7.6/rhino-1.7.6.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.squareup.okio",
-                    "name" : "okio",
-                    "version" : "1.12.0",
-                    "artifacts" : [
+                    "organization": "org.webjars",
+                    "name": "envjs",
+                    "version": "1.2",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "okio",
-                            "path" : "/home/mlewis/.ivy2/cache/com.squareup.okio/okio/jars/okio-1.12.0.jar"
+                            "name": "envjs",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/webjars/envjs/1.2/envjs-1.2.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-js",
-                    "name" : "sbt-scalajs",
-                    "version" : "0.6.29",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "test-interface",
+                    "version": "1.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "sbt-scalajs",
-                            "path" : "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.scala-js/sbt-scalajs/jars/sbt-scalajs-0.6.29.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization" : "org.scala-js",
-                    "name" : "scalajs-tools_2.12",
-                    "version" : "0.6.29",
-                    "artifacts" : [
+                            "name": "test-interface",
+                            "checksum": {
+                                "type": "sha1",
+                                "digest": "0a3f14d010c4cb32071f863d97291df31603b521"
+                            },
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0.jar"
+                        },
                         {
-                            "name" : "scalajs-tools_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-js/scalajs-tools_2.12/jars/scalajs-tools_2.12-0.6.29.jar"
+                            "name": "test-interface",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/test-interface/1.0/test-interface-1.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-js",
-                    "name" : "scalajs-ir_2.12",
-                    "version" : "0.6.29",
-                    "artifacts" : [
+                    "organization": "org.scala-native",
+                    "name": "nir_2.12",
+                    "version": "0.3.9",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "scalajs-ir_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-js/scalajs-ir_2.12/jars/scalajs-ir_2.12-0.6.29.jar"
+                            "name": "nir_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/nir_2.12/0.3.9/nir_2.12-0.3.9.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.google.javascript",
-                    "name" : "closure-compiler",
-                    "version" : "v20190513",
-                    "artifacts" : [
+                    "organization": "org.scala-native",
+                    "name": "util_2.12",
+                    "version": "0.3.9",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "closure-compiler",
-                            "path" : "/home/mlewis/.ivy2/cache/com.google.javascript/closure-compiler/jars/closure-compiler-v20190513.jar"
+                            "name": "util_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-native/util_2.12/0.3.9/util_2.12-0.3.9.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.google.javascript",
-                    "name" : "closure-compiler-externs",
-                    "version" : "v20190513",
-                    "artifacts" : [
+                    "organization": "org.bouncycastle",
+                    "name": "bcprov-jdk15on",
+                    "version": "1.51",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "closure-compiler-externs",
-                            "path" : "/home/mlewis/.ivy2/cache/com.google.javascript/closure-compiler-externs/jars/closure-compiler-externs-v20190513.jar"
+                            "name": "bcprov-jdk15on",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/bouncycastle/bcprov-jdk15on/1.51/bcprov-jdk15on-1.51.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "args4j",
-                    "name" : "args4j",
-                    "version" : "2.0.26",
-                    "artifacts" : [
+                    "organization": "com.google.javascript",
+                    "name": "closure-compiler-externs",
+                    "version": "v20190513",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "args4j",
-                            "path" : "/home/mlewis/.ivy2/cache/args4j/args4j/bundles/args4j-2.0.26.jar"
+                            "name": "closure-compiler-externs",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/javascript/closure-compiler-externs/v20190513/closure-compiler-externs-v20190513.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.google.errorprone",
-                    "name" : "error_prone_annotations",
-                    "version" : "2.3.1",
-                    "artifacts" : [
+                    "organization": "args4j",
+                    "name": "args4j",
+                    "version": "2.0.26",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "error_prone_annotations",
-                            "path" : "/home/mlewis/.ivy2/cache/com.google.errorprone/error_prone_annotations/jars/error_prone_annotations-2.3.1.jar"
+                            "name": "args4j",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/args4j/args4j/2.0.26/args4j-2.0.26.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.google.guava",
-                    "name" : "guava",
-                    "version" : "25.1-jre",
-                    "artifacts" : [
+                    "organization": "com.google.guava",
+                    "name": "guava",
+                    "version": "25.1-jre",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "guava",
-                            "path" : "/home/mlewis/.ivy2/cache/com.google.guava/guava/bundles/guava-25.1-jre.jar"
+                            "name": "guava",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/guava/guava/25.1-jre/guava-25.1-jre.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.checkerframework",
-                    "name" : "checker-qual",
-                    "version" : "2.0.0",
-                    "artifacts" : [
+                    "organization": "com.google.protobuf",
+                    "name": "protobuf-java",
+                    "version": "3.0.2",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "checker-qual",
-                            "path" : "/home/mlewis/.ivy2/cache/org.checkerframework/checker-qual/jars/checker-qual-2.0.0.jar"
+                            "name": "protobuf-java",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/protobuf/protobuf-java/3.0.2/protobuf-java-3.0.2.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.google.j2objc",
-                    "name" : "j2objc-annotations",
-                    "version" : "1.1",
-                    "artifacts" : [
+                    "organization": "com.google.jsinterop",
+                    "name": "jsinterop-annotations",
+                    "version": "1.0.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "j2objc-annotations",
-                            "path" : "/home/mlewis/.ivy2/cache/com.google.j2objc/j2objc-annotations/jars/j2objc-annotations-1.1.jar"
+                            "name": "jsinterop-annotations",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/jsinterop/jsinterop-annotations/1.0.0/jsinterop-annotations-1.0.0.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.codehaus.mojo",
-                    "name" : "animal-sniffer-annotations",
-                    "version" : "1.14",
-                    "artifacts" : [
+                    "organization": "com.google.j2objc",
+                    "name": "j2objc-annotations",
+                    "version": "1.1",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "animal-sniffer-annotations",
-                            "path" : "/home/mlewis/.ivy2/cache/org.codehaus.mojo/animal-sniffer-annotations/jars/animal-sniffer-annotations-1.14.jar"
+                            "name": "j2objc-annotations",
+                            "checksum": {
+                                "type": "sha1",
+                                "digest": "ed28ded51a8b1c6b112568def5f4b455e6809019"
+                            },
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.google.code.gson",
-                    "name" : "gson",
-                    "version" : "2.7",
-                    "artifacts" : [
+                    "organization": "org.codehaus.mojo",
+                    "name": "animal-sniffer-annotations",
+                    "version": "1.14",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "gson",
-                            "path" : "/home/mlewis/.ivy2/cache/com.google.code.gson/gson/jars/gson-2.7.jar"
+                            "name": "animal-sniffer-annotations",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.google.code.findbugs",
-                    "name" : "jsr305",
-                    "version" : "3.0.1",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "sbt",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "jsr305",
-                            "path" : "/home/mlewis/.ivy2/cache/com.google.code.findbugs/jsr305/jars/jsr305-3.0.1.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization" : "com.google.jsinterop",
-                    "name" : "jsinterop-annotations",
-                    "version" : "1.0.0",
-                    "artifacts" : [
+                            "name": "sbt",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/sbt/1.4.0/sbt-1.4.0.jar"
+                        },
                         {
-                            "name" : "jsinterop-annotations",
-                            "path" : "/home/mlewis/.ivy2/cache/com.google.jsinterop/jsinterop-annotations/jars/jsinterop-annotations-1.0.0.jar"
+                            "name": "sbt",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/sbt/1.4.0/sbt-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.googlecode.json-simple",
-                    "name" : "json-simple",
-                    "version" : "1.1.1",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "main_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "json-simple",
-                            "path" : "/home/mlewis/.ivy2/cache/com.googlecode.json-simple/json-simple/bundles/json-simple-1.1.1.jar"
-                        }
-                    ]
-                },
-                {
-                    "organization" : "org.scala-js",
-                    "name" : "scalajs-js-envs_2.12",
-                    "version" : "0.6.29",
-                    "artifacts" : [
+                            "name": "main_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/main_2.12/1.4.0/main_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "scalajs-js-envs_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-js/scalajs-js-envs_2.12/jars/scalajs-js-envs_2.12-0.6.29.jar"
+                            "name": "main_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/main_2.12/1.4.0/main_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.mozilla",
-                    "name" : "rhino",
-                    "version" : "1.7.6",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "io_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "rhino",
-                            "path" : "/home/mlewis/.ivy2/cache/org.mozilla/rhino/jars/rhino-1.7.6.jar"
+                            "name": "io_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/io_2.12/1.4.0/io_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "io_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/io_2.12/1.4.0/io_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.webjars",
-                    "name" : "envjs",
-                    "version" : "1.2",
-                    "artifacts" : [
+                    "organization": "net.java.dev.jna",
+                    "name": "jna",
+                    "version": "5.5.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "jna",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/net/java/dev/jna/jna/5.5.0/jna-5.5.0.jar"
+                        },
                         {
-                            "name" : "envjs",
-                            "path" : "/home/mlewis/.ivy2/cache/org.webjars/envjs/jars/envjs-1.2.jar"
+                            "name": "jna",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/net/java/dev/jna/jna/5.5.0/jna-5.5.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-js",
-                    "name" : "scalajs-sbt-test-adapter_2.12",
-                    "version" : "0.6.29",
-                    "artifacts" : [
+                    "organization": "net.java.dev.jna",
+                    "name": "jna-platform",
+                    "version": "5.5.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "scalajs-sbt-test-adapter_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-js/scalajs-sbt-test-adapter_2.12/jars/scalajs-sbt-test-adapter_2.12-0.6.29.jar"
+                            "name": "jna-platform",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/net/java/dev/jna/jna-platform/5.5.0/jna-platform-5.5.0.jar"
+                        },
+                        {
+                            "name": "jna-platform",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/net/java/dev/jna/jna-platform/5.5.0/jna-platform-5.5.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "test-interface",
-                    "version" : "1.0",
-                    "artifacts" : [
+                    "organization": "com.eed3si9n",
+                    "name": "gigahorse-okhttp_2.12",
+                    "version": "0.5.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "gigahorse-okhttp_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/gigahorse-okhttp_2.12/0.5.0/gigahorse-okhttp_2.12-0.5.0.jar"
+                        },
                         {
-                            "name" : "test-interface",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/test-interface/jars/test-interface-1.0.jar"
+                            "name": "gigahorse-okhttp_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/gigahorse-okhttp_2.12/0.5.0/gigahorse-okhttp_2.12-0.5.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.portable-scala",
-                    "name" : "sbt-platform-deps",
-                    "version" : "1.0.0",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "logic_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "sbt-platform-deps",
-                            "path" : "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.portable-scala/sbt-platform-deps/jars/sbt-platform-deps-1.0.0.jar"
+                            "name": "logic_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/logic_2.12/1.4.0/logic_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "logic_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/logic_2.12/1.4.0/logic_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.portable-scala",
-                    "name" : "sbt-scalajs-crossproject",
-                    "version" : "0.6.1",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "actions_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "actions_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/actions_2.12/1.4.0/actions_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "sbt-scalajs-crossproject",
-                            "path" : "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.portable-scala/sbt-scalajs-crossproject/jars/sbt-scalajs-crossproject-0.6.1.jar"
+                            "name": "actions_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/actions_2.12/1.4.0/actions_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.portable-scala",
-                    "name" : "sbt-crossproject",
-                    "version" : "0.6.1",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "main-settings_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "sbt-crossproject",
-                            "path" : "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.portable-scala/sbt-crossproject/jars/sbt-crossproject-0.6.1.jar"
+                            "name": "main-settings_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/main-settings_2.12/1.4.0/main-settings_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "main-settings_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/main-settings_2.12/1.4.0/main-settings_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-native",
-                    "name" : "sbt-scala-native",
-                    "version" : "0.3.9",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "run_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "run_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/run_2.12/1.4.0/run_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "sbt-scala-native",
-                            "path" : "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.scala-native/sbt-scala-native/jars/sbt-scala-native-0.3.9.jar"
+                            "name": "run_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/run_2.12/1.4.0/run_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-native",
-                    "name" : "tools_2.12",
-                    "version" : "0.3.9",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "command_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "tools_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-native/tools_2.12/jars/tools_2.12-0.3.9.jar"
+                            "name": "command_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/command_2.12/1.4.0/command_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "command_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/command_2.12/1.4.0/command_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-native",
-                    "name" : "nir_2.12",
-                    "version" : "0.3.9",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "collections_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "collections_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/collections_2.12/1.4.0/collections_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "nir_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-native/nir_2.12/jars/nir_2.12-0.3.9.jar"
+                            "name": "collections_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/collections_2.12/1.4.0/collections_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-native",
-                    "name" : "util_2.12",
-                    "version" : "0.3.9",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "scripted-plugin_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "util_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-native/util_2.12/jars/util_2.12-0.3.9.jar"
+                            "name": "scripted-plugin_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/scripted-plugin_2.12/1.4.0/scripted-plugin_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "scripted-plugin_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/scripted-plugin_2.12/1.4.0/scripted-plugin_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-native",
-                    "name" : "test-runner_2.12",
-                    "version" : "0.3.9",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "zinc-lm-integration_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "zinc-lm-integration_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-lm-integration_2.12/1.4.0/zinc-lm-integration_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "test-runner_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-native/test-runner_2.12/jars/test-runner_2.12-0.3.9.jar"
+                            "name": "zinc-lm-integration_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-lm-integration_2.12/1.4.0/zinc-lm-integration_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.portable-scala",
-                    "name" : "sbt-scala-native-crossproject",
-                    "version" : "0.6.1",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "util-logging_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "sbt-scala-native-crossproject",
-                            "path" : "/home/mlewis/.ivy2/cache/scala_2.12/sbt_1.0/org.portable-scala/sbt-scala-native-crossproject/jars/sbt-scala-native-crossproject-0.6.1.jar"
+                            "name": "util-logging_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-logging_2.12/1.4.0/util-logging_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "util-logging_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-logging_2.12/1.4.0/util-logging_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "sbt",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "org.scala-lang.modules",
+                    "name": "scala-xml_2.12",
+                    "version": "1.3.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scala-xml_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.3.0/scala-xml_2.12-1.3.0.jar"
+                        },
                         {
-                            "name" : "sbt",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/sbt/jars/sbt-1.2.8.jar"
+                            "name": "scala-xml_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/1.3.0/scala-xml_2.12-1.3.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "main_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "launcher-interface",
+                    "version": "1.1.5",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "main_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/main_2.12/jars/main_2.12-1.2.8.jar"
+                            "name": "launcher-interface",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/launcher-interface/1.1.5/launcher-interface-1.1.5.jar"
+                        },
+                        {
+                            "name": "launcher-interface",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/launcher-interface/1.1.5/launcher-interface-1.1.5-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "logic_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "com.github.ben-manes.caffeine",
+                    "name": "caffeine",
+                    "version": "2.8.5",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "caffeine",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/github/ben-manes/caffeine/caffeine/2.8.5/caffeine-2.8.5.jar"
+                        },
                         {
-                            "name" : "logic_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/logic_2.12/jars/logic_2.12-1.2.8.jar"
+                            "name": "caffeine",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/github/ben-manes/caffeine/caffeine/2.8.5/caffeine-2.8.5-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "collections_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "io.get-coursier",
+                    "name": "lm-coursier-shaded_2.12",
+                    "version": "2.0.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "collections_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/collections_2.12/jars/collections_2.12-1.2.8.jar"
+                            "name": "lm-coursier-shaded_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/io/get-coursier/lm-coursier-shaded_2.12/2.0.0/lm-coursier-shaded_2.12-2.0.0.jar"
+                        },
+                        {
+                            "name": "lm-coursier-shaded_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/io/get-coursier/lm-coursier-shaded_2.12/2.0.0/lm-coursier-shaded_2.12-2.0.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.eed3si9n",
-                    "name" : "sjson-new-scalajson_2.12",
-                    "version" : "0.8.2",
-                    "artifacts" : [
+                    "organization": "org.apache.logging.log4j",
+                    "name": "log4j-api",
+                    "version": "2.11.2",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "log4j-api",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.11.2/log4j-api-2.11.2.jar"
+                        },
                         {
-                            "name" : "sjson-new-scalajson_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.eed3si9n/sjson-new-scalajson_2.12/jars/sjson-new-scalajson_2.12-0.8.2.jar"
+                            "name": "log4j-api",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.11.2/log4j-api-2.11.2-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.eed3si9n",
-                    "name" : "sjson-new-core_2.12",
-                    "version" : "0.8.2",
-                    "artifacts" : [
+                    "organization": "org.apache.logging.log4j",
+                    "name": "log4j-core",
+                    "version": "2.11.2",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "sjson-new-core_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.eed3si9n/sjson-new-core_2.12/jars/sjson-new-core_2.12-0.8.2.jar"
+                            "name": "log4j-core",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/apache/logging/log4j/log4j-core/2.11.2/log4j-core-2.11.2.jar"
+                        },
+                        {
+                            "name": "log4j-core",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/apache/logging/log4j/log4j-core/2.11.2/log4j-core-2.11.2-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.eed3si9n",
-                    "name" : "shaded-scalajson_2.12",
-                    "version" : "1.0.0-M4",
-                    "artifacts" : [
+                    "organization": "org.apache.logging.log4j",
+                    "name": "log4j-slf4j-impl",
+                    "version": "2.11.2",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "log4j-slf4j-impl",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/apache/logging/log4j/log4j-slf4j-impl/2.11.2/log4j-slf4j-impl-2.11.2.jar"
+                        },
                         {
-                            "name" : "shaded-scalajson_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.eed3si9n/shaded-scalajson_2.12/jars/shaded-scalajson_2.12-1.0.0-M4.jar"
+                            "name": "log4j-slf4j-impl",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/apache/logging/log4j/log4j-slf4j-impl/2.11.2/log4j-slf4j-impl-2.11.2-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "util-position_2.12",
-                    "version" : "1.2.4",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "librarymanagement-core_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "util-position_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/util-position_2.12/jars/util-position_2.12-1.2.4.jar"
+                            "name": "librarymanagement-core_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/librarymanagement-core_2.12/1.4.0/librarymanagement-core_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "librarymanagement-core_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/librarymanagement-core_2.12/1.4.0/librarymanagement-core_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "util-relation_2.12",
-                    "version" : "1.2.4",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "librarymanagement-ivy_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "librarymanagement-ivy_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/librarymanagement-ivy_2.12/1.4.0/librarymanagement-ivy_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "util-relation_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/util-relation_2.12/jars/util-relation_2.12-1.2.4.jar"
+                            "name": "librarymanagement-ivy_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/librarymanagement-ivy_2.12/1.4.0/librarymanagement-ivy_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "actions_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "compiler-interface",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "actions_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/actions_2.12/jars/actions_2.12-1.2.8.jar"
+                            "name": "compiler-interface",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/compiler-interface/1.4.0/compiler-interface-1.4.0.jar"
+                        },
+                        {
+                            "name": "compiler-interface",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/compiler-interface/1.4.0/compiler-interface-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "completion_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "zinc-compile_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "zinc-compile_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-compile_2.12/1.4.0/zinc-compile_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "completion_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/completion_2.12/jars/completion_2.12-1.2.8.jar"
+                            "name": "zinc-compile_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-compile_2.12/1.4.0/zinc-compile_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "jline",
-                    "name" : "jline",
-                    "version" : "2.14.6",
-                    "artifacts" : [
+                    "organization": "com.swoval",
+                    "name": "file-tree-views",
+                    "version": "2.1.4",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "jline",
-                            "path" : "/home/mlewis/.ivy2/cache/jline/jline/jars/jline-2.14.6.jar"
+                            "name": "file-tree-views",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/swoval/file-tree-views/2.1.4/file-tree-views-2.1.4.jar"
+                        },
+                        {
+                            "name": "file-tree-views",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/swoval/file-tree-views/2.1.4/file-tree-views-2.1.4-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "io_2.12",
-                    "version" : "1.2.2",
-                    "artifacts" : [
+                    "organization": "com.typesafe",
+                    "name": "config",
+                    "version": "1.3.3",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "config",
+                            "checksum": {
+                                "type": "sha1",
+                                "digest": "4b68c2d5d0403bb4015520fcfabc88d0cbc4d117"
+                            },
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/typesafe/config/1.3.3/config-1.3.3.jar"
+                        },
                         {
-                            "name" : "io_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/io_2.12/jars/io_2.12-1.2.2.jar"
+                            "name": "config",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/typesafe/config/1.3.3/config-1.3.3-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.swoval",
-                    "name" : "apple-file-events",
-                    "version" : "1.3.2",
-                    "artifacts" : [
+                    "organization": "org.scala-lang.modules",
+                    "name": "scala-parser-combinators_2.12",
+                    "version": "1.1.2",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "apple-file-events",
-                            "path" : "/home/mlewis/.ivy2/cache/com.swoval/apple-file-events/jars/apple-file-events-1.3.2.jar"
+                            "name": "scala-parser-combinators_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2.jar"
+                        },
+                        {
+                            "name": "scala-parser-combinators_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-parser-combinators_2.12/1.1.2/scala-parser-combinators_2.12-1.1.2-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "net.java.dev.jna",
-                    "name" : "jna",
-                    "version" : "4.5.0",
-                    "artifacts" : [
+                    "organization": "com.eed3si9n",
+                    "name": "gigahorse-core_2.12",
+                    "version": "0.5.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "gigahorse-core_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/gigahorse-core_2.12/0.5.0/gigahorse-core_2.12-0.5.0.jar"
+                        },
                         {
-                            "name" : "jna",
-                            "path" : "/home/mlewis/.ivy2/cache/net.java.dev.jna/jna/jars/jna-4.5.0.jar"
+                            "name": "gigahorse-core_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/gigahorse-core_2.12/0.5.0/gigahorse-core_2.12-0.5.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "net.java.dev.jna",
-                    "name" : "jna-platform",
-                    "version" : "4.5.0",
-                    "artifacts" : [
+                    "organization": "com.squareup.okhttp3",
+                    "name": "okhttp",
+                    "version": "3.14.2",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "jna-platform",
-                            "path" : "/home/mlewis/.ivy2/cache/net.java.dev.jna/jna-platform/jars/jna-platform-4.5.0.jar"
+                            "name": "okhttp",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/squareup/okhttp3/okhttp/3.14.2/okhttp-3.14.2.jar"
+                        },
+                        {
+                            "name": "okhttp",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/squareup/okhttp3/okhttp/3.14.2/okhttp-3.14.2-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "util-control_2.12",
-                    "version" : "1.2.4",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "util-relation_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "util-relation_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-relation_2.12/1.4.0/util-relation_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "util-control_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/util-control_2.12/jars/util-control_2.12-1.2.4.jar"
+                            "name": "util-relation_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-relation_2.12/1.4.0/util-relation_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "run_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "completion_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "run_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/run_2.12/jars/run_2.12-1.2.8.jar"
+                            "name": "completion_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/completion_2.12/1.4.0/completion_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "completion_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/completion_2.12/1.4.0/completion_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "util-logging_2.12",
-                    "version" : "1.2.4",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "task-system_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "task-system_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/task-system_2.12/1.4.0/task-system_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "util-logging_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/util-logging_2.12/jars/util-logging_2.12-1.2.4.jar"
+                            "name": "task-system_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/task-system_2.12/1.4.0/task-system_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "util-interface",
-                    "version" : "1.2.4",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "tasks_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "util-interface",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/util-interface/jars/util-interface-1.2.4.jar"
+                            "name": "tasks_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/tasks_2.12/1.4.0/tasks_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "tasks_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/tasks_2.12/1.4.0/tasks_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.apache.logging.log4j",
-                    "name" : "log4j-api",
-                    "version" : "2.11.1",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "testing_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "testing_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/testing_2.12/1.4.0/testing_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "log4j-api",
-                            "path" : "/home/mlewis/.ivy2/cache/org.apache.logging.log4j/log4j-api/jars/log4j-api-2.11.1.jar"
+                            "name": "testing_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/testing_2.12/1.4.0/testing_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.apache.logging.log4j",
-                    "name" : "log4j-core",
-                    "version" : "2.11.1",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "util-tracking_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "log4j-core",
-                            "path" : "/home/mlewis/.ivy2/cache/org.apache.logging.log4j/log4j-core/jars/log4j-core-2.11.1.jar"
+                            "name": "util-tracking_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-tracking_2.12/1.4.0/util-tracking_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "util-tracking_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-tracking_2.12/1.4.0/util-tracking_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.lmax",
-                    "name" : "disruptor",
-                    "version" : "3.4.2",
-                    "artifacts" : [
+                    "organization": "com.eed3si9n",
+                    "name": "sjson-new-scalajson_2.12",
+                    "version": "0.9.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "sjson-new-scalajson_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/sjson-new-scalajson_2.12/0.9.0/sjson-new-scalajson_2.12-0.9.0.jar"
+                        },
                         {
-                            "name" : "disruptor",
-                            "path" : "/home/mlewis/.ivy2/cache/com.lmax/disruptor/jars/disruptor-3.4.2.jar"
+                            "name": "sjson-new-scalajson_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/sjson-new-scalajson_2.12/0.9.0/sjson-new-scalajson_2.12-0.9.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "zinc-classpath_2.12",
-                    "version" : "1.2.5",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt.jline3",
+                    "name": "jline-terminal",
+                    "version": "3.16.0-sbt-211a082ed6326908dc84ca017ce4430728f18a8a",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "zinc-classpath_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-classpath_2.12/jars/zinc-classpath_2.12-1.2.5.jar"
+                            "name": "jline-terminal",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/jline3/jline-terminal/3.16.0-sbt-211a082ed6326908dc84ca017ce4430728f18a8a/jline-terminal-3.16.0-sbt-211a082ed6326908dc84ca017ce4430728f18a8a.jar"
+                        },
+                        {
+                            "name": "jline-terminal",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/jline3/jline-terminal/3.16.0-sbt-211a082ed6326908dc84ca017ce4430728f18a8a/jline-terminal-3.16.0-sbt-211a082ed6326908dc84ca017ce4430728f18a8a-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-lang",
-                    "name" : "scala-compiler",
-                    "version" : "2.12.7",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "zinc-classpath_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "zinc-classpath_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-classpath_2.12/1.4.0/zinc-classpath_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "scala-compiler",
-                            "path" : "/home/mlewis/.sbt/boot/scala-2.12.7/lib/scala-compiler.jar"
+                            "name": "zinc-classpath_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-classpath_2.12/1.4.0/zinc-classpath_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "compiler-interface",
-                    "version" : "1.2.5",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "zinc-apiinfo_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "compiler-interface",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/compiler-interface/jars/compiler-interface-1.2.5.jar"
+                            "name": "zinc-apiinfo_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-apiinfo_2.12/1.4.0/zinc-apiinfo_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "zinc-apiinfo_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-apiinfo_2.12/1.4.0/zinc-apiinfo_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "task-system_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "zinc_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "zinc_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc_2.12/1.4.0/zinc_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "task-system_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/task-system_2.12/jars/task-system_2.12-1.2.8.jar"
+                            "name": "zinc_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc_2.12/1.4.0/zinc_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "tasks_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "core-macros_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "tasks_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/tasks_2.12/jars/tasks_2.12-1.2.8.jar"
+                            "name": "core-macros_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/core-macros_2.12/1.4.0/core-macros_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "core-macros_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/core-macros_2.12/1.4.0/core-macros_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "util-cache_2.12",
-                    "version" : "1.2.4",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "util-cache_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "util-cache_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-cache_2.12/1.4.0/util-cache_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "util-cache_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/util-cache_2.12/jars/util-cache_2.12-1.2.4.jar"
+                            "name": "util-cache_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-cache_2.12/1.4.0/util-cache_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.eed3si9n",
-                    "name" : "sjson-new-murmurhash_2.12",
-                    "version" : "0.8.2",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "util-control_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "sjson-new-murmurhash_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.eed3si9n/sjson-new-murmurhash_2.12/jars/sjson-new-murmurhash_2.12-0.8.2.jar"
+                            "name": "util-control_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-control_2.12/1.4.0/util-control_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "util-control_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-control_2.12/1.4.0/util-control_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "testing_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "protocol_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "protocol_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/protocol_2.12/1.4.0/protocol_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "testing_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/testing_2.12/jars/testing_2.12-1.2.8.jar"
+                            "name": "protocol_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/protocol_2.12/1.4.0/protocol_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "test-agent",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "com.eed3si9n",
+                    "name": "sjson-new-core_2.12",
+                    "version": "0.9.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "test-agent",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/test-agent/jars/test-agent-1.2.8.jar"
+                            "name": "sjson-new-core_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/sjson-new-core_2.12/0.9.0/sjson-new-core_2.12-0.9.0.jar"
+                        },
+                        {
+                            "name": "sjson-new-core_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/sjson-new-core_2.12/0.9.0/sjson-new-core_2.12-0.9.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "launcher-interface",
-                    "version" : "1.0.4",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "template-resolver",
+                    "version": "0.1",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "template-resolver",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/template-resolver/0.1/template-resolver-0.1.jar"
+                        },
                         {
-                            "name" : "launcher-interface",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/launcher-interface/jars/launcher-interface-1.0.4.jar"
+                            "name": "template-resolver",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/template-resolver/0.1/template-resolver-0.1-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "util-tracking_2.12",
-                    "version" : "1.2.4",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "util-position_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "util-tracking_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/util-tracking_2.12/jars/util-tracking_2.12-1.2.4.jar"
+                            "name": "util-position_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-position_2.12/1.4.0/util-position_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "util-position_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-position_2.12/1.4.0/util-position_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "zinc-apiinfo_2.12",
-                    "version" : "1.2.5",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "zinc-compile-core_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "zinc-compile-core_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-compile-core_2.12/1.4.0/zinc-compile-core_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "zinc-apiinfo_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-apiinfo_2.12/jars/zinc-apiinfo_2.12-1.2.5.jar"
+                            "name": "zinc-compile-core_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-compile-core_2.12/1.4.0/zinc-compile-core_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "compiler-bridge_2.12",
-                    "version" : "1.2.5",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "util-interface",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "compiler-bridge_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/compiler-bridge_2.12/jars/compiler-bridge_2.12-1.2.5.jar"
+                            "name": "util-interface",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-interface/1.4.0/util-interface-1.4.0.jar"
+                        },
+                        {
+                            "name": "util-interface",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/util-interface/1.4.0/util-interface-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "zinc-classfile_2.12",
-                    "version" : "1.2.5",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt.jline",
+                    "name": "jline",
+                    "version": "2.14.7-sbt-5e51b9d4f9631ebfa29753ce4accc57808e7fd6b",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "jline",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/jline/jline/2.14.7-sbt-5e51b9d4f9631ebfa29753ce4accc57808e7fd6b/jline-2.14.7-sbt-5e51b9d4f9631ebfa29753ce4accc57808e7fd6b.jar"
+                        },
                         {
-                            "name" : "zinc-classfile_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-classfile_2.12/jars/zinc-classfile_2.12-1.2.5.jar"
+                            "name": "jline",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/jline/jline/2.14.7-sbt-5e51b9d4f9631ebfa29753ce4accc57808e7fd6b/jline-2.14.7-sbt-5e51b9d4f9631ebfa29753ce4accc57808e7fd6b-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "librarymanagement-core_2.12",
-                    "version" : "1.2.4",
-                    "artifacts" : [
+                    "organization": "org.jline",
+                    "name": "jline-terminal-jna",
+                    "version": "3.16.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "librarymanagement-core_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/librarymanagement-core_2.12/jars/librarymanagement-core_2.12-1.2.4.jar"
+                            "name": "jline-terminal-jna",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline-terminal-jna/3.16.0/jline-terminal-jna-3.16.0.jar"
+                        },
+                        {
+                            "name": "jline-terminal-jna",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline-terminal-jna/3.16.0/jline-terminal-jna-3.16.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.jcraft",
-                    "name" : "jsch",
-                    "version" : "0.1.54",
-                    "artifacts" : [
+                    "organization": "org.jline",
+                    "name": "jline-terminal-jansi",
+                    "version": "3.16.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "jline-terminal-jansi",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline-terminal-jansi/3.16.0/jline-terminal-jansi-3.16.0.jar"
+                        },
                         {
-                            "name" : "jsch",
-                            "path" : "/home/mlewis/.ivy2/cache/com.jcraft/jsch/jars/jsch-0.1.54.jar"
+                            "name": "jline-terminal-jansi",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline-terminal-jansi/3.16.0/jline-terminal-jansi-3.16.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.squareup.okhttp3",
-                    "name" : "okhttp-urlconnection",
-                    "version" : "3.7.0",
-                    "artifacts" : [
+                    "organization": "com.lmax",
+                    "name": "disruptor",
+                    "version": "3.4.2",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "okhttp-urlconnection",
-                            "path" : "/home/mlewis/.ivy2/cache/com.squareup.okhttp3/okhttp-urlconnection/jars/okhttp-urlconnection-3.7.0.jar"
+                            "name": "disruptor",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/lmax/disruptor/3.4.2/disruptor-3.4.2.jar"
+                        },
+                        {
+                            "name": "disruptor",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/lmax/disruptor/3.4.2/disruptor-3.4.2-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "zinc-ivy-integration_2.12",
-                    "version" : "1.2.5",
-                    "artifacts" : [
+                    "organization": "org.scala-lang",
+                    "name": "scala-reflect",
+                    "version": "2.12.12",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scala-reflect",
+                            "path": "/home/mlewis/.sbt/boot/scala-2.12.12/lib/scala-reflect.jar"
+                        },
                         {
-                            "name" : "zinc-ivy-integration_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-ivy-integration_2.12/jars/zinc-ivy-integration_2.12-1.2.5.jar"
+                            "name": "scala-reflect",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.12/scala-reflect-2.12.12-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "zinc-compile-core_2.12",
-                    "version" : "1.2.5",
-                    "artifacts" : [
+                    "organization": "org.checkerframework",
+                    "name": "checker-qual",
+                    "version": "3.4.1",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "zinc-compile-core_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-compile-core_2.12/jars/zinc-compile-core_2.12-1.2.5.jar"
+                            "name": "checker-qual",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/checkerframework/checker-qual/3.4.1/checker-qual-3.4.1.jar"
+                        },
+                        {
+                            "name": "checker-qual",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/checkerframework/checker-qual/3.4.1/checker-qual-3.4.1-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "zinc_2.12",
-                    "version" : "1.2.5",
-                    "artifacts" : [
+                    "organization": "com.google.errorprone",
+                    "name": "error_prone_annotations",
+                    "version": "2.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "error_prone_annotations",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.4.0/error_prone_annotations-2.4.0.jar"
+                        },
                         {
-                            "name" : "zinc_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc_2.12/jars/zinc_2.12-1.2.5.jar"
+                            "name": "error_prone_annotations",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/google/errorprone/error_prone_annotations/2.4.0/error_prone_annotations-2.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "zinc-core_2.12",
-                    "version" : "1.2.5",
-                    "artifacts" : [
+                    "organization": "org.slf4j",
+                    "name": "slf4j-api",
+                    "version": "1.7.26",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "zinc-core_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-core_2.12/jars/zinc-core_2.12-1.2.5.jar"
+                            "name": "slf4j-api",
+                            "checksum": {
+                                "type": "sha1",
+                                "digest": "77100a62c2e6f04b53977b9f541044d7d722693d"
+                            },
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.26/slf4j-api-1.7.26.jar"
+                        },
+                        {
+                            "name": "slf4j-api",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.26/slf4j-api-1.7.26-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "zinc-persist_2.12",
-                    "version" : "1.2.5",
-                    "artifacts" : [
+                    "organization": "org.scala-lang",
+                    "name": "scala-compiler",
+                    "version": "2.12.12",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scala-compiler",
+                            "path": "/home/mlewis/.sbt/boot/scala-2.12.12/lib/scala-compiler.jar"
+                        },
                         {
-                            "name" : "zinc-persist_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-persist_2.12/jars/zinc-persist_2.12-1.2.5.jar"
+                            "name": "scala-compiler",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.12/scala-compiler-2.12.12-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.trueaccord.scalapb",
-                    "name" : "scalapb-runtime_2.12",
-                    "version" : "0.6.0",
-                    "artifacts" : [
+                    "organization": "com.jcraft",
+                    "name": "jsch",
+                    "version": "0.1.54",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "scalapb-runtime_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.trueaccord.scalapb/scalapb-runtime_2.12/jars/scalapb-runtime_2.12-0.6.0.jar"
+                            "name": "jsch",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/jcraft/jsch/0.1.54/jsch-0.1.54.jar"
+                        },
+                        {
+                            "name": "jsch",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/jcraft/jsch/0.1.54/jsch-0.1.54-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.trueaccord.lenses",
-                    "name" : "lenses_2.12",
-                    "version" : "0.4.12",
-                    "artifacts" : [
+                    "organization": "com.squareup.okhttp3",
+                    "name": "okhttp-urlconnection",
+                    "version": "3.7.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "okhttp-urlconnection",
+                            "checksum": {
+                                "type": "sha1",
+                                "digest": "22c61dda6d7e63a7325932c85b0a3412443b1f5a"
+                            },
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/squareup/okhttp3/okhttp-urlconnection/3.7.0/okhttp-urlconnection-3.7.0.jar"
+                        },
                         {
-                            "name" : "lenses_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.trueaccord.lenses/lenses_2.12/jars/lenses_2.12-0.4.12.jar"
+                            "name": "okhttp-urlconnection",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/squareup/okhttp3/okhttp-urlconnection/3.7.0/okhttp-urlconnection-3.7.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.lihaoyi",
-                    "name" : "fastparse_2.12",
-                    "version" : "0.4.2",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt.ivy",
+                    "name": "ivy",
+                    "version": "2.3.0-sbt-839fad1cdc07cf6fc81364d74c323867230432ad",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "fastparse_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.lihaoyi/fastparse_2.12/jars/fastparse_2.12-0.4.2.jar"
+                            "name": "ivy",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/ivy/ivy/2.3.0-sbt-839fad1cdc07cf6fc81364d74c323867230432ad/ivy-2.3.0-sbt-839fad1cdc07cf6fc81364d74c323867230432ad.jar"
+                        },
+                        {
+                            "name": "ivy",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/ivy/ivy/2.3.0-sbt-839fad1cdc07cf6fc81364d74c323867230432ad/ivy-2.3.0-sbt-839fad1cdc07cf6fc81364d74c323867230432ad-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.lihaoyi",
-                    "name" : "fastparse-utils_2.12",
-                    "version" : "0.4.2",
-                    "artifacts" : [
+                    "organization": "com.typesafe",
+                    "name": "ssl-config-core_2.12",
+                    "version": "0.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "ssl-config-core_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/typesafe/ssl-config-core_2.12/0.4.0/ssl-config-core_2.12-0.4.0.jar"
+                        },
                         {
-                            "name" : "fastparse-utils_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.lihaoyi/fastparse-utils_2.12/jars/fastparse-utils_2.12-0.4.2.jar"
+                            "name": "ssl-config-core_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/typesafe/ssl-config-core_2.12/0.4.0/ssl-config-core_2.12-0.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.lihaoyi",
-                    "name" : "sourcecode_2.12",
-                    "version" : "0.1.3",
-                    "artifacts" : [
+                    "organization": "org.reactivestreams",
+                    "name": "reactive-streams",
+                    "version": "1.0.2",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "sourcecode_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.lihaoyi/sourcecode_2.12/jars/sourcecode_2.12-0.1.3.jar"
+                            "name": "reactive-streams",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/reactivestreams/reactive-streams/1.0.2/reactive-streams-1.0.2.jar"
+                        },
+                        {
+                            "name": "reactive-streams",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/reactivestreams/reactive-streams/1.0.2/reactive-streams-1.0.2-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.google.protobuf",
-                    "name" : "protobuf-java",
-                    "version" : "3.3.1",
-                    "artifacts" : [
+                    "organization": "com.squareup.okio",
+                    "name": "okio",
+                    "version": "1.17.2",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "okio",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/squareup/okio/okio/1.17.2/okio-1.17.2.jar"
+                        },
                         {
-                            "name" : "protobuf-java",
-                            "path" : "/home/mlewis/.ivy2/cache/com.google.protobuf/protobuf-java/bundles/protobuf-java-3.3.1.jar"
+                            "name": "okio",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/squareup/okio/okio/1.17.2/okio-1.17.2-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "sbinary_2.12",
-                    "version" : "0.5.0",
-                    "artifacts" : [
+                    "organization": "org.jline",
+                    "name": "jline-reader",
+                    "version": "3.16.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "sbinary_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/sbinary_2.12/jars/sbinary_2.12-0.5.0.jar"
+                            "name": "jline-reader",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline-reader/3.16.0/jline-reader-3.16.0.jar"
+                        },
+                        {
+                            "name": "jline-reader",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline-reader/3.16.0/jline-reader-3.16.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "main-settings_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "test-agent",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "test-agent",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/test-agent/1.4.0/test-agent-1.4.0.jar"
+                        },
                         {
-                            "name" : "main-settings_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/main-settings_2.12/jars/main-settings_2.12-1.2.8.jar"
+                            "name": "test-agent",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/test-agent/1.4.0/test-agent-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "command_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "com.eed3si9n",
+                    "name": "shaded-jawn-parser_2.12",
+                    "version": "0.9.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "command_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/command_2.12/jars/command_2.12-1.2.8.jar"
+                            "name": "shaded-jawn-parser_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/shaded-jawn-parser_2.12/0.9.0/shaded-jawn-parser_2.12-0.9.0.jar"
+                        },
+                        {
+                            "name": "shaded-jawn-parser_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/shaded-jawn-parser_2.12/0.9.0/shaded-jawn-parser_2.12-0.9.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "protocol_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "com.eed3si9n",
+                    "name": "shaded-scalajson_2.12",
+                    "version": "1.0.0-M4",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "shaded-scalajson_2.12",
+                            "checksum": {
+                                "type": "sha1",
+                                "digest": "10f27db4bc3b0c0c1a5c9a28a67f84995a2c3013"
+                            },
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/shaded-scalajson_2.12/1.0.0-M4/shaded-scalajson_2.12-1.0.0-M4.jar"
+                        },
                         {
-                            "name" : "protocol_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/protocol_2.12/jars/protocol_2.12-1.2.8.jar"
+                            "name": "shaded-scalajson_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/shaded-scalajson_2.12/1.0.0-M4/shaded-scalajson_2.12-1.0.0-M4-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt.ipcsocket",
-                    "name" : "ipcsocket",
-                    "version" : "1.0.0",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "compiler-bridge_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "ipcsocket",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt.ipcsocket/ipcsocket/jars/ipcsocket-1.0.0.jar"
+                            "name": "compiler-bridge_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.4.0/compiler-bridge_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "compiler-bridge_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/compiler-bridge_2.12/1.4.0/compiler-bridge_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "template-resolver",
-                    "version" : "0.1",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "zinc-classfile_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "zinc-classfile_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-classfile_2.12/1.4.0/zinc-classfile_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "template-resolver",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/template-resolver/jars/template-resolver-0.1.jar"
+                            "name": "zinc-classfile_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-classfile_2.12/1.4.0/zinc-classfile_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "core-macros_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "zinc-core_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "core-macros_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/core-macros_2.12/jars/core-macros_2.12-1.2.8.jar"
+                            "name": "zinc-core_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-core_2.12/1.4.0/zinc-core_2.12-1.4.0.jar"
+                        },
+                        {
+                            "name": "zinc-core_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-core_2.12/1.4.0/zinc-core_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "scripted-sbt-redux_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "zinc-persist_2.12",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "zinc-persist_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-persist_2.12/1.4.0/zinc-persist_2.12-1.4.0.jar"
+                        },
                         {
-                            "name" : "scripted-sbt-redux_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/scripted-sbt-redux_2.12/jars/scripted-sbt-redux_2.12-1.2.8.jar"
+                            "name": "zinc-persist_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-persist_2.12/1.4.0/zinc-persist_2.12-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "util-scripted_2.12",
-                    "version" : "1.2.4",
-                    "artifacts" : [
+                    "organization": "com.eed3si9n",
+                    "name": "sjson-new-murmurhash_2.12",
+                    "version": "0.9.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "util-scripted_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/util-scripted_2.12/jars/util-scripted_2.12-1.2.4.jar"
+                            "name": "sjson-new-murmurhash_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/sjson-new-murmurhash_2.12/0.9.0/sjson-new-murmurhash_2.12-0.9.0.jar"
+                        },
+                        {
+                            "name": "sjson-new-murmurhash_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/com/eed3si9n/sjson-new-murmurhash_2.12/0.9.0/sjson-new-murmurhash_2.12-0.9.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "scripted-plugin_2.12",
-                    "version" : "1.2.8",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt.ipcsocket",
+                    "name": "ipcsocket",
+                    "version": "1.1.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "ipcsocket",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/ipcsocket/ipcsocket/1.1.0/ipcsocket-1.1.0.jar"
+                        },
                         {
-                            "name" : "scripted-plugin_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/scripted-plugin_2.12/jars/scripted-plugin_2.12-1.2.8.jar"
+                            "name": "ipcsocket",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/ipcsocket/ipcsocket/1.1.0/ipcsocket-1.1.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.apache.logging.log4j",
-                    "name" : "log4j-slf4j-impl",
-                    "version" : "2.11.1",
-                    "artifacts" : [
+                    "organization": "net.openhft",
+                    "name": "zero-allocation-hashing",
+                    "version": "0.10.1",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "log4j-slf4j-impl",
-                            "path" : "/home/mlewis/.ivy2/cache/org.apache.logging.log4j/log4j-slf4j-impl/jars/log4j-slf4j-impl-2.11.1.jar"
+                            "name": "zero-allocation-hashing",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/net/openhft/zero-allocation-hashing/0.10.1/zero-allocation-hashing-0.10.1.jar"
+                        },
+                        {
+                            "name": "zero-allocation-hashing",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/net/openhft/zero-allocation-hashing/0.10.1/zero-allocation-hashing-0.10.1-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.github.cb372",
-                    "name" : "scalacache-caffeine_2.12",
-                    "version" : "0.20.0",
-                    "artifacts" : [
+                    "organization": "org.fusesource.jansi",
+                    "name": "jansi",
+                    "version": "1.18",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "jansi",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/fusesource/jansi/jansi/1.18/jansi-1.18.jar"
+                        },
                         {
-                            "name" : "scalacache-caffeine_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.github.cb372/scalacache-caffeine_2.12/jars/scalacache-caffeine_2.12-0.20.0.jar"
+                            "name": "jansi",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/fusesource/jansi/jansi/1.18/jansi-1.18-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.github.cb372",
-                    "name" : "scalacache-core_2.12",
-                    "version" : "0.20.0",
-                    "artifacts" : [
+                    "organization": "org.jline",
+                    "name": "jline-terminal",
+                    "version": "3.16.0",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "scalacache-core_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/com.github.cb372/scalacache-core_2.12/jars/scalacache-core_2.12-0.20.0.jar"
+                            "name": "jline-terminal",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline-terminal/3.16.0/jline-terminal-3.16.0.jar"
+                        },
+                        {
+                            "name": "jline-terminal",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/jline/jline-terminal/3.16.0/jline-terminal-3.16.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "com.github.ben-manes.caffeine",
-                    "name" : "caffeine",
-                    "version" : "2.5.6",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "zinc-persist-core-assembly",
+                    "version": "1.4.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "zinc-persist-core-assembly",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-persist-core-assembly/1.4.0/zinc-persist-core-assembly-1.4.0.jar"
+                        },
                         {
-                            "name" : "caffeine",
-                            "path" : "/home/mlewis/.ivy2/cache/com.github.ben-manes.caffeine/caffeine/jars/caffeine-2.5.6.jar"
+                            "name": "zinc-persist-core-assembly",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-persist-core-assembly/1.4.0/zinc-persist-core-assembly-1.4.0-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "librarymanagement-ivy_2.12",
-                    "version" : "1.2.4",
-                    "artifacts" : [
+                    "organization": "org.scala-sbt",
+                    "name": "sbinary_2.12",
+                    "version": "0.5.1",
+                    "configurations": "default",
+                    "artifacts": [
                         {
-                            "name" : "librarymanagement-ivy_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/librarymanagement-ivy_2.12/jars/librarymanagement-ivy_2.12-1.2.4.jar"
+                            "name": "sbinary_2.12",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/sbinary_2.12/0.5.1/sbinary_2.12-0.5.1.jar"
+                        },
+                        {
+                            "name": "sbinary_2.12",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-sbt/sbinary_2.12/0.5.1/sbinary_2.12-0.5.1-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt.ivy",
-                    "name" : "ivy",
-                    "version" : "2.3.0-sbt-cb9cc189e9f3af519f9f102e6c5d446488ff6832",
-                    "artifacts" : [
+                    "organization": "org.scala-lang",
+                    "name": "scala-compiler",
+                    "version": "2.12.12",
+                    "configurations": "optional",
+                    "artifacts": [
                         {
-                            "name" : "ivy",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt.ivy/ivy/jars/ivy-2.3.0-sbt-cb9cc189e9f3af519f9f102e6c5d446488ff6832.jar"
+                            "name": "scala-compiler",
+                            "path": "/home/mlewis/.sbt/boot/scala-2.12.12/lib/scala-compiler.jar"
+                        },
+                        {
+                            "name": "scala-compiler",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.12/scala-compiler-2.12.12-sources.jar"
                         }
                     ]
                 },
                 {
-                    "organization" : "org.scala-sbt",
-                    "name" : "zinc-compile_2.12",
-                    "version" : "1.2.5",
-                    "artifacts" : [
+                    "organization": "org.scala-lang",
+                    "name": "scala-library",
+                    "version": "2.12.12",
+                    "configurations": "optional",
+                    "artifacts": [
+                        {
+                            "name": "scala-library",
+                            "path": "/home/mlewis/.sbt/boot/scala-2.12.12/lib/scala-library.jar"
+                        },
                         {
-                            "name" : "zinc-compile_2.12",
-                            "path" : "/home/mlewis/.ivy2/cache/org.scala-sbt/zinc-compile_2.12/jars/zinc-compile_2.12-1.2.5.jar"
+                            "name": "scala-library",
+                            "classifier": "sources",
+                            "path": "/home/mlewis/.cache/coursier/v1/https/repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.12/scala-library-2.12.12-sources.jar"
                         }
                     ]
                 }
             ]
-        }
+        },
+        "tags": [
+            "library"
+        ]
     }
 }

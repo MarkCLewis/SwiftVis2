@@ -419,6 +419,27 @@ object PlotTesting {
     Plot.gridNN(Seq(Seq(scatter, scatter), Seq(scatter, scatter2)))
   }
 
+  def buildUpFluent(): Plot = {
+    val xs = (0 to 10).map(_.toDouble)
+    val ys = xs.map(x => math.sqrt(x))
+    val counts = (0 to 9).map(i => 1.0 - i*i/100.0)
+    Plot.simple(ScatterStyle(xs, xs))
+      .withAxis("y2", NumericAxis.defaultVerticalAxis("y2", "Y2").min(0.0).maxSide)
+      .updatedAxis[NumericAxis]("x", _.updatedName("X"))
+      .updatedAxis[NumericAxis]("x", _.updatedName("Y"))
+      .updatedPlotGrid(_.withRow().withColumn().withRow(0).withColumn(0)
+        .withStyle(ScatterStyle(xs, ys), "x", "y", 0, 0, 0)
+        .withStyle(HistogramStyle(xs, Seq(HistogramStyle.DataAndColor(counts, RedARGB))), "x", "y2", 0, 1, 0)
+        .withStyle(ScatterStyle(xs, ys), "x", "y", 0, 2, 0)
+        .withStyle(HistogramStyle(xs, Seq(HistogramStyle.DataAndColor(counts, RedARGB))), "x", "y2", 1, 0, 0)
+        .withStyle(ScatterStyle(xs, counts), "x", "y", 1, 1, 1)
+        .withStyle(HistogramStyle(xs, Seq(HistogramStyle.DataAndColor(counts, RedARGB))), "x", "y2", 1, 2, 0)
+        .withStyle(ScatterStyle(xs, ys), "x", "y", 2, 0, 0)
+        .withStyle(HistogramStyle(xs, Seq(HistogramStyle.DataAndColor(counts, RedARGB))), "x", "y2", 2, 1, 0)
+        .withStyle(ScatterStyle(xs, ys), "x", "y", 2, 2, 0)
+      )
+  }
+
   val largeDim = 1000
   val medDim = 800
   val smallDim = 600

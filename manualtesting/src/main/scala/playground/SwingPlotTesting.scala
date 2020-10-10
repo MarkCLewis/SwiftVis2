@@ -38,5 +38,6 @@ object SwingPlotTesting extends App {
   // SwingRenderer(ptPlot, smallDim, smallDim)
 //   SwingRenderer(colorTest(), largeDim, largeDim)
   // SwingRenderer(simpleFull(), smallDim, smallDim)
-  SwingRenderer(gridSkipAxisLabels(), smallDim, smallDim, true)
+  // SwingRenderer(gridSkipAxisLabels(), smallDim, smallDim, true)
+  SwingRenderer(buildUpFluent(), smallDim, smallDim, true)
 }

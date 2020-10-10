@@ -151,17 +151,24 @@ case class PlotGrid(
     }
   }
 
+  def rows: Int = plots.length
+
+  def columns: Option[Int] = if (plots.nonEmpty) Some(plots.head.length) else None
+
   // Fluent Interface
 
-  def withRow(row: Int = plots.length): PlotGrid = ??? // TODO
+  def withRow(row: Int = plots.length): PlotGrid = {
+    copy(plots = plots.patch(row, Seq(Seq.fill(plots.head.length)(Seq.empty[Plot2D])), 0), yWeights = yWeights.patch(row, Seq(1.0), 0))
+  }
   
-  def withColumn(col: Int = plots.head.length): PlotGrid = ??? // TODO
+  def withColumn(col: Int = plots.head.length): PlotGrid = {
+    copy(plots = plots.map(_.patch(col, Seq(Seq.empty[Plot2D]), 0)), xWeights = xWeights.patch(col, Seq(1.0), 0))
+  }
   
-  def withStyle(style: PlotStyle, row: Int = 0, col: Int = 0, stack: Int = 0): PlotGrid = {
+  def withStyle(style: PlotStyle, xAxis: String, yAxis: String, row: Int = 0, col: Int = 0, stack: Int = 0): PlotGrid = {
     val prow = plots(row)
     val pcell = prow(col)
-    val p2d = pcell(stack)
-    copy(plots = plots.updated(row, prow.updated(col, pcell.patch(stack, Seq(p2d.copy(style = style)), 0))))
+    copy(plots = plots.updated(row, prow.updated(col, pcell.patch(stack, Seq(Plot2D(style, xAxis, yAxis)), 0))))
   }
   
   def updatedStyle[A <: PlotStyle](f: A => A, row: Int = 0, col: Int = 0, stack: Int = 0): PlotGrid = {
