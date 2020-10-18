@@ -18,7 +18,6 @@ sealed trait Axis {
  * the tickSpacing will be ignored, even if it is provided.
  */
 case class NumericAxis(
-  key:           String,
   min:           Option[Double]                      = None,
   max:           Option[Double]                      = None,
   tickSpacing:   Option[Double]                      = None,
@@ -251,6 +250,17 @@ case class NumericAxis(
     * @return The modified axis.
     */
   def ticks(tstyle: Axis.TickStyle.Value): NumericAxis = updatedTickStyle(tstyle)
+
+  /**
+    * Override equality because I need this to check for identify in the sets and maps.
+    *
+    * @param that
+    * @return
+    */
+  override def equals(that: Any): Boolean = that match {
+    case ar: AnyRef => this eq ar
+    case _ => false
+  }
   
   // Private methods
 
@@ -314,7 +324,7 @@ case class NumericAxis(
     }
   }
 
-  def calcTickLocations(amin: Double, amax: Double): Seq[Double] = {
+  private def calcTickLocations(amin: Double, amax: Double): Seq[Double] = {
     if (tickSpacing.nonEmpty || tickLabelInfo.nonEmpty) {
       style match {
         case Axis.ScaleStyle.Linear =>
@@ -355,15 +365,15 @@ case class NumericAxis(
 }
 
 object NumericAxis {
-  def defaultHorizontalAxis(text: String, key: String = "x", numFormat: String = "%1.1f", xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear) = {
+  def defaultHorizontalAxis(text: String, numFormat: String = "%1.1f", xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear) = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    NumericAxis(key, None, None, None, Axis.TickStyle.Both,
+    NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(90.0, font, numFormat)), Some(Axis.NameSettings(text, font)), Axis.DisplaySide.Min, xType)
   }
 
-  def defaultVerticalAxis(text: String, key: String = "y", numFormat: String = "%1.1f", yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear) = {
+  def defaultVerticalAxis(text: String, numFormat: String = "%1.1f", yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear) = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    NumericAxis(key, None, None, None, Axis.TickStyle.Both,
+    NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, numFormat)), Some(Axis.NameSettings(text, font)), Axis.DisplaySide.Min, yType)
   }
 }
@@ -372,7 +382,6 @@ object NumericAxis {
  * Axis with text categories for labels instead of numeric values.
  */
 case class CategoryAxis(
-  key:           String,
   tickStyle:        Axis.TickStyle.Value,
   labelOrientation: Double, // angle in degrees
   labelFont:        Renderer.FontData,
@@ -453,6 +462,18 @@ case class CategoryAxis(
     }
 
   }
+
+  /**
+    * Override equality because I need this to check for identify in the sets and maps.
+    *
+    * @param that
+    * @return
+    */
+  override def equals(that: Any): Boolean = that match {
+    case ar: AnyRef => this eq ar
+    case _ => false
+  }
+
 }
 
 /**

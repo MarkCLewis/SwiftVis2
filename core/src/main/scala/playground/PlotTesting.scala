@@ -173,16 +173,16 @@ object PlotTesting {
    */
   def longForm(): Plot = {
     val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    val xAxis1 = new NumericAxis("x1", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)),
+    val xAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)),
         Some(Axis.NameSettings("X1", font)))
-    val xAxis2 = new NumericAxis("x2", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)),
+    val xAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)),
         Some(Axis.NameSettings("X2", font)))
-    val xAxisCat = new CategoryAxis("xcat", Axis.TickStyle.Both, 0, font, Some(Axis.NameSettings("Categories", font)), Axis.DisplaySide.Max)
-    val yAxis1 = new NumericAxis("y1", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, numberFormat)),
+    val xAxisCat = new CategoryAxis(Axis.TickStyle.Both, 0, font, Some(Axis.NameSettings("Categories", font)), Axis.DisplaySide.Max)
+    val yAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, numberFormat)),
         Some(Axis.NameSettings("Y1", font)))
-    val yAxis2 = new NumericAxis("y2", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")),
+    val yAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")),
         Some(Axis.NameSettings("Y2", font)))
-    val yAxis3 = new NumericAxis("y3", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")),
+    val yAxis3 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")),
         Some(Axis.NameSettings("Y3", font)), Axis.DisplaySide.Max)
 
     // Main Scatter plot
@@ -376,11 +376,11 @@ object PlotTesting {
       )
     }
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    val photonCountAxis = NumericAxis("Count", None, None, None, Axis.TickStyle.Both,
+    val photonCountAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings("Photon Count", font)), Axis.DisplaySide.Max)
-    val yAxes = plotStyles.zipWithIndex.map { case (_, i) => NumericAxis("Y"+i, None, None, None, Axis.TickStyle.Both,
+    val yAxes = plotStyles.zipWithIndex.map { case (_, i) => NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings("Azimuthal Position", font)), Axis.DisplaySide.Min) }
-    val xAxis = NumericAxis("X", None, None, None, Axis.TickStyle.Both,
+    val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings("Radial Position", font)), Axis.DisplaySide.Min)
     val grid = PlotGrid(plotStyles.zipWithIndex.map { case ((cart, scans), i) =>
       Seq(Seq(Plot2D(cart, "X", "Y"+i)), scans.map(scan => Plot2D(scan, "X", "Count"))) },
@@ -399,8 +399,8 @@ object PlotTesting {
     val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val style = ScatterStyle(x, y)
     val p2d = Plot2D(style, "x", "y")
-    val xAxis = NumericAxis("x", tickLabelInfo = Some(Axis.LabelSettings(90, font, numberFormat)), name = Some(Axis.NameSettings("X", font)))
-    val yAxis = NumericAxis("y", tickLabelInfo = Some(Axis.LabelSettings(0, font, numberFormat)), name = Some(Axis.NameSettings("Y", font)))
+    val xAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(90, font, numberFormat)), name = Some(Axis.NameSettings("X", font)))
+    val yAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(0, font, numberFormat)), name = Some(Axis.NameSettings("Y", font)))
     val grid = PlotGrid(Seq(Seq(Seq(p2d))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0))
     Plot(grids = Map("main" -> Plot.GridData(grid, Bounds(0.0, 0.05, 0.95, 0.95))))
   }
@@ -424,7 +424,7 @@ object PlotTesting {
     val ys = xs.map(x => math.sqrt(x))
     val counts = (0 to 9).map(i => 1.0 - i*i/100.0)
     Plot.simple(ScatterStyle(xs, xs))
-      .withAxis("y2", NumericAxis.defaultVerticalAxis("y2", "Y2").min(0.0).maxSide)
+      .withAxis("y2", NumericAxis.defaultVerticalAxis("Y2").min(0.0).maxSide)
       .updatedAxis[NumericAxis]("x", _.updatedName("X"))
       .updatedAxis[NumericAxis]("x", _.updatedName("Y"))
       .updatedPlotGrid(_.withRow().withColumn().withRow(0).withColumn(0)

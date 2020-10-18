@@ -201,6 +201,10 @@ case class PlotGrid(
     copy(plots = plots.updated(row, prow.updated(col, pcell.updated(stack, p2d.copy(yAxisName = axisName)))))
   }
 
+  def updatedXWeight(col: Int, weight: Double): PlotGrid = copy(xWeights = xWeights.updated(col, weight))
+
+  def updatedYWeight(row: Int, weight: Double): PlotGrid = copy(yWeights = yWeights.updated(row, weight))
+
   // Private Methods
 
   private def collectXAxes(pred: Axis => Boolean): Seq[Seq[String]] = {
@@ -246,9 +250,9 @@ object PlotGrid {
    */
   def oneByOne(xLabel: String, xType: Axis.ScaleStyle.Value, yLabel: String, yType: Axis.ScaleStyle.Value, styles: PlotStyle*): PlotGrid = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    val xAxis = NumericAxis("x", None, None, None, Axis.TickStyle.Both,
+    val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min, xType)
-    val yAxis = NumericAxis("y", None, None, None, Axis.TickStyle.Both,
+    val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
     PlotGrid(Seq(Seq(styles.map(s => Plot2D(s, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
   }
