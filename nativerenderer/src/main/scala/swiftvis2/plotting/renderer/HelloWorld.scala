@@ -19,7 +19,7 @@ object HelloWorld extends App {
   val xLabel = "x"
   val yLabel = "y"
   val numberFormat = "%1.1f"
-  println("Hello world!")
+  println("Hello world! [In Scala Native]")
   //swiftRend.drawLine(200, 200, 300, 300)
   //swiftRend.drawRectangle(50, 50, 50, 50)
   //swiftRend.drawEllipse(150, 150, 25, 25)
