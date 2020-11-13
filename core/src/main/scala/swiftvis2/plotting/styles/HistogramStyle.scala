@@ -1,14 +1,8 @@
 package swiftvis2.plotting.styles
 
-import swiftvis2.plotting.Axis
-import swiftvis2.plotting.Bounds
+import swiftvis2.plotting.{Axis, Bounds, CategoryAxis, LegendItem, NumericAxis, PlotDoubleSeries, PlotIntSeries, PlotLabel, PlotStringSeries, UnboundDoubleSeries}
 import swiftvis2.plotting.renderer.Renderer
-import swiftvis2.plotting.UnboundDoubleSeries
-import swiftvis2.plotting.NumericAxis
-import swiftvis2.plotting.CategoryAxis
-import swiftvis2.plotting.PlotStringSeries
-import swiftvis2.plotting.PlotDoubleSeries
-import swiftvis2.plotting.PlotIntSeries
+import swiftvis2.plotting.styles.HistogramStyle.{DataAndColor, fromData}
 
 // TODO - add error bars
 
@@ -19,7 +13,8 @@ final case class HistogramStyle(
     binValues: PlotDoubleSeries,
     valSourceColor: Seq[HistogramStyle.DataAndColor], 
     centerOnBins: Boolean = false,
-    binsOnX: Boolean = true) extends NumberNumberPlotStyle {
+    binsOnX: Boolean = true,
+    labels: Seq[PlotLabel] = Seq.empty) extends NumberNumberPlotStyle {
 
   def render(r: Renderer, bounds: Bounds, xAxis: Axis, xminFunc: Axis => Double, xmaxFunc: Axis => Double,
       yAxis: Axis, yminFunc: Axis => Double, ymaxFunc: Axis => Double, axisBounds: Seq[Bounds]): 
@@ -99,6 +94,8 @@ final case class HistogramStyle(
   def binMax(start: Int, end: Int): Double = if(centerOnBins) binValues(end - 1) + (binValues(end - 1) - binValues(end - 2)) / 2 else binValues(end)
   def valueMin(start: Int, end: Int): Double = (start until end).foldLeft(Double.MaxValue)((d, a) => d min valSourceColor.map(_.data(a)).sum)
   def valueMax(start: Int, end: Int): Double = (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_.data(a)).sum)
+
+  def legendFields: Seq[LegendItem] = List.empty
 }
 
 object HistogramStyle {

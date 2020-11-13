@@ -1,5 +1,7 @@
 package swiftvis2
 
+import swiftvis2.plotting.renderer.Renderer
+
 /**
  * Helpful constants and implicit conversions.
  */
@@ -97,6 +99,30 @@ package object plotting {
     def minIndex: Int = Int.MinValue
     def maxIndex: Int = Int.MaxValue
     def apply(i: Int) = f(i)
+  }
+
+  implicit class FontToFontSeries(fd: Renderer.FontData) extends PlotFontSeries {
+    def minIndex = Int.MinValue
+    def maxIndex = Int.MaxValue
+    def apply(i: Int) = fd
+  }
+
+  implicit class FontFuncToFontSeries(f: Int => Renderer.FontData) extends PlotFontSeries {
+    def minIndex = Int.MinValue
+    def maxIndex = Int.MaxValue
+    def apply(i: Int) = f(i)
+  }
+
+  implicit class SeqToFontSeries(data: Seq[Renderer.FontData]) extends PlotFontSeries {
+    def minIndex = 0
+    def maxIndex = data.size
+    def apply(i: Int) = data(i)
+  }
+
+  implicit class ArrayToFontSeries(data: Array[Renderer.FontData]) extends PlotFontSeries {
+    def minIndex = 0
+    def maxIndex = data.size
+    def apply(i: Int) = data(i)
   }
   
   // TODO - other implicits

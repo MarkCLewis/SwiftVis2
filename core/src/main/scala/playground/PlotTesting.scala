@@ -2,10 +2,11 @@ package playground
 
 import swiftvis2.plotting.renderer.Renderer
 import swiftvis2.plotting.styles._
-import swiftvis2.plotting.{Axis, BlackARGB, BlueARGB, Bounds, CategoryAxis, ColorGradient, CyanARGB, Ellipse, GreenARGB, MagentaARGB, NoSymbol, NumericAxis, Plot, Plot2D, PlotDoubleSeries, PlotGrid, PlotIntSeries, PlotLegend, PlotSymbol, PlotText, Rectangle, RedARGB, YellowARGB, WhiteARGB}
+import swiftvis2.plotting.{Axis, BlackARGB, BlueARGB, Bounds, CategoryAxis, ColorGradient, CyanARGB, Ellipse, GreenARGB, MagentaARGB, NoSymbol, NumericAxis, Plot, Plot2D, PlotDoubleSeries, PlotGrid, PlotIntSeries, PlotLegend, PlotSymbol, PlotText, Rectangle, RedARGB, WhiteARGB, YellowARGB}
 import swiftvis2.plotting.styles.ScatterStyle.LineData
-import swiftvis2.plotting.Plot.TextData
-import swiftvis2.plotting.Plot.GridData
+import swiftvis2.plotting.Plot.{GridData, TextData, barPlotMap, stacked}
+import swiftvis2.plotting.styles.BarStyle.DataAndColor
+import swiftvis2.plotting.styles.ScatterStyle
 
 object PlotTesting {
   val xLabel = "x"
@@ -21,8 +22,27 @@ object PlotTesting {
     val cg = (x: Int) => if(x < 5) RedARGB else BlackARGB
     val colors = xPnt.map(cg)
     val sp = Plot.scatterPlot(xPnt, yPnt, title = "Quadratic", xLabel = xLabel, yLabel = yLabel, symbolColor = colors)
-    val grid = sp.grids("Main").grid
-    new Plot(sp.texts, sp.grids, Seq(PlotLegend.legend(grid, Seq("Red", "Black"))))
+    sp
+  }
+
+  def barPlot(): Plot = {
+    val xData = 1 to 10
+
+    val style = BarStyle(Seq(""), Seq(DataAndColor(xData.count(_ > 5), BlackARGB, "> 5"),
+      DataAndColor(xData.count(_ < 5), RedARGB, "< 5"), DataAndColor(xData.count(_ == 5), GreenARGB, "== 5")), true)
+
+    stacked(Seq(style))
+  }
+
+  def legendScatter(): Plot = {
+    val xPnt = 1 to 10
+    val yPnt = xPnt.map(a => a * a)
+    val cg = (x: Int) => if(x < 5) RedARGB else BlackARGB
+    val colors = xPnt.map(cg)
+    val sizing = (x: Int) => (x * 2).toDouble
+    val sp = ScatterStyle(xPnt, yPnt).coloredBy(cg, Seq(("Less than 5", RedARGB), ("Greater than or equal to 5", BlackARGB)))
+    val sizedSp = sp.sizedBy("Value", xPnt.map(sizing), xPnt.map(sizing))
+    Plot.stacked(Seq(sizedSp), title = "Legend demo").withGeneratedLegend()
   }
 
   /**
@@ -89,6 +109,24 @@ object PlotTesting {
         Seq((x1, y1, BlackARGB, 5), (x2, y2, BlueARGB, 5)),
         Seq((x3, y3, cg(c3), 10), (x4, y4, GreenARGB, 5))),
       "Plot Grid", "Shared X", "Shared Y")
+  }
+
+  def legendScatterGrid(): Plot = {
+    val x2 = 0.0 to 1.1 by 0.01
+    val c3 = x2.map(_ => math.random)
+    val cg = ColorGradient(0.0 -> BlackARGB, 0.5 -> RedARGB, 1.0 -> WhiteARGB)
+    val firstUpdate = scatterGrid().updatedStyle ({
+      scatter: ScatterStyle => scatter.coloredBy(BlackARGB, Seq(("Random", BlackARGB)))
+    })
+    val secondUpdate = firstUpdate.updatedStyle( {
+      scatter: ScatterStyle => scatter.coloredBy(BlueARGB, Seq(("cos(10x^2)", BlueARGB)))
+    }, col = 1)
+    val thirdUpdate = secondUpdate.updatedStyle({
+      scatter: ScatterStyle => scatter.coloredByGradient(cg, c3, "Random colors", false)
+    }, row = 1)
+    thirdUpdate.updatedStyle({
+      scatter: ScatterStyle => scatter.coloredBy(GreenARGB, Seq(("0.01 / x", GreenARGB)))
+    }, row = 1, col = 1).withGeneratedLegend(smooshPlot = false)
   }
 
   /**

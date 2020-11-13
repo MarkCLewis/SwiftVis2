@@ -4,7 +4,7 @@ import java.io.ByteArrayOutputStream
 import java.util.Base64
 
 import javax.imageio.ImageIO
-import polynote.runtime.{MIMERepr, ReprsOf}
+import polynote.runtime.{MIMERepr, ReprsOf, ValueRepr}
 import swiftvis2.plotting.Plot
 import swiftvis2.plotting.renderer.SwingRenderer
 

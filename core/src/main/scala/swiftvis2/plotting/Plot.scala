@@ -1,5 +1,6 @@
 package swiftvis2.plotting
 
+import swiftvis2.plotting.Plot.LegendData
 import swiftvis2.plotting.renderer.Renderer
 import swiftvis2.plotting.styles.ScatterStyle
 import swiftvis2.plotting.styles.BarStyle
@@ -19,7 +20,7 @@ import swiftvis2.plotting.styles.CategoryCategoryPlotStyle
  * This allows the user to place multiple plots with separate axes or multiple labels. Text is drawn
  * after all plot grids so it will appear on top of them.
  */
-case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String, Plot.GridData] = Map.empty, legends: Seq[PlotLegend] = Seq.empty) {
+case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String, Plot.GridData] = Map.empty, legends: Map[String, LegendData] = Map.empty, smooshed: Boolean = false) {
   import Plot._
   
   /**
@@ -32,7 +33,7 @@ case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String
     r.fillRectangle(bounds)
     grids.foreach { case (_, g) => g.grid.render(r, bounds.subXY(g.bounds)) }
     texts.foreach { case (_, t) => t.text.render(r, bounds.subXY(t.bounds)) }
-    legends.foreach(x => x.render(r, bounds.subXY(x.bounds)))
+    legends.foreach { case (_, l) => l.legend.render(r, bounds.subXY(l.bounds)) }
     r.finish()
   }
   
@@ -104,6 +105,39 @@ case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String
     val grid = grids(gridName).grid
     copy(grids = grids + (gridName -> grids(gridName).copy(grid = grid.updatedStyleXAxis(axisName, row, col, stack))))
   }
+
+  def withLegend(name: String, legend: PlotLegend, b: Bounds): Plot = {
+    copy(legends = legends + (name -> LegendData(legend, b)))
+  }
+
+  def withLegend(name: String, ld: LegendData): Plot = {
+    copy(legends = legends + (name -> ld))
+  }
+
+  def updatedLegend(legendName: String, f: PlotLegend => PlotLegend): Plot = {
+    val oldL = legends(legendName)
+    copy(legends = legends.updated(legendName, oldL.copy(legend = f(oldL.legend))))
+  }
+
+  def updatedLegendBounds(legendName: String, f: Bounds => Bounds): Plot = {
+    val oldL = legends(legendName)
+    copy(legends = legends.updated(legendName, oldL.copy(bounds = f(oldL.bounds))))
+  }
+
+  /**
+   * Try to generate a legend based on descriptions in styles. The items in the generated legend will be a set.
+   *
+   * @return
+   */
+
+  def withGeneratedLegend(bounds: Bounds = Bounds(0.8, 0.4, 0.2, 0.2), smooshPlot: Boolean = true): Plot = {
+    val allStyles = grids.mapValues { case GridData(g, _) => g.plots.flatten.flatten.map(_.style)}.values.flatten.toSeq
+    val nGrids = if(smooshPlot) {
+      grids.mapValues { case GridData(g, b) => GridData(g, b.subXYBorder(0.0, bounds.width, 0.0, 0.0)) }
+    } else grids
+    this.copy(legends = legends + ("gen" -> LegendData(PlotLegend(
+      allStyles.flatMap(_.legendFields).groupBy(_.desc).map(_._2.head).toSeq, !smooshPlot), bounds)), grids = nGrids)
+  }
   
   // TODO - Add methods for updating and adding different elements.
   
@@ -128,6 +162,12 @@ object Plot {
    * Combines a plot grid with fractional bounds for rendering.
    */
   case class GridData(grid: PlotGrid, bounds: Bounds)
+
+  /**
+   * Combines a legend with fractional bounds for rendering
+   */
+
+  case class LegendData(legend: PlotLegend, bounds: Bounds)
 
   /**
    * Plots a single style in a 1x1 grid.
@@ -607,7 +647,6 @@ object Plot {
    * @param bins A series of values that represent either the centers of bins or the edges of bins.
    * @param data The data that we are binning to make the Histogram.
    * @param color The color to draw the histogram boxes in.
-   * @param centerOnBins Tells if the bins values are a bin centers or if the define the edges of bins.
    * @param title The title put on the plot.
    * @param xLabel The label drawn on the x-axis.
    * @param yLabel The label drawn on the y-axis.

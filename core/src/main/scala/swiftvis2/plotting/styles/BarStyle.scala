@@ -1,14 +1,7 @@
 package swiftvis2.plotting.styles
 
-import swiftvis2.plotting.Axis
-import swiftvis2.plotting.Bounds
+import swiftvis2.plotting.{Axis, Bounds, CategoryAxis, Illustration, LegendItem, NumericAxis, PlotDoubleSeries, PlotIntSeries, PlotLabel, PlotStringSeries, PlotSymbol, Rectangle, UnboundDoubleSeries}
 import swiftvis2.plotting.renderer.Renderer
-import swiftvis2.plotting.UnboundDoubleSeries
-import swiftvis2.plotting.NumericAxis
-import swiftvis2.plotting.CategoryAxis
-import swiftvis2.plotting.PlotStringSeries
-import swiftvis2.plotting.PlotDoubleSeries
-import swiftvis2.plotting.PlotIntSeries
 
 // TODO - add error bars to these.
 // TODO - allow bars to be flipped to the other axis.
@@ -17,7 +10,8 @@ case class BarStyle(
     categories: PlotStringSeries,
     valSourceColor: Seq[BarStyle.DataAndColor],
     stacked: Boolean = false,
-    barWidthFrac: Double = 0.8
+    barWidthFrac: Double = 0.8,
+    labels: Seq[PlotLabel] = Seq.empty
     ) extends CategoryNumberPlotStyle {
   
   def render(r: Renderer, bounds: Bounds, xAxis: Axis, xminFunc: Axis => Double, xmaxFunc: Axis => Double,
@@ -92,8 +86,10 @@ case class BarStyle(
       (start until end).foldLeft(Double.MinValue)((d, a) => d max valSourceColor.map(_.data(a)).max)
     }
   }
+
+  def legendFields: Seq[LegendItem] = valSourceColor.map(x => LegendItem(x.desc, Seq(Illustration(x.color, Some(Rectangle), 10, 10))))
 }
 
 object BarStyle {
-  case class DataAndColor(data: PlotDoubleSeries, color: Int)
+  case class DataAndColor(data: PlotDoubleSeries, color: Int, desc: String = "")
 }

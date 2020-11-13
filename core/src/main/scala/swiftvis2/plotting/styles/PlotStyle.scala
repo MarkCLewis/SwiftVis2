@@ -1,8 +1,7 @@
 package swiftvis2.plotting.styles
 
-import swiftvis2.plotting.Bounds
+import swiftvis2.plotting.{Axis, Bounds, ColorGradient, LegendItem, PlotDoubleSeries, PlotIntSeries}
 import swiftvis2.plotting.renderer.Renderer
-import swiftvis2.plotting.Axis
 
 // TODO - Add methods to check if the axis type matches for X and Y. Allows warnings before exceptions.
 // TODO - Add style for heatmap.
@@ -46,6 +45,13 @@ trait PlotStyle {
    * Returns the maximum numeric value for the y-axis for this plot if applicable.
    */
   def yDataMax(): Option[Double]
+
+  /**
+   * Returns the sequence of legend entries currently associated with this plot. If none are available, returns Seq.empty.
+   */
+
+  def legendFields: Seq[LegendItem]
+
 }
 
 // This subtypes are used to indicate what combination of axis types a style works with 

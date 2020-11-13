@@ -169,6 +169,11 @@ class SwingRenderer(g: Graphics2D) extends Renderer {
     g.draw(path)
   }
 
+  def getTextWidth(s: String, fd: Renderer.FontData, fs: Double): Double = {
+    val x = new Font(fd.font, Font.PLAIN, fs.toInt)
+    g.getFontMetrics(x).stringWidth(s)
+  }
+
   def drawText(s: String, x: Double, y: Double, align: Renderer.HorizontalAlign.Value, angle: Double): Unit = {
     val frc = g.getFontRenderContext()
     val oldTrans = g.getTransform()

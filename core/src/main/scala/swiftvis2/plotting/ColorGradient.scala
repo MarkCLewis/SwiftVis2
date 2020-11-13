@@ -11,7 +11,7 @@ package swiftvis2.plotting
  * with Spark. You can instead do cg('col) as the Spark Column will be implicitly converted to
  * a PlotIntSeries and the gradient will be applied to the values. 
  */
-class ColorGradient private (colorValues: Seq[(Double, Int)]) extends (Double => Int) {
+class ColorGradient (val colorValues: Seq[(Double, Int)]) extends (Double => Int) {
   
   /**
    * Apply this as a function to a Double and produce the appropriate color as an Int.
