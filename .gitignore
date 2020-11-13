@@ -1,7 +1,10 @@
 .metals/
 .bloop/
-
-.vscode
+.bsp
+.vscode/
+/project/project/
+/project/.bloop
+/project/metals.sbt
 
 # Created by https://www.gitignore.io/api/sbt,scala,eclipse
 

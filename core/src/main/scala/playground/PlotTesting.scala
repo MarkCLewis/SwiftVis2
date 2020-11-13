@@ -211,16 +211,16 @@ object PlotTesting {
    */
   def longForm(): Plot = {
     val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    val xAxis1 = new NumericAxis("x1", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)),
+    val xAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)),
         Some(Axis.NameSettings("X1", font)))
-    val xAxis2 = new NumericAxis("x2", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)),
+    val xAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(90, font, numberFormat)),
         Some(Axis.NameSettings("X2", font)))
-    val xAxisCat = new CategoryAxis("xcat", Axis.TickStyle.Both, 0, font, Some(Axis.NameSettings("Categories", font)), Axis.DisplaySide.Max)
-    val yAxis1 = new NumericAxis("y1", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, numberFormat)),
+    val xAxisCat = new CategoryAxis(Axis.TickStyle.Both, 0, font, Some(Axis.NameSettings("Categories", font)), Axis.DisplaySide.Max)
+    val yAxis1 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, numberFormat)),
         Some(Axis.NameSettings("Y1", font)))
-    val yAxis2 = new NumericAxis("y2", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")),
+    val yAxis2 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")),
         Some(Axis.NameSettings("Y2", font)))
-    val yAxis3 = new NumericAxis("y3", None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")),
+    val yAxis3 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.LabelSettings(0, font, "%1.0f")),
         Some(Axis.NameSettings("Y3", font)), Axis.DisplaySide.Max)
 
     // Main Scatter plot
@@ -414,11 +414,11 @@ object PlotTesting {
       )
     }
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    val photonCountAxis = NumericAxis("Count", None, None, None, Axis.TickStyle.Both,
+    val photonCountAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings("Photon Count", font)), Axis.DisplaySide.Max)
-    val yAxes = plotStyles.zipWithIndex.map { case (_, i) => NumericAxis("Y"+i, None, None, None, Axis.TickStyle.Both,
+    val yAxes = plotStyles.zipWithIndex.map { case (_, i) => NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings("Azimuthal Position", font)), Axis.DisplaySide.Min) }
-    val xAxis = NumericAxis("X", None, None, None, Axis.TickStyle.Both,
+    val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings("Radial Position", font)), Axis.DisplaySide.Min)
     val grid = PlotGrid(plotStyles.zipWithIndex.map { case ((cart, scans), i) =>
       Seq(Seq(Plot2D(cart, "X", "Y"+i)), scans.map(scan => Plot2D(scan, "X", "Count"))) },
@@ -426,7 +426,7 @@ object PlotTesting {
       Seq(1.0, 1.0),
       plotStyles.map(_ => 1.0)
     )
-    println(grid)
+    // println(grid)
     Plot(Map("Title" -> TextData(PlotText("Funky Plot Test"), Bounds(0, 0, 1.0, 0.05))),
       Map("Main" -> GridData(grid, Bounds(0.01, 0.05, 0.99, 0.95))))
   }
@@ -437,8 +437,8 @@ object PlotTesting {
     val font = new Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val style = ScatterStyle(x, y)
     val p2d = Plot2D(style, "x", "y")
-    val xAxis = NumericAxis("x", tickLabelInfo = Some(Axis.LabelSettings(90, font, numberFormat)), name = Some(Axis.NameSettings("X", font)))
-    val yAxis = NumericAxis("y", tickLabelInfo = Some(Axis.LabelSettings(0, font, numberFormat)), name = Some(Axis.NameSettings("Y", font)))
+    val xAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(90, font, numberFormat)), name = Some(Axis.NameSettings("X", font)))
+    val yAxis = NumericAxis(tickLabelInfo = Some(Axis.LabelSettings(0, font, numberFormat)), name = Some(Axis.NameSettings("Y", font)))
     val grid = PlotGrid(Seq(Seq(Seq(p2d))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0))
     Plot(grids = Map("main" -> Plot.GridData(grid, Bounds(0.0, 0.05, 0.95, 0.95))))
   }
@@ -447,6 +447,35 @@ object PlotTesting {
     val x = Array.fill(1000000)((math.random-0.5)*(math.random-0.5))
     val y = x.map(_ => math.cos(math.random*math.random*6.28))
     Plot.scatterPlot(x, y, "Big", xLabel, yLabel, 0.001, BlackARGB, xSizing = PlotSymbol.Sizing.Scaled, ySizing = PlotSymbol.Sizing.Scaled)
+  }
+
+  def gridSkipAxisLabels(): Plot = {
+    val x = (0 to 10).map(_.toDouble) :+ 10.3
+    val y = (0 to 10).map(x => x*x) :+ 101
+    val scatter = ScatterStyle(x, y)
+    val scatter2 = ScatterStyle(x, x)
+    Plot.gridNN(Seq(Seq(scatter, scatter), Seq(scatter, scatter2)))
+  }
+
+  def buildUpFluent(): Plot = {
+    val xs = (0 to 10).map(_.toDouble)
+    val ys = xs.map(x => math.sqrt(x))
+    val counts = (0 to 9).map(i => 1.0 - i*i/100.0)
+    Plot.simple(ScatterStyle(xs, xs))
+      .withAxis("y2", NumericAxis.defaultVerticalAxis("Y2").min(0.0).maxSide)
+      .updatedAxis[NumericAxis]("x", _.updatedName("X"))
+      .updatedAxis[NumericAxis]("x", _.updatedName("Y"))
+      .updatedPlotGrid(_.withRow().withColumn().withRow(0).withColumn(0)
+        .withStyle(ScatterStyle(xs, ys), "x", "y", 0, 0, 0)
+        .withStyle(HistogramStyle(xs, Seq(HistogramStyle.DataAndColor(counts, RedARGB))), "x", "y2", 0, 1, 0)
+        .withStyle(ScatterStyle(xs, ys), "x", "y", 0, 2, 0)
+        .withStyle(HistogramStyle(xs, Seq(HistogramStyle.DataAndColor(counts, RedARGB))), "x", "y2", 1, 0, 0)
+        .withStyle(ScatterStyle(xs, counts), "x", "y", 1, 1, 1)
+        .withStyle(HistogramStyle(xs, Seq(HistogramStyle.DataAndColor(counts, RedARGB))), "x", "y2", 1, 2, 0)
+        .withStyle(ScatterStyle(xs, ys), "x", "y", 2, 0, 0)
+        .withStyle(HistogramStyle(xs, Seq(HistogramStyle.DataAndColor(counts, RedARGB))), "x", "y2", 2, 1, 0)
+        .withStyle(ScatterStyle(xs, ys), "x", "y", 2, 2, 0)
+      )
   }
 
   val largeDim = 1000

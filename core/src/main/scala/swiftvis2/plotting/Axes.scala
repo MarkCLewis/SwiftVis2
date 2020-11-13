@@ -18,7 +18,6 @@ sealed trait Axis {
  * the tickSpacing will be ignored, even if it is provided.
  */
 case class NumericAxis(
-  key:           String,
   min:           Option[Double]                      = None,
   max:           Option[Double]                      = None,
   tickSpacing:   Option[Double]                      = None,
@@ -39,7 +38,7 @@ case class NumericAxis(
     val toPixels = toPixelFunc(pmin, pmax, amin, amax)
     val whichBounds = (if (orient == Axis.RenderOrientation.YAxis) 2 else 0) + (if (displaySide == Axis.DisplaySide.Max) 1 else 0)
     val (tickBounds, tickSize, nameBounds, nameSize, tickLocs) = boundsAndSizing(r, bounds(whichBounds), orient, amin, amax)
-    (toPixels, tickSize, nameSize, (tfs, nfs, aggBounds, nextAxis) => render(r, tickBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, tickLocs, toPixels))
+    (toPixels, tickSize, nameSize, (tfs, nfs, aggBounds, nextAxis, hasAdjacentCell) => render(r, tickBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, tickLocs, toPixels, hasAdjacentCell))
   }
 
   def toPixelFunc(pmin: Double, pmax: Double, amin: Double, amax: Double): Double => Double = {
@@ -251,6 +250,17 @@ case class NumericAxis(
     * @return The modified axis.
     */
   def ticks(tstyle: Axis.TickStyle.Value): NumericAxis = updatedTickStyle(tstyle)
+
+  /**
+    * Override equality because I need this to check for identify in the sets and maps.
+    *
+    * @param that
+    * @return
+    */
+  override def equals(that: Any): Boolean = that match {
+    case ar: AnyRef => this eq ar
+    case _ => false
+  }
   
   // Private methods
 
@@ -273,7 +283,7 @@ case class NumericAxis(
   }
 
   private def render(r: Renderer, tickBounds: Bounds, tickFontSize: Double, nameBounds: Bounds, aggBounds: Option[Bounds], nextAxis: Option[Axis], 
-      nameFontSize: Double, orient: Axis.RenderOrientation.Value, tickLocs: Seq[Double], toPixels: Axis.UnitConverter): Option[Bounds] = {
+      nameFontSize: Double, orient: Axis.RenderOrientation.Value, tickLocs: Seq[Double], toPixels: Axis.UnitConverter, hasAdjacentCell: Boolean): Option[Bounds] = {
 
     // Draw ticks and labels
     orient match {
@@ -287,7 +297,7 @@ case class NumericAxis(
           Axis.TickStyle.drawTick(r, tickStyle, orient, px, cy, displaySide, tickLen)
           tickLabelInfo.foreach { tli =>
             val textAlign = if (tli.angle % 180.0 == 0) Renderer.HorizontalAlign.Center else Renderer.HorizontalAlign.Left
-            r.drawText(tli.numberFormat.format(x), px, labelY, textAlign, tli.angle)
+            if (!hasAdjacentCell || px < tickBounds.x + tickBounds.width - tickFontSize) r.drawText(tli.numberFormat.format(x), px, labelY, textAlign, tli.angle)
           }
         }
       case Axis.RenderOrientation.YAxis =>
@@ -300,7 +310,7 @@ case class NumericAxis(
           Axis.TickStyle.drawTick(r, tickStyle, orient, cx, py, displaySide, tickLen)
           tickLabelInfo.foreach { tli =>
             val textAlign = if ((tli.angle + 90) % 180.0 == 0) Renderer.HorizontalAlign.Center else if (displaySide == Axis.DisplaySide.Min) Renderer.HorizontalAlign.Right else Renderer.HorizontalAlign.Left
-            r.drawText(tli.numberFormat.format(y), labelX, py, textAlign, tli.angle)
+            if (!hasAdjacentCell || py > tickBounds.y + tickFontSize) r.drawText(tli.numberFormat.format(y), labelX, py, textAlign, tli.angle)
           }
         }
     }
@@ -314,7 +324,7 @@ case class NumericAxis(
     }
   }
 
-  def calcTickLocations(amin: Double, amax: Double): Seq[Double] = {
+  private def calcTickLocations(amin: Double, amax: Double): Seq[Double] = {
     if (tickSpacing.nonEmpty || tickLabelInfo.nonEmpty) {
       style match {
         case Axis.ScaleStyle.Linear =>
@@ -322,9 +332,12 @@ case class NumericAxis(
             val str = "%e".format((amax - amin) / 6)
             (str.take(str.indexOf('.') + 2).toDouble.round + str.drop(str.indexOf('e'))).toDouble // TODO - consider BigDecimal here if display gets unhappy
           }
-          val firstTickApprox = (amin / majorSep).toInt * majorSep
+          val firstTickApprox = (amin / majorSep) * majorSep
           val firstTick = firstTickApprox + (if ((amax - amin).abs < (amax - firstTickApprox).abs) majorSep else 0)
-          firstTick to amax by majorSep
+          val numTicks = ((amax - firstTick).abs / majorSep.abs).toInt
+          println(firstTick, amax, majorSep, numTicks)
+          (0 to numTicks).map(i => firstTick + i * majorSep)
+//           firstTick to amax by majorSep
         case Axis.ScaleStyle.LogDense =>
           var pos = Math.pow(10, Math.floor(Math.log10(Math.min(amin, amax))))
           var ret = List[Double]()
@@ -351,11 +364,24 @@ case class NumericAxis(
   }
 }
 
+object NumericAxis {
+  def defaultHorizontalAxis(text: String, numFormat: String = "%1.1f", xType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear) = {
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    NumericAxis(None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(90.0, font, numFormat)), Some(Axis.NameSettings(text, font)), Axis.DisplaySide.Min, xType)
+  }
+
+  def defaultVerticalAxis(text: String, numFormat: String = "%1.1f", yType: Axis.ScaleStyle.Value = Axis.ScaleStyle.Linear) = {
+    val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
+    NumericAxis(None, None, None, Axis.TickStyle.Both,
+      Some(Axis.LabelSettings(0.0, font, numFormat)), Some(Axis.NameSettings(text, font)), Axis.DisplaySide.Min, yType)
+  }
+}
+
 /**
  * Axis with text categories for labels instead of numeric values.
  */
 case class CategoryAxis(
-  key:           String,
   tickStyle:        Axis.TickStyle.Value,
   labelOrientation: Double, // angle in degrees
   labelFont:        Renderer.FontData,
@@ -378,7 +404,7 @@ case class CategoryAxis(
         }
         c -> range
     }.toMap
-    (catLocs, catSize, nameSize, (tfs, nfs, aggBounds, nextAxis) => render(r, catBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, categories, catLocs))
+    (catLocs, catSize, nameSize, (tfs, nfs, aggBounds, nextAxis, hasAdjacentCell) => render(r, catBounds, tfs, nameBounds, aggBounds, nextAxis, nfs, orient, categories, catLocs))
   }
 
   def boundsAndSizing(r: Renderer, bounds: Bounds, orient: Axis.RenderOrientation.Value, categories: Seq[String]): (Bounds, Double, Bounds, Double) = {
@@ -436,6 +462,18 @@ case class CategoryAxis(
     }
 
   }
+
+  /**
+    * Override equality because I need this to check for identify in the sets and maps.
+    *
+    * @param that
+    * @return
+    */
+  override def equals(that: Any): Boolean = that match {
+    case ar: AnyRef => this eq ar
+    case _ => false
+  }
+
 }
 
 /**
@@ -445,7 +483,7 @@ object Axis {
   type UnitConverter = Double => Double
   type CategoryLoc = String => (Double, Double)
   type FontSizer = (Renderer, Bounds, Axis.RenderOrientation.Value) => (Double, Double)
-  type AxisRenderer = (Double, Double, Option[Bounds], Option[Axis]) => Option[Bounds]
+  type AxisRenderer = (Double, Double, Option[Bounds], Option[Axis], Boolean) => Option[Bounds]
   case class LabelSettings(angle: Double, font: Renderer.FontData, numberFormat: String)
   case class NameSettings(name: String, font: Renderer.FontData)
 

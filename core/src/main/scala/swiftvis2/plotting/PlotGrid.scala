@@ -24,14 +24,14 @@ case class PlotGrid(
   axes:     Map[String, Axis],
   xWeights: Seq[Double],
   yWeights: Seq[Double],
-  axisFrac: Double                = 0.15) extends Plottable {
+  axisFrac: Double = 0.15) extends Plottable {
 
   if (yWeights.length != plots.length) println(s"Warning!!! Rows in plots not matched by yWeights. ${plots.length} != ${yWeights.length}")
   if (plots.nonEmpty && xWeights.length != plots.head.length) println(s"Warning!!! Columns in plots not matched by xWeights. ${plots.head.length} != ${xWeights.length}")
   
   {
-    val xAxes = plots.flatMap(_.flatMap(_.flatMap(_.xAxisName)))
-    val yAxes = plots.flatMap(_.flatMap(_.flatMap(_.yAxisName)))
+    val xAxes = plots.flatMap(_.flatMap(_.map(_.xAxisName)))
+    val yAxes = plots.flatMap(_.flatMap(_.map(_.yAxisName)))
     if ((xAxes ++ yAxes).toSet != axes.keySet) println(s"Warning!!! Used axes don't match provided axes.\nxAxes = $xAxes\nyAxes = $yAxes\naxis keys = ${axes.keys}")
   }
 
@@ -114,7 +114,7 @@ case class PlotGrid(
         //      for (i <- 0 until minXAxisCount; if i < axisSeq.size) {
         if (axisSeq.nonEmpty) {
           val nextAxis = if (index >= minXAxes.length - 1 || minXAxes(index + 1).isEmpty) None else Some(axes(minXAxes(index + 1)(0)))
-          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis)
+          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis, index < minXAxes.length - 1)
         } else None
     }
     val maxXAxisCount = maxXAxes.maxBy(_.size).size
@@ -124,7 +124,7 @@ case class PlotGrid(
         //      for (i <- 0 until maxXAxisCount; if i < axisSeq._1.size) {
         if (axisSeq.nonEmpty) {
           val nextAxis = if (index >= maxXAxes.length - 1 || maxXAxes(index + 1).isEmpty) None else Some(axes(maxXAxes(index + 1)(0)))
-          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis)
+          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis, index < minXAxes.length - 1)
         } else None
     }
 
@@ -136,7 +136,7 @@ case class PlotGrid(
         //      for (i <- 0 until minYAxisCount; if i < axisSeq._1.size) {
         if (axisSeq.nonEmpty) {
           val nextAxis = if (index >= minYAxes.length - 1 || minYAxes(index + 1).isEmpty) None else Some(axes(minYAxes(index + 1)(0)))
-          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis)
+          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis, index > 0)
         } else None
     }
     val maxYAxisCount = maxYAxes.maxBy(_.size).size
@@ -146,22 +146,29 @@ case class PlotGrid(
         //      for (i <- 0 until maxYAxisCount; if i < axisSeq._1.size) {
         if (axisSeq.nonEmpty) {
           val nextAxis = if (index >= maxYAxes.length - 1 || maxYAxes(index + 1).isEmpty) None else Some(axes(maxYAxes(index + 1)(0)))
-          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis)
+          axisRenderers(axisSeq(0) -> index)(tickFontSize, nameFontSize, aggBounds, nextAxis, index > 0)
         } else None
     }
   }
 
+  def rows: Int = plots.length
+
+  def columns: Option[Int] = if (plots.nonEmpty) Some(plots.head.length) else None
+
   // Fluent Interface
 
-  def withRow(row: Int = plots.length): PlotGrid = ??? // TODO
+  def withRow(row: Int = plots.length): PlotGrid = {
+    copy(plots = plots.patch(row, Seq(Seq.fill(plots.head.length)(Seq.empty[Plot2D])), 0), yWeights = yWeights.patch(row, Seq(1.0), 0))
+  }
   
-  def withColumn(col: Int = plots.head.length): PlotGrid = ??? // TODO
+  def withColumn(col: Int = plots.head.length): PlotGrid = {
+    copy(plots = plots.map(_.patch(col, Seq(Seq.empty[Plot2D]), 0)), xWeights = xWeights.patch(col, Seq(1.0), 0))
+  }
   
-  def withStyle(style: PlotStyle, row: Int = 0, col: Int = 0, stack: Int = 0): PlotGrid = {
+  def withStyle(style: PlotStyle, xAxis: String, yAxis: String, row: Int = 0, col: Int = 0, stack: Int = 0): PlotGrid = {
     val prow = plots(row)
     val pcell = prow(col)
-    val p2d = pcell(stack)
-    copy(plots = plots.updated(row, prow.updated(col, pcell.patch(stack, Seq(p2d.copy(style = style)), 0))))
+    copy(plots = plots.updated(row, prow.updated(col, pcell.patch(stack, Seq(Plot2D(style, xAxis, yAxis)), 0))))
   }
   
   def updatedStyle[A <: PlotStyle](f: A => A, row: Int = 0, col: Int = 0, stack: Int = 0): PlotGrid = {
@@ -186,6 +193,17 @@ case class PlotGrid(
     val p2d = pcell(stack)
     copy(plots = plots.updated(row, prow.updated(col, pcell.updated(stack, p2d.copy(xAxisName = axisName)))))
   }
+
+  def updatedStyleYAxis(axisName: String, row: Int = 0, col: Int = 0, stack: Int = 0): PlotGrid = {
+    val prow = plots(row)
+    val pcell = prow(col)
+    val p2d = pcell(stack)
+    copy(plots = plots.updated(row, prow.updated(col, pcell.updated(stack, p2d.copy(yAxisName = axisName)))))
+  }
+
+  def updatedXWeight(col: Int, weight: Double): PlotGrid = copy(xWeights = xWeights.updated(col, weight))
+
+  def updatedYWeight(row: Int, weight: Double): PlotGrid = copy(yWeights = yWeights.updated(row, weight))
 
   // Private Methods
 
@@ -232,9 +250,9 @@ object PlotGrid {
    */
   def oneByOne(xLabel: String, xType: Axis.ScaleStyle.Value, yLabel: String, yType: Axis.ScaleStyle.Value, styles: PlotStyle*): PlotGrid = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
-    val xAxis = NumericAxis("x", None, None, None, Axis.TickStyle.Both,
+    val xAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(90.0, font, "%1.1f")), Some(Axis.NameSettings(xLabel, font)), Axis.DisplaySide.Min, xType)
-    val yAxis = NumericAxis("y", None, None, None, Axis.TickStyle.Both,
+    val yAxis = NumericAxis(None, None, None, Axis.TickStyle.Both,
       Some(Axis.LabelSettings(0.0, font, "%1.1f")), Some(Axis.NameSettings(yLabel, font)), Axis.DisplaySide.Min, yType)
     PlotGrid(Seq(Seq(styles.map(s => Plot2D(s, "x", "y")))), Map("x" -> xAxis, "y" -> yAxis), Seq(1.0), Seq(1.0), 0.15)
   }

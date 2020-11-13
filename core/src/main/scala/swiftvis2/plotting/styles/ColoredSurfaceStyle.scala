@@ -55,6 +55,7 @@ case class ColoredSurfaceStyle(
         val xs = Array(pData(0)(i).x, pData(1)(i).x, pData(1)(i + 1).x, pData(0)(i + 1).x)
         val ys = Array(pData(0)(i).y, pData(1)(i).y, pData(1)(i + 1).y, pData(0)(i + 1).y)
         r.fillPolygon(xs, ys)
+        r.drawPolygon(xs, ys)
       }
       
       // Swap data down.
