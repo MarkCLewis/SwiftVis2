@@ -97,11 +97,14 @@ final case class ViolinPlotStyle private (
   def yDataMin(): Option[Double] = Some(minData - 0.1 * (maxData - minData))
 
   def yDataMax(): Option[Double] = Some(maxData + 0.1 * (maxData - minData))
+
+  def legendFields: Seq[LegendItem] = List.empty
 }
 
 object ViolinPlotStyle {
   def apply(categories: Seq[String], plotData: Array[PlotDoubleSeries], maxWidthFrac: Double = 0.8,
-            color: Int = BlackARGB, stroke: Renderer.StrokeData = Renderer.StrokeData(1, Nil), bandwidth: Option[Double] = None): ViolinPlotStyle = {
+            color: Int = BlackARGB, stroke: Renderer.StrokeData = Renderer.StrokeData(1, Nil),
+            bandwidth: Option[Double] = None, labels: Seq[PlotLabel] = Seq.empty): ViolinPlotStyle = {
     var maxDensity = 0.0
     val violinData = for ((cat, data) <- categories zip plotData) yield {
       val d = (data.minIndex until data.maxIndex).map(data).sorted

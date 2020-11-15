@@ -9,7 +9,8 @@ case class ColoredSurfaceStyle(
     xSource: PlotDoubleSeries,
     ySource: PlotDoubleSeries,
     group: PlotSeries,
-    colors: PlotIntSeries
+    colors: PlotIntSeries,
+    labels: Seq[PlotLabel] = Seq.empty
   ) extends NumberNumberPlotStyle {
 
   def render(
@@ -95,4 +96,6 @@ case class ColoredSurfaceStyle(
     Some(ydMax(start, end))
   }
   def ydMax(start: Int, end: Int): Double = (start until end).foldLeft(Double.MinValue)((d, a) => d max ySource(a))
+
+  def legendFields: Seq[LegendItem] = List.empty
 }

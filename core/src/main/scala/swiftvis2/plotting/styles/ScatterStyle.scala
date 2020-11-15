@@ -2,6 +2,8 @@ package swiftvis2.plotting.styles
 
 import swiftvis2.plotting._
 import swiftvis2.plotting.renderer.Renderer
+import swiftvis2.plotting.PlotSymbol
+import swiftvis2.plotting.renderer.Renderer.FontData
 
 /**
  * This class represents a highly functional scatter plot. The points can use different symbols that are scaled/sized in different ways
@@ -9,17 +11,25 @@ import swiftvis2.plotting.renderer.Renderer
  * have error bars on them.
  */
 final case class ScatterStyle(
-    xSource: PlotDoubleSeries,
-    ySource: PlotDoubleSeries,
-    symbol: PlotSymbol = Ellipse,
-    symbolWidth: PlotDoubleSeries = 10,
-    symbolHeight: PlotDoubleSeries = 10,
-    xSizing: PlotSymbol.Sizing.Value = PlotSymbol.Sizing.Pixels,
-    ySizing: PlotSymbol.Sizing.Value = PlotSymbol.Sizing.Pixels,
-    colors: PlotIntSeries = BlackARGB,
-    lines: Option[ScatterStyle.LineData] = None,
-    xErrorBars: Option[PlotDoubleSeries] = None,
-    yErrorBars: Option[PlotDoubleSeries] = None) extends NumberNumberPlotStyle {
+                               xSource: PlotDoubleSeries,
+                               ySource: PlotDoubleSeries,
+                               symbol: PlotSymbol = Ellipse,
+                               symbolWidth: PlotDoubleSeries = 10,
+                               symbolHeight: PlotDoubleSeries = 10,
+                               xSizing: PlotSymbol.Sizing.Value = PlotSymbol.Sizing.Pixels,
+                               ySizing: PlotSymbol.Sizing.Value = PlotSymbol.Sizing.Pixels,
+                               colors: PlotIntSeries = BlackARGB,
+                               lines: Option[ScatterStyle.LineData] = None,
+                               xErrorBars: Option[PlotDoubleSeries] = None,
+                               yErrorBars: Option[PlotDoubleSeries] = None,
+                               uniformCols: Boolean = true,
+                               colorDesc: String = "",
+                               colorDescs: Seq[(String, Int)] = Seq.empty,
+                               sizingDesc: String = "",
+                               colorIsGradient: Boolean = false,
+                               labels: Seq[PlotLabel] = Seq.empty,
+                               legendSizeTrans: Double => Double = identity,
+                               gradient: Option[ColorGradient] = None) extends NumberNumberPlotStyle {
 
   import ScatterStyle._
   def render(r: Renderer, bounds: Bounds, xAxis: Axis, xminFunc: Axis => Double, xmaxFunc: Axis => Double,
@@ -92,6 +102,7 @@ final case class ScatterStyle(
           r.drawLinePath(lst.map(_._1), lst.map(_._2))
         }
     }
+    labels.foreach(_.render(r, bounds, xAxis, xminFunc, xmaxFunc, yAxis, yminFunc, ymaxFunc, axisBounds))
     (Seq(xtfs, ytfs), Seq(xnfs, ynfs), xRender, yRender)
   }
 
@@ -123,6 +134,62 @@ final case class ScatterStyle(
     Some(ydMax(start, end))
   }
   def ydMax(start: Int, end: Int): Double = (start until end).foldLeft(Double.MinValue)((d, a) => d max ySource(a)+yErrorBars.map(_(a)).getOrElse(0.0))
+
+  def coloredBy(determinant: PlotIntSeries = colors, descs: Seq[(String, Int)]): ScatterStyle = this.copy(colorDescs = descs, colors = determinant)
+
+  def sizedBy(desc: String, xsz: PlotDoubleSeries = symbolWidth, ysz: PlotDoubleSeries = symbolHeight, trans: Double => Double = identity): ScatterStyle = {
+    this.copy(sizingDesc = desc, symbolWidth = xsz, symbolHeight = ysz, legendSizeTrans = trans)
+  }
+
+  def legendFields: Seq[LegendItem] = {
+
+    val sizingSample = if(sizingDesc.isEmpty) Seq.empty else {
+      val wSeq = (symbolWidth.minIndex until symbolWidth.maxIndex).map(symbolWidth(_)).distinct.sorted
+      val hSeq = (symbolHeight.minIndex until symbolHeight.maxIndex).map(symbolHeight(_)).distinct.sorted
+      Seq(wSeq.head -> hSeq.head, wSeq(wSeq.length / 2) -> hSeq(hSeq.length / 2), wSeq.last -> hSeq.last)
+    }
+
+    val sizingItem: LegendItem = LegendItem(sizingDesc, Seq.empty, sizingSample.map { case (w, h) =>
+      val x = legendSizeTrans(w)
+      val desc = legendSizeTrans(w).toString ++ (if(w != h) "," ++ legendSizeTrans(h).toString else "")
+      val illu = Illustration(BlackARGB, Some(symbol), w, h)
+      LegendItem(desc, Seq(illu), Seq.empty)
+    })
+
+    val colorPoints = if(uniformCols && colorDesc.nonEmpty) {
+      Seq(Illustration(colors(0), Some(symbol), Illustration.med, Illustration.med))
+    } else if (colorDesc.isEmpty) Seq.empty else {
+      val colSeq = (for (i <- colors.minIndex until colors.maxIndex) yield colors(i)).sorted
+
+      val startCol = colSeq(0)
+      val midCol = colSeq(colSeq.distinct.length / 2)
+      val endCol = colSeq.last
+
+      Seq(
+        Illustration(startCol, Some(symbol), Illustration.med, Illustration.med),
+        Illustration(midCol, Some(symbol), Illustration.med, Illustration.med),
+        Illustration(endCol, Some(symbol), Illustration.med, Illustration.med)
+      )
+    }
+    val realColorItem = Seq(LegendItem(colorDesc, Seq(Illustration(0, Some(Rectangle), 100, 100, gradient))))
+    val colorItems = if(colorIsGradient) realColorItem else {
+      for(desc <- colorDescs) yield {
+        LegendItem(desc._1, Seq(Illustration(symbol = Some(symbol), width = Illustration.med, height = Illustration.med, color = desc._2)))
+      }
+    }
+
+
+    colorItems :+ sizingItem
+  }
+
+  def coloredByGradient(determinant: ColorGradient, data: PlotDoubleSeries, desc: String = "", uniform: Boolean = true): ScatterStyle = this.copy(colorDesc = desc, colors = determinant(data), uniformCols = uniform, colorIsGradient = true, gradient = Some(determinant))
+
+  def withLabels(texts: PlotStringSeries, xPos: PlotDoubleSeries, yPos: PlotDoubleSeries, colors: PlotIntSeries = BlackARGB,
+                fonts: PlotFontSeries = FontData("Ariel", Renderer.FontStyle.Plain), widths: PlotDoubleSeries = 30, heights: PlotDoubleSeries = 30,
+                nudgeX: PlotDoubleSeries = 0, nudgeY:PlotDoubleSeries = -20, boxed: Boolean = false): ScatterStyle = {
+    val newLabels = labels :+ PlotLabel(texts, xPos, yPos, colors, fonts, widths, heights, nudgeX, nudgeY, boxed)
+    this.copy(labels = newLabels)
+  }
 }
 
 object ScatterStyle {
@@ -132,8 +199,8 @@ object ScatterStyle {
    * all the data points will be connected with one line.
    */
   case class LineData(groups: PlotSeries, stroke: Renderer.StrokeData = Renderer.StrokeData(1))
-  
+
   val connectAll = Some(LineData(0))
-  
+
   private case class ScatterData(i: Int, d: Double, y: Double, px: Double, py: Double, pwidth: Double, pheight: Double, color: Int)
 }

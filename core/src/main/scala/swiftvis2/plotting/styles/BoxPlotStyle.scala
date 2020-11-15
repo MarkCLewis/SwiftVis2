@@ -17,7 +17,8 @@ final case class BoxPlotStyle(
   symbol:       PlotSymbol,
   symbolSize:   Double,
   color:        Int,
-  stroke:       Renderer.StrokeData) extends CategoryNumberPlotStyle {
+  stroke:       Renderer.StrokeData,
+  labels: Seq[PlotLabel]) extends CategoryNumberPlotStyle {
 
   private val minData = boxData.map { bpd =>
     bpd.min min (if(bpd.outliers.isEmpty) Double.MaxValue else bpd.outliers.min)
@@ -72,11 +73,13 @@ final case class BoxPlotStyle(
   def yDataMin(): Option[Double] = Some(minData-0.02*(maxData-minData))
 
   def yDataMax(): Option[Double] = Some(maxData+0.02*(maxData-minData))
+
+  def legendFields: Seq[LegendItem] = List.empty
 }
 
 object BoxPlotStyle {
   def apply(categories: Seq[String], plotData: Array[PlotDoubleSeries], boxWidthFrac: Double = 0.8, symbol: PlotSymbol = EllipseLine, symbolSize: Double = 5,
-            color: Int = BlackARGB, stroke: Renderer.StrokeData = Renderer.StrokeData(1, Nil)): BoxPlotStyle = {
+            color: Int = BlackARGB, stroke: Renderer.StrokeData = Renderer.StrokeData(1, Nil), labels: Seq[PlotLabel] = Seq.empty): BoxPlotStyle = {
     val boxData = for ((cat, data) <- categories zip plotData) yield {
       val d = (data.minIndex until data.maxIndex).map(data).sorted
       val median = if (d.length % 2 == 1) d(d.length / 2) else 0.5 * (d(d.length / 2) + d(d.length / 2 - 1))
@@ -88,6 +91,6 @@ object BoxPlotStyle {
       val outliers = d.filter(x => x < min || x > max)
       BoxPlotData(cat, min, firstQuartile, median, thirdQuartile, max, outliers)
     }
-    new BoxPlotStyle(boxData, boxWidthFrac, symbol, symbolSize, color, stroke)
+    new BoxPlotStyle(boxData, boxWidthFrac, symbol, symbolSize, color, stroke, labels)
   }
 }

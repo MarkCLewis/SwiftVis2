@@ -1,21 +1,31 @@
 package swiftvis2.plotting
 
 import swiftvis2.plotting.renderer.Renderer
+import swiftvis2.plotting.styles.{BarStyle, PlotStyle, ScatterStyle}
 
-case class LegendItem(
-                       text: String,
-                       color: Int = 0,
-                       gradient: ColorGradient = ColorGradient((-1, -1)),
-                       sizedPoints: Seq[(Int, Int)] = Seq.empty,
-                       symbol: PlotSymbol = NoSymbol
-                     ) extends Product  with Serializable {
-  def render(r: Renderer, bounds: Bounds, fontSize: Double): Unit = {
-    r.setColor(BlackARGB)
-    r.setFont(Renderer.FontData("Ariel", Renderer.FontStyle.Plain), fontSize)
-    r.drawText(text, bounds.x, bounds.y + bounds.height*0.5, Renderer.HorizontalAlign.Left, 0)
-    r.setColor(color)
-    if(symbol != NoSymbol) symbol.drawSymbol(bounds.x + bounds.width - 25, bounds.y, 25, 25, r)
-    else r.fillRectangle(bounds.x + bounds.width - 25, bounds.y + bounds.height*0.3, 25, bounds.height / 2.5)
-  }
-  def hasContent: Boolean = !text.isEmpty
+case class LegendItem (
+                       desc: String,
+                       illustrations: Seq[Illustration],
+                       subItems: Seq[LegendItem] = List.empty,
+                     ) extends Product  with Serializable
+// Internal struct containing all data required for an illustration
+// Should seriously consider a refactor to make LegendItems and section headers separate,
+// as well as making gradient illustrations separate. This would get rid of the options
+// in Illustration and make the render method much cleaner.
+
+
+// TODO: Defaults
+
+case class Illustration (
+                            color: Int,
+                            symbol: Option[PlotSymbol],
+                            width: Double,
+                            height: Double,
+                            gradient: Option[ColorGradient] = None
+                        )
+
+object Illustration {
+  val small: Double = 5
+  val med: Double = 15
+  val big: Double = 30
 }

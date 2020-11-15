@@ -4,12 +4,14 @@ import swiftvis2.plotting.renderer.SwingRenderer
 
 object SwingPlotTesting extends App {
   import PlotTesting._
+//  SwingRenderer(legendScatter(), makeMain = true)
+//  SwingRenderer(barPlot())
+//  SwingRenderer(performanceTest(), largeDim, largeDim, true)
+//  SwingRenderer(scatter1(), medDim, medDim)
+//  SwingRenderer(scatter2(), medDim, medDim)
+//  SwingRenderer(scatterLines(), medDim, medDim)
+   SwingRenderer(legendScatterGrid(), medDim, medDim, true)
 
-  // SwingRenderer(performanceTest(), largeDim, largeDim, true)
-  // SwingRenderer(scatter1(), medDim, medDim)
-  // SwingRenderer(scatter2(), medDim, medDim)
-  // SwingRenderer(scatterLines(), medDim, medDim)
-  // SwingRenderer(scatterGrid(), medDim, medDim)
   // SwingRenderer(scatterWithErrorBars(), medDim, medDim)
   // SwingRenderer(scatterMultidata(), medDim, medDim)
   // SwingRenderer(scatterWithSizeandColor(), medDim, medDim)
@@ -26,7 +28,7 @@ object SwingPlotTesting extends App {
   // SwingRenderer(histogram2(), smallDim, smallDim)
   // SwingRenderer(histogramGrid(), medDim, medDim)
   // SwingRenderer(longForm(), 1200, 1000)
-  SwingRenderer(ringPlotGridBug(), 1200, 1000, true)
+//  SwingRenderer(ringPlotGridBug(), 1200, 1000, true)
   // SwingRenderer(coloredSurfacePlot(), 1200, 1000, true)
   // SwingRenderer(boxPlot(), smallDim, smallDim)
   // SwingRenderer(violinPlot(), smallDim, smallDim)
@@ -39,5 +41,5 @@ object SwingPlotTesting extends App {
   // SwingRenderer(colorTest(), largeDim, largeDim)
   // SwingRenderer(simpleFull(), smallDim, smallDim)
   // SwingRenderer(gridSkipAxisLabels(), smallDim, smallDim, true)
-  SwingRenderer(buildUpFluent(), smallDim, smallDim, true)
+//  SwingRenderer(buildUpFluent(), smallDim, smallDim, true)
 }
