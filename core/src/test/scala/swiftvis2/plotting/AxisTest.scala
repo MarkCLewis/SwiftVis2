@@ -30,7 +30,7 @@ class AxisTest extends FlatSpec {
     val locs = f.axis.calcTickLocations(-10, 10)
     assert(locs == Seq(-10.0, -8.0, -6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0))
     val locs2 = f.axis.calcTickLocations(-7, 11)
-    assert(locs2 == Seq(-7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0, 11.0))
+    assert(locs2 == Seq(-6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0))
   }
   
   "A dense log axis" should "have proper ticks" in {
