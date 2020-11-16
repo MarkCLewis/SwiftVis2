@@ -4,9 +4,9 @@ import org.scalatest.FlatSpec
 
 class AxisTest extends FlatSpec {
   def fixture = new {
-    val axis = NumericAxis("axis", Some(0), Some(100), tickSpacing = Some(2))
-    val logAxis = NumericAxis("log", Some(0), Some(100), tickSpacing = Some(1), style = Axis.ScaleStyle.LogDense)
-    val sparseLogAxis = NumericAxis("sparse", Some(0), Some(100), tickSpacing = Some(1), style = Axis.ScaleStyle.LogSparse)
+    val axis = NumericAxis(Some(0), Some(100), tickSpacing = Some(2))
+    val logAxis = NumericAxis(Some(0), Some(100), tickSpacing = Some(1), style = Axis.ScaleStyle.LogDense)
+    val sparseLogAxis = NumericAxis(Some(0), Some(100), tickSpacing = Some(1), style = Axis.ScaleStyle.LogSparse)
   }
   
   "A linear axis" should "do conversions" in {
@@ -30,7 +30,7 @@ class AxisTest extends FlatSpec {
     val locs = f.axis.calcTickLocations(-10, 10)
     assert(locs == Seq(-10.0, -8.0, -6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0))
     val locs2 = f.axis.calcTickLocations(-7, 11)
-    assert(locs2 == Seq(-6.0, -4.0, -2.0, 0.0, 2.0, 4.0, 6.0, 8.0, 10.0))
+    assert(locs2 == Seq(-7.0, -5.0, -3.0, -1.0, 1.0, 3.0, 5.0, 7.0, 9.0, 11.0))
   }
   
   "A dense log axis" should "have proper ticks" in {

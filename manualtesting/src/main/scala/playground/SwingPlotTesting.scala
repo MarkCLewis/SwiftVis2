@@ -10,6 +10,7 @@ object SwingPlotTesting extends App {
 //  SwingRenderer(scatter1(), medDim, medDim)
 //  SwingRenderer(scatter2(), medDim, medDim)
 //  SwingRenderer(scatterLines(), medDim, medDim)
+   SwingRenderer(legendScatter(), medDim, medDim, true)
    SwingRenderer(legendScatterGrid(), medDim, medDim, true)
 
   // SwingRenderer(scatterWithErrorBars(), medDim, medDim)
