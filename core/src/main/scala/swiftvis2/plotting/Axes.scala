@@ -334,20 +334,10 @@ case class NumericAxis(
           }
           val firstTickApprox = (amin / majorSep).toInt * majorSep
           val firstTick = firstTickApprox + (if ((amax - amin).abs < (amax - firstTickApprox).abs) majorSep else 0)
-          val numTicks = ((amax - firstTick).abs / majorSep).toInt
+          val numTicks = ((amax - firstTick) / majorSep).abs.toInt
           println(firstTick, amax, majorSep, numTicks)
           (0 to numTicks).map(i => firstTick + i * majorSep)
 
-          // Nick's code. Talk about why this was changed.
-          // val majorSep = tickSpacing.getOrElse {
-          //   val str = "%e".format((amax - amin) / 6)
-          //   (str.take(str.indexOf('.') + 2).toDouble.round + str.drop(str.indexOf('e'))).toDouble // TODO - consider BigDecimal here if display gets unhappy
-          // }
-          // val firstTickApprox = (amin / majorSep) * majorSep
-          // val firstTick = firstTickApprox + (if ((amax - amin).abs < (amax - firstTickApprox).abs) majorSep else 0)
-          // val numTicks = ((amax - firstTick).abs / majorSep.abs).toInt
-          // println(firstTick, amax, majorSep, numTicks)
-          // (0 to numTicks).map(i => firstTick + i * majorSep)
 //           firstTick to amax by majorSep
         case Axis.ScaleStyle.LogDense =>
           var pos = Math.pow(10, Math.floor(Math.log10(Math.min(amin, amax))))
