@@ -2,7 +2,7 @@ package swiftvis2.plotting.styles
 
 import swiftvis2.plotting.Axis.AxisRenderer
 import swiftvis2.plotting.renderer.Renderer
-import swiftvis2.plotting.renderer.Renderer.FontData
+import swiftvis2.plotting.renderer.Renderer.{FontData, StrokeData}
 import swiftvis2.plotting.styles.ScatterStyle.LineData
 import swiftvis2.plotting.{Axis, BlackARGB, Bounds, LegendItem, NumericAxis, PlotDoubleSeries, PlotIntSeries, PlotSymbol, WhiteARGB}
 
@@ -24,7 +24,13 @@ final case class LabelStyle(
                             textYNudges: PlotDoubleSeries = Seq.empty[Double],
                             symbolXNudges: PlotDoubleSeries = Seq.empty[Double],
                             symbolYNudges: PlotDoubleSeries = Seq.empty[Double],
-                            boxedText: Boolean = false) extends NumberNumberPlotStyle {
+                            boxedText: Boolean = false,
+                            lineStartPointsX: Seq[Double] = Seq.empty,
+                            lineStartPointsY: Seq[Double] = Seq.empty,
+                            lineEndPointsX: Seq[Double] = Seq.empty,
+                            lineEndPointsY: Seq[Double] = Seq.empty,
+                            lineThicknesses: Seq[Double] = Seq.empty,
+                            lineColors: Seq[Int] = Seq.empty) extends NumberNumberPlotStyle {
   /**
    * This method will render the plot to the specified region using the provided renderer with the given axes and bounds for the axes.
    *
@@ -75,6 +81,18 @@ final case class LabelStyle(
         r.setColor(col)
         sym.drawSymbol(drawX, drawY, width, height, r)
       }
+    }
+
+    for(i <- lineStartPointsX.indices) {
+      val (startX, startY) = lineStartPointsX(i) -> lineStartPointsY(i)
+      val (endX, endY) = lineEndPointsX(i) -> lineEndPointsY(i)
+      val thickness = lineThicknesses(i)
+      val lineCol = lineColors(i)
+      val (drawStartX, drawStartY) = xConv(startX) -> yConv(startY)
+      val (drawEndX, drawEndY) = xConv(endX) -> yConv(endY)
+      r.setColor(lineCol)
+      r.setStroke(StrokeData(thickness))
+      r.drawLine(drawStartX, drawStartY, drawEndX, drawEndY)
     }
 
     (Seq(xtfs, ytfs), Seq(xnfs, ynfs), xRender, yRender)

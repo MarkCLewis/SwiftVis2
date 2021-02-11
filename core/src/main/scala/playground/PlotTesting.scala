@@ -52,7 +52,9 @@ object PlotTesting {
     val labelStyle = LabelStyle(xPnt, yPnt, xPnt, yPnt, texts = xPnt.map(_.toString), symbols = xPnt.map(x => Rectangle),
       textXNudges = xPnt.map(_ => 0.0), textYNudges = xPnt.map(_ => -20.0), symbolXNudges =  xPnt.map(_ => 0.0), symbolYNudges = xPnt.map(_ => -50.0),
       textWidth = xPnt.map(_ => 20.0), textHeight = xPnt.map(_ => 20.0), textColors = xPnt.map(_ => BlackARGB),
-      symbolWidth = xPnt.map(_ => 20.0), symbolHeight = xPnt.map(_ => 20.0), symbolColors = xPnt.map(_ => BlackARGB))
+      symbolWidth = xPnt.map(_ => 20.0), symbolHeight = xPnt.map(_ => 20.0), symbolColors = xPnt.map(_ => BlackARGB),
+      lineStartPointsX = Seq(0.0), lineStartPointsY = Seq(50.0), lineEndPointsX = Seq(10.0), lineEndPointsY = Seq(50.0),
+      lineThicknesses = Seq(3.0), lineColors = Seq(BlackARGB))
     Plot.stacked(Seq(sp, labelStyle))
   }
 
