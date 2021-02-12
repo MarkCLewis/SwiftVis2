@@ -50,8 +50,9 @@ final case class LabelStyle(
     val (yConv, ytfs, ynfs, yRender) = yNAxis.renderInfo(bounds.y + bounds.height, bounds.y,
       yminFunc(yNAxis), ymaxFunc(yNAxis), Axis.RenderOrientation.YAxis, r, axisBounds)
     val (start, end) = calcTextStartEnd
-    for(i <- start until end) {
-      if(texts.nonEmpty) {
+
+    if(texts.nonEmpty) {
+      for(i <- texts.indices) {
         val txt = texts(i)
         val (x, y) = (textXSource(i), textYSource(i))
         val col = textColors(i)
@@ -69,8 +70,9 @@ final case class LabelStyle(
         r.setColor(col)
         r.drawText(txt, drawX, drawY, Renderer.HorizontalAlign.Center, 0.0)
       }
-
-      if(symbols.nonEmpty) {
+    }
+    if(symbols.nonEmpty) {
+      for(i <- symbols.indices) {
         val sym = symbols(i)
         val (x, y) = (symbolXSource(i), symbolYSource(i))
         val col = symbolColors(i)
