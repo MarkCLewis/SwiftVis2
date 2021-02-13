@@ -27,7 +27,6 @@ final case class ScatterStyle(
                                colorDescs: Seq[(String, Int)] = Seq.empty,
                                sizingDesc: String = "",
                                colorIsGradient: Boolean = false,
-                               labels: Seq[PlotLabel] = Seq.empty,
                                legendSizeTrans: Double => Double = identity,
                                gradient: Option[ColorGradient] = None) extends NumberNumberPlotStyle {
 
@@ -102,7 +101,6 @@ final case class ScatterStyle(
           r.drawLinePath(lst.map(_._1), lst.map(_._2))
         }
     }
-    labels.foreach(_.render(r, bounds, xAxis, xminFunc, xmaxFunc, yAxis, yminFunc, ymaxFunc, axisBounds))
     (Seq(xtfs, ytfs), Seq(xnfs, ynfs), xRender, yRender)
   }
 
@@ -183,13 +181,6 @@ final case class ScatterStyle(
   }
 
   def coloredByGradient(determinant: ColorGradient, data: PlotDoubleSeries, desc: String = "", uniform: Boolean = true): ScatterStyle = this.copy(colorDesc = desc, colors = determinant(data), uniformCols = uniform, colorIsGradient = true, gradient = Some(determinant))
-
-  def withLabels(texts: PlotStringSeries, xPos: PlotDoubleSeries, yPos: PlotDoubleSeries, colors: PlotIntSeries = BlackARGB,
-                fonts: PlotFontSeries = FontData("Ariel", Renderer.FontStyle.Plain), widths: PlotDoubleSeries = 30, heights: PlotDoubleSeries = 30,
-                nudgeX: PlotDoubleSeries = 0, nudgeY:PlotDoubleSeries = -20, boxed: Boolean = false): ScatterStyle = {
-    val newLabels = labels :+ PlotLabel(texts, xPos, yPos, colors, fonts, widths, heights, nudgeX, nudgeY, boxed)
-    this.copy(labels = newLabels)
-  }
 }
 
 object ScatterStyle {
