@@ -29,6 +29,7 @@ case class Vect(x: Double, y: Double, z: Double) {
   }
   override def hashCode(): Int = {
     println("Don't hash on Vects!")
+    Thread.dumpStack()
     9802
   }
 }

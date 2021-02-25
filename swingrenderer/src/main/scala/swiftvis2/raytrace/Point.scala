@@ -34,6 +34,7 @@ case class Point(x:Double, y:Double, z:Double) {
   }
   override def hashCode(): Int = {
     println("Don't hash on Points!")
+    Thread.dumpStack()
     9801
   }
 }
