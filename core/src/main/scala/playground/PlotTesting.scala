@@ -45,6 +45,19 @@ object PlotTesting {
     Plot.stacked(Seq(sizedSp), title = "Legend demo").withGeneratedLegend()
   }
 
+  def labelScatter(): Plot = {
+    val xPnt = 1 to 10
+    val yPnt = xPnt.map(a => a * a)
+    val sp = ScatterStyle(xPnt, yPnt)
+    val labelStyle = LabelStyle(xPnt, yPnt, xPnt, yPnt, texts = xPnt.map(_.toString), symbols = xPnt.map(x => Rectangle),
+      textXNudges = 0.0, textYNudges = -20.0, symbolXNudges = 0.0, symbolYNudges = -50.0,
+      textWidth = 20.0, textHeight = 20.0, textColors = BlackARGB,
+      symbolWidth = 20.0, symbolHeight = 20.0, symbolColors = BlackARGB,
+      lineStartPointsX = Seq(0.0), lineStartPointsY = Seq(50.0), lineEndPointsX = Seq(10.0), lineEndPointsY = Seq(50.0),
+      lineThicknesses = 3.0, lineColors = BlackARGB)
+    Plot.stacked(Seq(sp, labelStyle))
+  }
+
   /**
    * Short form, single data with two log axes
    */
