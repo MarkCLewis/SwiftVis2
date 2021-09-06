@@ -102,7 +102,7 @@ final case class ViolinPlotStyle private (
 }
 
 object ViolinPlotStyle {
-  def apply(categories: Seq[String], plotData: Array[PlotDoubleSeries], maxWidthFrac: Double = 0.8,
+  def apply(categories: Seq[String], plotData: Seq[PlotDoubleSeries], maxWidthFrac: Double = 0.8,
             color: Int = BlackARGB, stroke: Renderer.StrokeData = Renderer.StrokeData(1, Nil),
             bandwidth: Option[Double] = None, labels: Seq[PlotLabel] = Seq.empty): ViolinPlotStyle = {
     var maxDensity = 0.0
@@ -120,7 +120,7 @@ object ViolinPlotStyle {
         math.pow(4 * std * std * std * std * std / (3 * d.length), 0.2) // Rule-of-thumb bandwidth estimator
       }
       val tree = buildTree(d, bw, 0, d.length)
-      val densities = (min-0.15*(max-min) to max+0.15*(max-min) by bw / 4).map { x =>
+      val densities = doubleRange(min-0.15*(max-min), max+0.15*(max-min), bw / 4).map { x =>
         x -> tree.density(x, bw)
       }
       maxDensity = maxDensity max densities.maxBy(_._2)._2

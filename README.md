@@ -62,7 +62,7 @@ object PlotTesting extends JFXApp {
   val plot = Plot.scatterPlot(xPnt, yPnt, "Quadratic", "x", "y")
   FXRenderer(plot)
 
-  val plot2 = Plot.scatterPlot((1 to 1000).map(_ => math.random * math.random), (1 to 1000).map(_ => math.random * math.random), "Random Points", "x", "y")
+  val plot2 = Plot.scatterPlot((1 to 1000).map(_ => math.random() * math.random()), (1 to 1000).map(_ => math.random() * math.random()), "Random Points", "x", "y")
   FXRenderer(plot2, 1500, 500)
 }
 ```
@@ -80,7 +80,7 @@ object PlotTesting extends App {
   val plot = Plot.scatterPlot(xPnt, yPnt, "Quadratic", "x", "y")
   SwingRenderer(plot)
 
-  val plot2 = Plot.scatterPlot((1 to 1000).map(_ => math.random * math.random), (1 to 1000).map(_ => math.random * math.random), "Random Points", "x", "y")
+  val plot2 = Plot.scatterPlot((1 to 1000).map(_ => math.random() * math.random()), (1 to 1000).map(_ => math.random() * math.random()), "Random Points", "x", "y")
   SwingRenderer(plot2, 1500, 500, true)  // The true at the end means that closing this window terminates the application.
 }
 ```

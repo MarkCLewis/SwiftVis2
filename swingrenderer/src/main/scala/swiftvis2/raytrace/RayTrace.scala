@@ -23,7 +23,7 @@ object RayTrace {
     val aspect = img.width.toDouble/img.height
     for (i <- (0 until img.width).par; j <- (0 until img.height).par) {
       img.setColor(i, j, (((0 until numRays).map(index => {
-        val ray = Ray(eye, topLeft + right * (aspect * (i + (if (index > 0) math.random * 0.75 else 0)) / img.width) + down * (j + (if (index > 0) math.random * 0.75 else 0)) / img.height)
+        val ray = Ray(eye, topLeft + right * (aspect * (i + (if (index > 0) math.random() * 0.75 else 0)) / img.width) + down * (j + (if (index > 0) math.random() * 0.75 else 0)) / img.height)
         castRay(ray, geom, lights, 0)
       }).reduceLeft(_ + _)) / numRays))
     }

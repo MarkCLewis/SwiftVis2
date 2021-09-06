@@ -21,33 +21,33 @@ object PlotSymbol {
 }
 
 sealed trait PlotSymbol {
-  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer)
+  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer): Unit
 }
 
 case object Ellipse extends PlotSymbol {
-  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer) = r.fillEllipse(cx, cy, width, height)
+  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer): Unit = r.fillEllipse(cx, cy, width, height)
 }
 
 case object EllipseLine extends PlotSymbol {
-  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer) = r.drawEllipse(cx, cy, width, height)
+  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer): Unit = r.drawEllipse(cx, cy, width, height)
 }
 
 case object Rectangle extends PlotSymbol {
-  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer) = r.fillRectangleC(cx, cy, width, height)
+  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer): Unit = r.fillRectangleC(cx, cy, width, height)
 }
 
 case object RectangleLine extends PlotSymbol {
-  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer) = r.drawRectangleC(cx, cy, width, height)
+  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer): Unit = r.drawRectangleC(cx, cy, width, height)
 }
 
 case object Triangle extends PlotSymbol {
-  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer) = ???
+  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer): Unit = ???
 }
 
 case object Star extends PlotSymbol {
-  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer) = ???
+  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer): Unit = ???
 }
 
 case object NoSymbol extends PlotSymbol {
-  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer) = {}
+  def drawSymbol(cx: Double, cy: Double, width: Double, height: Double, r: Renderer): Unit = {}
 }

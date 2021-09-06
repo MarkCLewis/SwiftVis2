@@ -1,8 +1,10 @@
 package swiftvis2.plotting
 
-import org.scalatest.FlatSpec
+import org.scalatest._
+import flatspec._
+import matchers._
 
-class AxisTest extends FlatSpec {
+class AxisTest extends AnyFlatSpec with should.Matchers {
   def fixture = new {
     val axis = NumericAxis(Some(0), Some(100), tickSpacing = Some(2))
     val logAxis = NumericAxis(Some(0), Some(100), tickSpacing = Some(1), style = Axis.ScaleStyle.LogDense)

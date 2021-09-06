@@ -24,7 +24,7 @@ class KDTreeGeometryTest extends FlatSpec with Matchers {
   }
   
   it should "have proper intersect data for a large random test outside" in {
-    val spheres = Array.fill(2000)(GeomSphere(Point(math.random, math.random, math.random), 0.01, p => RTColor.White, p => 0.0))
+    val spheres = Array.fill(2000)(GeomSphere(Point(math.random, math.random, math.random()), 0.01, p => RTColor.White, p => 0.0))
     val tree = new KDTreeGeometry(spheres)
     val list = new ListScene(spheres:_*)
     
@@ -36,13 +36,13 @@ class KDTreeGeometryTest extends FlatSpec with Matchers {
     
     // Random
     for(_ <- 1 to 100) {
-      val ray = Ray(Point(100, 0, 0), Point(math.random, math.random, math.random))
+      val ray = Ray(Point(100, 0, 0), Point(math.random, math.random, math.random()))
       tree.intersect(ray) should be (list.intersect(ray))
     }
   }
 
   it should "have proper intersect data for a large random test inside" in {
-    val spheres = Array.fill(2000)(GeomSphere(Point(math.random, math.random, math.random), 0.01, p => RTColor.White, p => 0.0))
+    val spheres = Array.fill(2000)(GeomSphere(Point(math.random, math.random, math.random()), 0.01, p => RTColor.White, p => 0.0))
     val tree = new KDTreeGeometry(spheres)
     val list = new ListScene(spheres:_*)
     
@@ -54,13 +54,13 @@ class KDTreeGeometryTest extends FlatSpec with Matchers {
     
     // Random
     for(_ <- 1 to 100) {
-      val ray = Ray(Point(math.random, math.random, math.random), Point(math.random, math.random, math.random))
+      val ray = Ray(Point(math.random, math.random, math.random()), Point(math.random, math.random, math.random()))
       tree.intersect(ray) should be (list.intersect(ray))
     }
   }
   
   it should "match the ListScene for casting" in {
-    val spheres = Array.fill(2000)(GeomSphere(Point(math.random*10, math.random*10, util.Random.nextGaussian()), 0.1, p => RTColor.White, p => 0.0))
+    val spheres = Array.fill(2000)(GeomSphere(Point(math.random()*10, math.random()*10, util.Random.nextGaussian()), 0.1, p => RTColor.White, p => 0.0))
     val tree = new KDTreeGeometry(spheres)
     val list = new ListScene(spheres:_*)
     val lights = List(PointLight(RTColor(0.7, 0.5, 0.1), Point(100*math.cos(10*math.Pi/180), 0, 100*math.sin(10*math.Pi/180))))

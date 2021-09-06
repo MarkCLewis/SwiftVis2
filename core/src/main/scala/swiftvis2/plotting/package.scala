@@ -50,7 +50,7 @@ package object plotting {
   implicit class ArrayLongToDoubleSeries(data: Array[Long]) extends PlotDoubleSeries {
     def minIndex: Int = 0
     def maxIndex: Int = data.size
-    def apply(i: Int): Double = data(i)
+    def apply(i: Int): Double = data(i).toDouble
   }
 
   implicit class SeqToIntSeries(data: Seq[Int]) extends PlotIntSeries {
@@ -126,4 +126,11 @@ package object plotting {
   }
   
   // TODO - other implicits
+
+  def doubleRange(rmin: Double, rmax: Double, rstep: Double) = new collection.immutable.IndexedSeq[Double] {
+    require((rmax - rmin) * rstep >= 0.0)
+    val cnt = ((rmax - rmin) / rstep).toInt + 1
+    def apply(idx: Int): Double = (rmin + idx * rstep)
+    def length: Int = cnt
+  }
 }

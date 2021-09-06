@@ -216,8 +216,8 @@ val yAxis3 = new NumericAxis(None, None, None, Axis.TickStyle.Both, Some(Axis.La
 
 // Main Scatter plot
 val (mainX, mainY) = (for (_ <- 1 to 1000) yield {
-  val r = math.random * math.random * math.random
-  val theta = math.random * 2 * math.Pi
+  val r = math.random() * math.random() * math.random
+  val theta = math.random() * 2 * math.Pi
   (r * math.cos(theta), r * math.sin(theta))
 }).unzip
 val mainScatter = ScatterStyle(mainX, mainY, Ellipse, 5, 5, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Pixels, BlueARGB)
@@ -246,10 +246,10 @@ val barChart = BarStyle(Seq("FY", "Sophomore", "Junior", "Senior"), Seq(
 val barChartPlot = Plot2D(barChart, "xcat", "y3")
 
 // Second Scatter
-val x2 = Array.fill(100)(math.random)
-val y2 = x2.map(x => math.cos(x * 3) + 0.2 * math.random)
-val ex2 = x2.map(x => 0.1 * math.random)
-val ey2 = x2.map(x => 0.2 * math.random)
+val x2 = Array.fill(100)(math.random())
+val y2 = x2.map(x => math.cos(x * 3) + 0.2 * math.random())
+val ex2 = x2.map(x => 0.1 * math.random())
+val ey2 = x2.map(x => 0.2 * math.random())
 val cg = ColorGradient(-1.0 -> BlackARGB, 0.0 -> BlueARGB, 1.0 -> GreenARGB)
 val errorScatter = ScatterStyle(x2, y2, Rectangle, 5, ey2, PlotSymbol.Sizing.Pixels, PlotSymbol.Sizing.Scaled, cg(y2),
   None, Some(ex2), Some(ey2))

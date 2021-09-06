@@ -23,7 +23,7 @@ object RayTracePathTesting extends JFXApp {
       val img = new WritableImage(720, 480)
       content = List(new ImageView(img))
 
-      val spheres = Array.fill(200)(GeomSphere(swiftvis2.raytrace.Point(math.random, math.random, math.random), 0.01, p => RTColor.White, p => 0.0))
+      val spheres = Array.fill(200)(GeomSphere(swiftvis2.raytrace.Point(math.random, math.random, math.random()), 0.01, p => RTColor.White, p => 0.0))
       val tree = new KDTreeGeometry(spheres)
       val path = LinearViewPath(List(StopPoint(View(swiftvis2.raytrace.Point(0, -5, 0), Vect(0, 1, 0), Vect(0, 0, 1)), 1),
                                      StopPoint(View(swiftvis2.raytrace.Point(0, 0, 0), Vect(0, 1, 0), Vect(0, 0, 1)), 1),

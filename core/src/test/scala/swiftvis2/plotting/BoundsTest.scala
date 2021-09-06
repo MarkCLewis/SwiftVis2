@@ -1,8 +1,10 @@
 package swiftvis2.plotting
 
-import org.scalatest.FlatSpec
+import org.scalatest._
+import flatspec._
+import matchers._
 
-class BoundsTest extends FlatSpec {
+class BoundsTest extends AnyFlatSpec with should.Matchers {
   def fixture = new {
     val bounds = Bounds(0, 0, 10, 5) 
   }

@@ -141,9 +141,9 @@ case class Plot(texts: Map[String, Plot.TextData] = Map.empty, grids: Map[String
    */
 
   def withGeneratedLegend(bounds: Bounds = Bounds(0.8, 0.4, 0.2, 0.2), smooshPlot: Boolean = true): Plot = {
-    val allStyles = grids.mapValues { case GridData(g, _) => g.plots.flatten.flatten.map(_.style)}.values.flatten.toSeq
-    val nGrids = if(smooshPlot) {
-      grids.mapValues { case GridData(g, b) => GridData(g, b.subXYBorder(0.0, bounds.width, 0.0, 0.0)) }
+    val allStyles = grids.map { case (key, GridData(g, _)) => g.plots.flatten.flatten.map(_.style)}.flatten.toSeq
+    val nGrids:Map[String, GridData] = if(smooshPlot) {
+      grids.map { case (key, GridData(g, b)) => key -> GridData(g, b.subXYBorder(0.0, bounds.width, 0.0, 0.0)) }
     } else grids
     this.copy(legends = legends + ("gen" -> LegendData(PlotLegend(
       allStyles.flatMap(_.legendFields).groupBy(_.desc).map(_._2.head).toSeq, !smooshPlot), bounds)), grids = nGrids)
@@ -744,7 +744,7 @@ object Plot {
    * @param xLabel The label drawn on the x-axis.
    * @param yLabel The label drawn on the y-axis.
    */
-  def boxPlot(categories: Array[String], plotData: Array[PlotDoubleSeries], boxWidthFrac: Double = 0.8, symbol: PlotSymbol = EllipseLine, symbolSize: Double = 7.5,
+  def boxPlot(categories: Seq[String], plotData: Seq[PlotDoubleSeries], boxWidthFrac: Double = 0.8, symbol: PlotSymbol = EllipseLine, symbolSize: Double = 7.5,
               color: Int = BlackARGB, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)
@@ -768,7 +768,7 @@ object Plot {
    * @param xLabel The label drawn on the x-axis.
    * @param yLabel The label drawn on the y-axis.
    */
-  def violinPlot(categories: Array[String], plotData: Array[PlotDoubleSeries], bandwidth: Option[Double] = None, widthFrac: Double = 0.8,
+  def violinPlot(categories: Seq[String], plotData: Seq[PlotDoubleSeries], bandwidth: Option[Double] = None, widthFrac: Double = 0.8,
                  color: Int = BlackARGB, title: String = "", xLabel: String = "", yLabel: String = ""): Plot = {
     val font = Renderer.FontData("Ariel", Renderer.FontStyle.Plain)
     val text = PlotText(title, 0xff000000, font, Renderer.HorizontalAlign.Center, 0.0)

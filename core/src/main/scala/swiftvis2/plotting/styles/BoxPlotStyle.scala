@@ -78,7 +78,7 @@ final case class BoxPlotStyle(
 }
 
 object BoxPlotStyle {
-  def apply(categories: Seq[String], plotData: Array[PlotDoubleSeries], boxWidthFrac: Double = 0.8, symbol: PlotSymbol = EllipseLine, symbolSize: Double = 5,
+  def apply(categories: Seq[String], plotData: Seq[PlotDoubleSeries], boxWidthFrac: Double = 0.8, symbol: PlotSymbol = EllipseLine, symbolSize: Double = 5,
             color: Int = BlackARGB, stroke: Renderer.StrokeData = Renderer.StrokeData(1, Nil), labels: Seq[PlotLabel] = Seq.empty): BoxPlotStyle = {
     val boxData = for ((cat, data) <- categories zip plotData) yield {
       val d = (data.minIndex until data.maxIndex).map(data).sorted

@@ -22,7 +22,7 @@ object DoubleFormula {
   
 
   def main(args: Array[String]): Unit = {
-    val di = DataInput(Array(DataSet(Array.fill(100,3)(math.random)), DataSet(Array.fill(100,3)(math.random))))
+    val di = DataInput(Array(DataSet(Array.fill(100,3)(math.random())), DataSet(Array.fill(100,3)(math.random()))))
     val df = apply("x(i+1, 0)*d(1).x(i*2+3, 1)")
     println(df(di, 10, Nil))
     println(di.x(11,0)*di.d(1).x(23,1))
