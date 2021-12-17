@@ -3,7 +3,7 @@ package swiftvis2.raytrace
 class ListScene(g:Geometry*) extends Geometry with Scene {
   private var geom : List[Geometry] = g.toList
   
-  def addGeom(g:Geometry) {
+  def addGeom(g:Geometry): Unit = {
     geom = g::geom
   }
   

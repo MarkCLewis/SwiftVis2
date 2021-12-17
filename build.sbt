@@ -2,6 +2,7 @@ fork := true
 
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
+scalaVersion := "2.13.7"
 
 lazy val commonSettings = Seq(
   organization := "edu.trinity",
@@ -30,13 +31,13 @@ lazy val core = (crossProject(JSPlatform, JVMPlatform).crossType(CrossType.Pure)
   .settings(
 		commonSettings,
     name         := "SwiftVis2Core",
-    crossScalaVersions := Seq("2.12.11", "2.13.6"),
+    scalaVersion := "2.13.7",
     javaOptions += "-Dio.netty.tryReflectionSetAccessible=true",
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value, 
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value, 
     libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.9",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.9" % "test"
+    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.10",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.10" % "test"
   )
 
 lazy val coreJVM = core.jvm
@@ -46,7 +47,7 @@ lazy val jvm = (project in file("jvm"))
   .settings(
     commonSettings,
     name         := "SwiftVis2JVM",
-    crossScalaVersions := Seq("2.12.11", "2.13.6")
+    scalaVersion := "2.13.7"
   ).dependsOn(coreJVM)
 
 // Determine OS version of JavaFX binaries
@@ -62,8 +63,8 @@ lazy val fxrenderer = (project in file("fxrenderer"))
   .settings(
     commonSettings,
     name         := "SwiftVis2FX",
-    crossScalaVersions := Seq("2.12.11", "2.13.6"),
-    libraryDependencies += "org.scalafx" %% "scalafx" % "11-R16",
+    scalaVersion := "2.13.7",
+    libraryDependencies += "org.scalafx" %% "scalafx" % "17.0.1-R26",
     libraryDependencies ++= javaFXModules.map( m =>
       "org.openjfx" % s"javafx-$m" % "11" classifier osName
     )
@@ -73,35 +74,34 @@ lazy val swingrenderer = (project in file("swingrenderer"))
   .settings(
     commonSettings,
     name         := "SwiftVis2Swing",
-    crossScalaVersions := Seq("2.12.11", "2.13.6"),
-    libraryDependencies += "org.scala-lang.modules" % "scala-swing" % "2.1.1",
-    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.9",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.9" % "test"
+    scalaVersion := "2.13.7",
+    libraryDependencies += "org.scala-lang.modules" %% "scala-swing" % "3.0.0",
+    libraryDependencies += "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4"
   ).dependsOn(jvm)
 
 lazy val polynote = (project in file("polynoteintegration"))
   .settings(
     commonSettings,
     name         := "SwiftVis2Polynote",
-    crossScalaVersions := Seq("2.12.11", "2.13.6"),
-    libraryDependencies += "org.polynote" %% "polynote-runtime" % "0.3.8"
+    scalaVersion := "2.12.15",
+    libraryDependencies += "org.polynote" %% "polynote-runtime" % "0.4.4"
   ).dependsOn(swingrenderer)
 
 lazy val spark = (project in file("spark"))
   .settings(
 		commonSettings,
     name         := "SwiftVis2Spark",
-    scalaVersion := "2.12.11",
+    scalaVersion := "2.13.7",
     scalacOptions := Seq("-unchecked", "-deprecation"),
-    libraryDependencies += "org.apache.spark" %% "spark-core" % "3.0.0",
-    libraryDependencies += "org.apache.spark" %% "spark-sql" % "3.0.0"
+    libraryDependencies += "org.apache.spark" %% "spark-core" % "3.2.0",
+    libraryDependencies += "org.apache.spark" %% "spark-sql" % "3.2.0"
   ).dependsOn(coreJVM)
 
 lazy val manTests = (project in file("manualtesting"))
   .settings(
     commonSettings,
     name         := "SwiftVis2ManualTests",
-    crossScalaVersions := Seq("2.12.11", "2.13.6"),
+    scalaVersion := "2.13.7",
     scalacOptions := Seq("-unchecked", "-deprecation"),
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
@@ -111,27 +111,28 @@ lazy val manTests = (project in file("manualtesting"))
 lazy val jsrenderer = (project in file("jsrenderer"))
   .settings(commonSettings,
     name         := "SwiftVis2JS",
-    crossScalaVersions := Seq("2.12.11", "2.13.6"),
+    scalaVersion := "2.13.7",
     scalacOptions := Seq("-unchecked", "-deprecation"),
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7"
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.0.0"
   ).dependsOn(coreJS)
   .enablePlugins(ScalaJSPlugin)
 
 lazy val reactrenderer = (project in file("reactrenderer"))
   .settings(commonSettings,
     name         := "SwiftVis2React",
-    crossScalaVersions := Seq("2.12.11", "2.13.6"),
+    scalaVersion := "2.13.7",
     scalacOptions := Seq("-unchecked", "-deprecation"),
     libraryDependencies += "org.scala-lang" % "scala-library" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
     libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.7",
-    libraryDependencies += "me.shadaj" %%% "slinky-core" % "0.6.5",
-    libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.6.5",
-    scalacOptions += "-P:scalajs:sjsDefinedByDefault",
-    addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
+    //libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.0.0",
+    libraryDependencies += "me.shadaj" %%% "slinky-core" % "0.6.8",
+    libraryDependencies += "me.shadaj" %%% "slinky-web" % "0.6.8",
+    //scalacOptions += "-P:scalajs:sjsDefinedByDefault",
+    //addCompilerPlugin("org.scalamacros" % "paradise" % "2.1.1" cross CrossVersion.full)
+    scalacOptions += "-Ymacro-annotations"
   ).dependsOn(coreJS)
   .enablePlugins(ScalaJSPlugin)

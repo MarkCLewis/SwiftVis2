@@ -2,9 +2,10 @@ package swiftvis2.raytrace
 
 import java.awt.{ Color, Font, Graphics2D }
 import java.awt.image.BufferedImage
-import scala.swing._
+//import scala.swing._
 import javax.imageio.ImageIO
 import java.io.File
+import scala.collection.parallel.CollectionConverters._
 
 object RayTrace {
   def texturePanel(p: Point, r: Vect, d: Vect, n: Vect, ref: Double, fname: String): Geometry = {
@@ -69,7 +70,7 @@ object RayTrace {
     val refs = Array.tabulate(faces)((x) => ref)
     println(pnts.length)
     for (i <- 0 until faces) {
-      ret.addGeom(new GeomPolygon(Array(pnts(i)_2, pnts(i)_1, pnts(i + 1)_1, pnts(i + 1)_2), col, refs))
+      ret.addGeom(new GeomPolygon(Array(pnts(i)._2, pnts(i)._1, pnts(i + 1)._1, pnts(i + 1)._2), col, refs))
     }
     ret.addGeom(new GeomPolygon(pnts.take(faces).map(_._1).toArray, col, refs))
     ret.addGeom(new GeomPolygon(pnts.take(faces).map(_._2).toArray, col, refs))

@@ -3,7 +3,7 @@ package swiftvis2.raytrace
 case class Vect(x: Double, y: Double, z: Double) {
   def +(v: Vect) = Vect(x + v.x, y + v.y, z + v.z)
   def -(v: Vect) = Vect(x - v.x, y - v.y, z - v.z)
-  def unary_-() = Vect(-x, -y, -z)
+  def unary_- = Vect(-x, -y, -z)
   def dot(v: Vect) = x * v.x + y * v.y + z * v.z
   def cross(v: Vect) = Vect(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x)
   def *(s: Double) = Vect(x * s, y * s, z * s)

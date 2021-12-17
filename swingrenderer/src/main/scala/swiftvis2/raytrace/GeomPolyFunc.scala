@@ -1,7 +1,7 @@
 package swiftvis2.raytrace
 
 class GeomPolyFunc(pnts: Array[Point], normal: (Point) => Vect, colors: (Point) => RTColor, reflect: (Point) => Double) extends Geometry {
-  val n = (pnts(2) - pnts(1)) cross (pnts(0) - pnts(1)) normalize
+  val n = ((pnts(2) - pnts(1)) cross (pnts(0) - pnts(1))).normalize
 
   override def intersect(r: Ray): Option[IntersectData] = {
     val s = ((pnts(0) - r.p0) dot n) / (r.dir dot n)

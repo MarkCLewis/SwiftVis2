@@ -6,7 +6,7 @@ import java.awt.geom.{Ellipse2D, Line2D, Path2D, Rectangle2D}
 import java.awt.image.BufferedImage
 
 import javax.imageio.ImageIO
-import javax.swing._
+import javax.swing.{JPanel, JFrame, JMenuBar, JMenu, JMenuItem, JFileChooser, JOptionPane, WindowConstants}
 import swiftvis2.plotting.{Bounds, Plot}
 
 import scala.collection.mutable.ArrayStack
@@ -23,7 +23,7 @@ object SwingRenderer {
 
   class SwingPanelUpdater(private var plot: Plot) extends Updater {
     val panel = new JPanel() {
-      override def paint(gr: Graphics) {
+      override def paint(gr: Graphics): Unit = {
         val g = gr.asInstanceOf[Graphics2D]
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)

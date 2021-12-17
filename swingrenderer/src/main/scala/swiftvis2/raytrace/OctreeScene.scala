@@ -6,7 +6,7 @@ class OctreeScene(c: Point, s: Double) extends Geometry with Scene {
   private var children: Array[OctreeScene] = null
   private var geomList: List[Geometry] = Nil
 
-  override def addGeom(geom: Geometry) {
+  override def addGeom(geom: Geometry): Unit = {
     val qs = size * 0.25
     if (geom.boundingSphere.radius > qs) geomList = geom :: geomList
     else {
@@ -28,7 +28,7 @@ class OctreeScene(c: Point, s: Double) extends Geometry with Scene {
   }
 
   override def intersect(r: Ray): Option[IntersectData] = {
-    val geomOID = ((None: Option[IntersectData]) /: geomList)((oid, g) => {
+    val geomOID = geomList.foldLeft(None: Option[IntersectData])((oid, g) => {
       val goid = g.intersect(r)
       (oid, goid) match {
         case (None, _)             => goid

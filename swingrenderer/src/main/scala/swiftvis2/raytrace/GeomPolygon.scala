@@ -1,11 +1,11 @@
 package swiftvis2.raytrace
 
 class GeomPolygon(pnts: Array[Point], normals: Array[Vect], colors: (Point) => RTColor, reflect: Array[Double]) extends Geometry {
-  val n = (pnts(2) - pnts(1)) cross (pnts(0) - pnts(1)) normalize
-  val norms = normals map (_ normalize)
+  val n = ((pnts(2) - pnts(1)) cross (pnts(0) - pnts(1))).normalize
+  val norms = normals map (_.normalize)
 
   def this(pnts: Array[Point], colors: (Point) => RTColor, reflect: Array[Double]) =
-    this(pnts, Array.tabulate(pnts.length)((x) => (pnts(2) - pnts(1)) cross (pnts(0) - pnts(1)) normalize), colors, reflect)
+    this(pnts, Array.tabulate(pnts.length)((x) => ((pnts(2) - pnts(1)) cross (pnts(0) - pnts(1))).normalize), colors, reflect)
 
   override def intersect(r: Ray): Option[IntersectData] = {
     val s = ((pnts(0) - r.p0) dot n) / (r.dir dot n)

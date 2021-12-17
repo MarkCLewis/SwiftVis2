@@ -38,7 +38,7 @@ class KDTreeGeometry[B <: Bounds](geometry: Seq[Geometry], val MaxGeom: Int = 5,
   override def boundingBox: Box = root.bounds.boundingBox
 
   private def buildTree(geom: Seq[Geometry]): Node[B] = {
-    def helper(g: Seq[Geometry], min: Point, max: Point, level: Int): Future[Node[B]] = {
+    def helper(g: Array[Geometry], min: Point, max: Point, level: Int): Future[Node[B]] = {
       val body = () => {
         val size = (max - min).magnitude
         val (here, children) = g.partition(_.boundingSphere.radius > size)
@@ -60,7 +60,7 @@ class KDTreeGeometry[B <: Bounds](geometry: Seq[Geometry], val MaxGeom: Int = 5,
       }
       (if(level < 8) Future(body()) else Future.successful(body())).flatMap(x => x)
     }
-    Await.result(helper(geom, geom.map(g => g.boundingSphere.center.offsetAll(-g.boundingSphere.radius)).reduceLeft(_ min _),
+    Await.result(helper(geom.toArray, geom.map(g => g.boundingSphere.center.offsetAll(-g.boundingSphere.radius)).reduceLeft(_ min _),
       geom.map(g => g.boundingSphere.center.offsetAll(g.boundingSphere.radius)).reduceLeft(_ max _), 0), scala.concurrent.duration.Duration.Inf)
   }
 
@@ -88,9 +88,9 @@ class KDTreeGeometry[B <: Bounds](geometry: Seq[Geometry], val MaxGeom: Int = 5,
 
 object KDTreeGeometry {
   private sealed trait Node[B] extends Serializable {
-    val g: Seq[Geometry]
+    val g: Array[Geometry]
     val bounds: B
   }
-  private case class InternalNode[B](g: Seq[Geometry], splitDim: Int, splitValue: Double, left: Node[B], right: Node[B], bounds: B) extends Node[B]
-  private case class LeafNode[B](g: Seq[Geometry], bounds: B) extends Node[B]
+  private case class InternalNode[B](g: Array[Geometry], splitDim: Int, splitValue: Double, left: Node[B], right: Node[B], bounds: B) extends Node[B]
+  private case class LeafNode[B](g: Array[Geometry], bounds: B) extends Node[B]
 }

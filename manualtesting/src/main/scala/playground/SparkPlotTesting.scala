@@ -1,7 +1,7 @@
 package playground
 
 import org.apache.spark.sql.SparkSession
-import scalafx.application.JFXApp
+import scalafx.application.JFXApp3
 import swiftvis2.plotting._
 import swiftvis2.plotting.renderer.SwingRenderer
 import swiftvis2.plotting.renderer.Renderer

@@ -1,8 +1,9 @@
 package swiftvis2.raytrace
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec._
+import org.scalatest.matchers._
 
-class KDTreeGeometryTest extends FlatSpec with Matchers {
+class KDTreeGeometryTest extends AnyFlatSpec with should.Matchers {
   "A KD Geometry Tree" should "have proper intersections for a small test" in {
     val spheres = List(GeomSphere(Point(0, 0, 0), 1, p => RTColor.White, p => 0.0),
                        GeomSphere(Point(3, 0, 0), 1, p => RTColor.White, p => 0.0),

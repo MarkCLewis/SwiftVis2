@@ -1,8 +1,9 @@
 package swiftvis2.raytrace
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec._
+import org.scalatest.matchers._
 
-class BoxIntersectTest extends FlatSpec with Matchers {
+class BoxIntersectTest extends AnyFlatSpec with should.Matchers {
   "A box" should "intersect basic" in {
     val box = BoundingBox(Point(-1, -1, -1), Point(1, 1, 1))
     val ray = Ray(Point(2, 2.5, 3), Vect(-1, -1, -1))

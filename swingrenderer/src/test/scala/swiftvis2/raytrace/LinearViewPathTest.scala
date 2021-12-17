@@ -1,9 +1,10 @@
 package swiftvis2.raytrace
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec._
+import org.scalatest.matchers._
 import swiftvis2.raytrace.LinearViewPath.{StopPoint, View}
 
-class LinearViewPathTest extends FlatSpec with Matchers {
+class LinearViewPathTest extends AnyFlatSpec with should.Matchers {
 
   "A linear view path" should "adjust the location in apply" in {
     val path = LinearViewPath(List(StopPoint(View(Point(0, 0, 0), Vect(1, 0, 0), Vect(0, 1, 0)), 0.1), StopPoint(View(Point(1, 2, 4), Vect(1, 0, 0), Vect(0, 1, 0)), 0.1)), List(1.0))

@@ -44,19 +44,19 @@ Note that the `sbt` commands can all be done at onced from the command line with
 
 While it is possible to build plots piece by piece, the fact that SwiftVis2 supports a lot of plotting options can make that tedious.
 To help with that, facade methods are added that construct frequently used structures. The following code shows how you can use
-two facade methods to generate a scatter plot and display it. Note that you need to do this in a class that extends JFXApp
+two facade methods to generate a scatter plot and display it. Note that you need to do this in a class that extends JFXApp3
 to use the FXRenderer. That isn't needed for other renderers. Based on our expereince, at this point we would recommend using 
 the SwingRenderer over the FXRenderer. It is easier to use, faster, and produces slightly nicer output.
 
 A sample application using JavaFX might look like the following.
 
 ```scala
-import scalafx.application.JFXApp
+import scalafx.application.JFXApp3
 import swiftvis2.plotting
 import swiftvis2.plotting.Plot
 import swiftvis2.plotting.renderer.FXRenderer
 
-object PlotTesting extends JFXApp {
+object PlotTesting extends JFXApp3 {
   val xPnt = 1 to 10
   val yPnt = xPnt.map(a => a * a)
   val plot = Plot.scatterPlot(xPnt, yPnt, "Quadratic", "x", "y")

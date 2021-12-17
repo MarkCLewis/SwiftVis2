@@ -5,7 +5,7 @@ import java.util.concurrent.{CountDownLatch, Executors}
 
 import javax.imageio.ImageIO
 import scalafx.Includes._
-import scalafx.application.{JFXApp, Platform}
+import scalafx.application.{JFXApp3, Platform}
 import scalafx.embed.swing.SwingFXUtils
 import scalafx.event.ActionEvent
 import scalafx.geometry.VPos
@@ -23,9 +23,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}
 
 object FXRenderer {
-  def shellStart(args: Array[String] = Array()): Future[JFXApp] = {
+  def shellStart(args: Array[String] = Array()): Future[JFXApp3] = {
     Future {
-      object ShellFX extends JFXApp
+      object ShellFX extends JFXApp3 {
+        def start(): Unit = {}
+      }
       ShellFX.main(args)
       ShellFX
     }

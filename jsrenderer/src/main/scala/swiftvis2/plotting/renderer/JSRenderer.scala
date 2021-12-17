@@ -1,6 +1,5 @@
 package swiftvis2.plotting.renderer
 
-import org.scalajs.dom.ext.Color
 import swiftvis2.plotting._
 import org.scalajs.dom.html.Canvas
 import org.scalajs.dom.raw.CanvasRenderingContext2D
@@ -98,9 +97,13 @@ class JSRenderer(canvas: Canvas) extends Renderer {
   }
 
   def setColor(argb: Int): Unit = {
-    val color = new Color((argb >> 16) & 0xff, (argb >> 8) & 0xff, argb & 0xff)
-    ctx2D.fillStyle = color.toHex
-    ctx2D.strokeStyle = color.toHex
+    val color = Array((argb >> 16) & 0xff, (argb >> 8) & 0xff, argb & 0xff).map(byte => {
+      val s = byte.toString
+      val pad = "0" * (2-s.length)
+      s"$pad$s"
+    }).mkString
+    ctx2D.fillStyle = color
+    ctx2D.strokeStyle = color
   }
 
   def setStroke(stroke: Renderer.StrokeData): Unit = {

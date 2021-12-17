@@ -1,8 +1,9 @@
 package swiftvis2.raytrace
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec._
+import org.scalatest.matchers._
 
-class OffsetGeometryTest extends FlatSpec with Matchers {
+class OffsetGeometryTest extends AnyFlatSpec with should.Matchers {
   "OffsetGeometry" should "have the correct simple intercept" in {
     val sphere = GeomSphere(Point(0,0,0), 1, p => RTColor.White, p => 0)
     val offsetSphere = OffsetGeometry(sphere, Vect(1,1,0))
