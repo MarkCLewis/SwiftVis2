@@ -1,5 +1,7 @@
 package swiftvis2
 
+import scala.collection.immutable.ArraySeq
+
 class DataElement(
     private val _x: Array[Double],
     private val _s: Array[String],
@@ -10,9 +12,9 @@ class DataElement(
 }
 
 object DataElement {
-  val noNums = Array[Double]()
-  val noStrings = Array[String]()
-  val noInts = Array[Int]()
+  val noNums = ArraySeq[Double]()
+  val noStrings = ArraySeq[String]()
+  val noInts = ArraySeq[Int]()
 
   def apply(nums: Seq[Double] = noNums, strings: Seq[String] = noStrings, ints: Seq[Int] = noInts): DataElement = 
     new DataElement(nums.toArray, strings.toArray, ints.toArray)

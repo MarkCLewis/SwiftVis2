@@ -9,7 +9,7 @@ import javax.imageio.ImageIO
 import javax.swing.{JPanel, JFrame, JMenuBar, JMenu, JMenuItem, JFileChooser, JOptionPane, WindowConstants}
 import swiftvis2.plotting.{Bounds, Plot}
 
-import scala.collection.mutable.ArrayStack
+import scala.collection.mutable.Stack
 
 /**
  * A renderer for drawing to the desktop using Swing. In theory, JavaFX is the way to go for the future, but in practice
@@ -112,7 +112,7 @@ object SwingRenderer {
 class SwingRenderer(g: Graphics2D) extends Renderer {
   import SwingRenderer.Options
 
-  private val stack = ArrayStack[Options]()
+  private val stack = Stack[Options]()
 
   def drawEllipse(cx: Double, cy: Double, width: Double, height: Double): Unit = {
     g.draw(new Ellipse2D.Double(cx - width / 2, cy - height / 2, width, height))

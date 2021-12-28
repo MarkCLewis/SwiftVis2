@@ -66,7 +66,7 @@ lazy val fxrenderer = (project in file("fxrenderer"))
     scalaVersion := "2.13.7",
     libraryDependencies += "org.scalafx" %% "scalafx" % "17.0.1-R26",
     libraryDependencies ++= javaFXModules.map( m =>
-      "org.openjfx" % s"javafx-$m" % "11" classifier osName
+      "org.openjfx" % s"javafx-$m" % "17" classifier osName
     )
   ).dependsOn(jvm)
 
@@ -76,16 +76,18 @@ lazy val swingrenderer = (project in file("swingrenderer"))
     name         := "SwiftVis2Swing",
     scalaVersion := "2.13.7",
     libraryDependencies += "org.scala-lang.modules" %% "scala-swing" % "3.0.0",
-    libraryDependencies += "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4"
+    libraryDependencies += "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4",
+    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.10",
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.10" % "test"
   ).dependsOn(jvm)
 
-lazy val polynote = (project in file("polynoteintegration"))
-  .settings(
-    commonSettings,
-    name         := "SwiftVis2Polynote",
-    scalaVersion := "2.12.15",
-    libraryDependencies += "org.polynote" %% "polynote-runtime" % "0.4.4"
-  ).dependsOn(swingrenderer)
+// lazy val polynote = (project in file("polynoteintegration"))
+//   .settings(
+//     commonSettings,
+//     name         := "SwiftVis2Polynote",
+//     scalaVersion := "2.13.7",
+//     libraryDependencies += "org.polynote" %% "polynote-runtime" % "0.4.4"
+//   ).dependsOn(swingrenderer)
 
 lazy val spark = (project in file("spark"))
   .settings(

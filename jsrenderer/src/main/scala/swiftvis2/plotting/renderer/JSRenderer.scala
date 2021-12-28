@@ -2,7 +2,7 @@ package swiftvis2.plotting.renderer
 
 import swiftvis2.plotting._
 import org.scalajs.dom.html.Canvas
-import org.scalajs.dom.raw.CanvasRenderingContext2D
+import org.scalajs.dom.CanvasRenderingContext2D
 import swiftvis2.plotting.renderer.Renderer.FontStyle
 
 import scala.scalajs.js
@@ -83,7 +83,7 @@ class JSRenderer(canvas: Canvas) extends Renderer {
   }
 
   def drawText(s: String, x: Double, y: Double, align: Renderer.HorizontalAlign.Value, angle: Double): Unit = {
-    ctx2D.save
+    ctx2D.save()
     ctx2D.textBaseline = "middle"
     ctx2D.translate(x, y)
     ctx2D.rotate(angle * (math.Pi / 180))
@@ -93,7 +93,7 @@ class JSRenderer(canvas: Canvas) extends Renderer {
       case Renderer.HorizontalAlign.Right => "right"
     }
     ctx2D.fillText(s, 0, 0)
-    ctx2D.restore
+    ctx2D.restore()
   }
 
   def setColor(argb: Int): Unit = {

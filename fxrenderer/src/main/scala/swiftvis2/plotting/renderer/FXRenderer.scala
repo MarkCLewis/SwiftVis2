@@ -190,7 +190,7 @@ class FXRenderer(gc: GraphicsContext, maxQueue: Int = 1000) extends Renderer {
 
   def drawText(s: String, x: Double, y: Double, align: Renderer.HorizontalAlign.Value, angle: Double): Unit = {
     enqueue(() => {
-      gc.save
+      gc.save()
       text.text = s
       text.font = gc.font
       gc.textBaseline = VPos.Center
@@ -202,13 +202,13 @@ class FXRenderer(gc: GraphicsContext, maxQueue: Int = 1000) extends Renderer {
         case Renderer.HorizontalAlign.Right => TextAlignment.Right
       }
       gc.fillText(s, 0, 0)
-      gc.restore
+      gc.restore()
     })
   }
 
-  def save(): Unit = enqueue(() => gc.save)
+  def save(): Unit = enqueue(() => gc.save())
 
-  def restore(): Unit = enqueue(() => gc.restore)
+  def restore(): Unit = enqueue(() => gc.restore())
 
   def setColor(argb: Int): Unit = {
     enqueue(() => {

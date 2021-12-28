@@ -1,7 +1,7 @@
 package swiftvis2.plotting.renderer
 
 import swiftvis2.plotting.Bounds
-import scala.collection.mutable.ArrayStack
+import scala.collection.mutable.Stack
 import slinky.web.svg._
 import slinky.core.facade.ReactElement
 
@@ -57,7 +57,7 @@ class ReactRendererElementMaker {
   import SVGRenderer.Options
 
   private var copt = Options("#000000", Renderer.StrokeData(1.0, Nil), Renderer.FontData("Ariel", Renderer.FontStyle.Plain), 10.0, None)
-  private val stack = ArrayStack[Options]()
+  private val stack = Stack[Options]()
   private var clipCnt = 0
 
   def drawEllipse(centerx: Double, centery: Double, width: Double, height: Double): ReactElement = {

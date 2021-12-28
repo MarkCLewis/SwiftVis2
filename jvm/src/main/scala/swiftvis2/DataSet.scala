@@ -8,7 +8,7 @@ class DataSet private (private val in: IndexedSeq[DataElement]) {
 }
 
 object DataSet {  
-  def apply(xs: IndexedSeq[Array[Double]]): DataSet = {
+  def apply(xs: IndexedSeq[IndexedSeq[Double]]): DataSet = {
     new DataSet(xs.map(x => DataElement(x)))
   }
 }

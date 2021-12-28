@@ -2,6 +2,7 @@ package swiftvis2.plotting.styles
 
 import swiftvis2.plotting._
 import swiftvis2.plotting.renderer.Renderer
+import scala.collection.immutable.ArraySeq
 
 case class XYC(x: Double, y: Double, c: Int)
 
@@ -52,8 +53,8 @@ case class ColoredSurfaceStyle(
     def drawGroup(): Unit = {
       for (i <- 0 until pData(0).length - 1; if i < pData(1).length - 1) {
         r.setColor(pData(0)(i).c)
-        val xs = Array(pData(0)(i).x, pData(1)(i).x, pData(1)(i + 1).x, pData(0)(i + 1).x)
-        val ys = Array(pData(0)(i).y, pData(1)(i).y, pData(1)(i + 1).y, pData(0)(i + 1).y)
+        val xs = ArraySeq(pData(0)(i).x, pData(1)(i).x, pData(1)(i + 1).x, pData(0)(i + 1).x)
+        val ys = ArraySeq(pData(0)(i).y, pData(1)(i).y, pData(1)(i + 1).y, pData(0)(i + 1).y)
         r.fillPolygon(xs, ys)
         r.drawPolygon(xs, ys)
       }

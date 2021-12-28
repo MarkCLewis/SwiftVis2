@@ -49,7 +49,7 @@ object CompilerParsing {
       println(className+"\n"+classString)
       val inputFile = new BatchSourceFile(className+".scala", classString)
       val fParser = new global.syntaxAnalyzer.SourceFileParser(inputFile)
-      val fTree = fParser.parse
+      val fTree = fParser.parse()
       val bounds = findIndices(fTree)
 
       run.compileSources(List(inputFile))

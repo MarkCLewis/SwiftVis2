@@ -38,7 +38,7 @@ object JFXPlotTesting extends JFXApp3 {
       FXRenderer(violinPlot(), smallDim, smallDim)
       val rowPlot = rowOfDists()
       FXRenderer(rowPlot, 1200, smallDim)
-      val ptPlot = pressureTempPlot
+      val ptPlot = pressureTempPlot()
       FXRenderer(ptPlot, smallDim, smallDim)
       FXRenderer(colorTest(), largeDim, largeDim)
       saveToFile()

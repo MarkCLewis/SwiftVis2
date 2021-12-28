@@ -26,7 +26,7 @@ class HelloWorld extends (() => Unit) {
 
   val run = new global.Run
   val parser = new global.syntaxAnalyzer.SourceFileParser(inputFile)
-  val tree = parser.parse
+  val tree = parser.parse()
   println(tree)
 
   run.compileSources(List(inputFile))

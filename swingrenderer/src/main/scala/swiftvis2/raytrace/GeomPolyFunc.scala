@@ -24,10 +24,10 @@ class GeomPolyFunc(pnts: Array[Point], normal: (Point) => Vect, colors: (Point) 
   }
 
   override val boundingSphere: Sphere = {
-    val (xmin, xmax, ymin, ymax, zmin, zmax) = ((pnts(0).x, pnts(0).x, pnts(0).y, pnts(0).y, pnts(0).z, pnts(0).z) /: pnts)((b, p) =>
+    val (xmin, xmax, ymin, ymax, zmin, zmax) = pnts.foldLeft((pnts(0).x, pnts(0).x, pnts(0).y, pnts(0).y, pnts(0).z, pnts(0).z))((b, p) =>
       b match { case (xi, xa, yi, ya, zi, za) => (xi min p.x, xa max p.x, yi min p.y, ya max p.y, zi min p.z, za max p.z) })
     val center = new Point(0.5 * (xmin + xmax), 0.5 * (ymin + ymax), 0.5 * (zmin + zmax))
-    val radius = (0.0 /: pnts)((r, p) => (r max (p distanceTo center)))
+    val radius = pnts.foldLeft(0.0)((r, p) => (r max (p distanceTo center)))
     new BoundingSphere(center, radius)
   }
 

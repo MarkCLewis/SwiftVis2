@@ -9,7 +9,7 @@ object SVGPlotTesting extends App {
   JVMSVGInterface(longForm(), "plot.svg", 1200, 1000)
   val rowPlot = rowOfDists()
   JVMSVGInterface(rowPlot, "rowOfDists.svg", pubDim, 300)
-  val ptPlot = pressureTempPlot
+  val ptPlot = pressureTempPlot()
   JVMSVGInterface(ptPlot, "pressureTempPlot.svg", pubDim, pubDim)
   JVMSVGInterface(simpleFull(), "simpleFull.svg", pubDim, pubDim)
   JVMSVGInterface(longForm(), "longForm.svg", 1200, 1000)

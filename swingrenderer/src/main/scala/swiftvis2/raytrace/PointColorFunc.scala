@@ -8,12 +8,12 @@ class PointColorFunc(p:Array[Point], c:Array[Color]) {
     
     def apply(p:Point) : Color = {
         val distances=pnts map ((x)=>1/x.distanceTo(p))
-        val distSum=(0.0 /: distances)(_+_)
+        val distSum=distances.foldLeft(0.0)(_+_)
         val weights=distances map (_/distSum)
-        val drawRed=(0.0 /: (cols zip weights)) ((r,p)=>p match {case (c,w) => r+c.getRed()*w})
-        val drawGreen=(0.0 /: (cols zip weights)) ((g,p)=>p match {case (c,w) => g+c.getGreen()*w})
-        val drawBlue=(0.0 /: (cols zip weights)) ((b,p)=>p match {case (c,w) => b+c.getBlue()*w})
-        val drawAlpha=(0.0 /: (cols zip weights)) ((a,p)=>p match {case (c,w) => a+c.getAlpha()*w})
+        val drawRed=(cols zip weights).foldLeft(0.0) ((r,p)=>p match {case (c,w) => r+c.getRed()*w})
+        val drawGreen=(cols zip weights).foldLeft(0.0) ((g,p)=>p match {case (c,w) => g+c.getGreen()*w})
+        val drawBlue=(cols zip weights).foldLeft(0.0) ((b,p)=>p match {case (c,w) => b+c.getBlue()*w})
+        val drawAlpha=(cols zip weights).foldLeft(0.0) ((a,p)=>p match {case (c,w) => a+c.getAlpha()*w})
         new Color(drawRed.toInt,drawGreen.toInt,drawBlue.toInt,drawAlpha.toInt)
     }
 }

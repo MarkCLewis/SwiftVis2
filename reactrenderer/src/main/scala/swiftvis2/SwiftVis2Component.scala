@@ -13,7 +13,7 @@ import slinky.web.svg._
   case class Props(plot: Plot, width: Double, height: Double)
 
   
-  def render = {
+  def render() = {
     val renderer = new ReactRenderer(props.width, props.height)
     props.plot.render(renderer, Bounds(0.0, 0.0, props.width, props.height))
     svg ( width:=s"${props.width}px", height:=s"${props.height}px", renderer.elements )

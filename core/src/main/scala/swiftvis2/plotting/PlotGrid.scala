@@ -77,8 +77,8 @@ case class PlotGrid(
     // Draw grid of plots
     r.setColor(0xff000000)
     val sizesAndAxisRenderers = (for {
-      ((row, i), yStart, yEnd) <- (plots.zipWithIndex, yStarts, yStarts.tail).zipped
-      ((p2ds, j), xStart, xEnd) <- (row.zipWithIndex, xStarts, xStarts.tail).zipped
+      ((row, i), yStart, yEnd) <- plots.zipWithIndex.lazyZip(yStarts).lazyZip(yStarts.tail)
+      ((p2ds, j), xStart, xEnd) <- row.zipWithIndex.lazyZip(xStarts).lazyZip(xStarts.tail)
     } yield {
       val axisBounds = Seq(
         minXAxisBounds.subX(xStart, xEnd),
@@ -210,7 +210,7 @@ case class PlotGrid(
   private def collectXAxes(pred: Axis => Boolean): Seq[Seq[String]] = {
     plots.foldLeft(Seq.fill(plots(0).size)(Seq.empty[String])) { (names, row) =>
       val toAdd = row.map(_.flatMap(p2d => axisNameAsListWithCondition(p2d.xAxisName, pred)))
-      (names, toAdd).zipped.map((a, b) => (b ++: a))
+      names.lazyZip(toAdd).map((a, b) => (b ++: a))
     }
   }
 

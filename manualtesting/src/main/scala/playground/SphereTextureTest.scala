@@ -5,6 +5,7 @@ import scalafx.scene.Scene
 import scalafx.scene.image.{ImageView, WritableImage}
 import swiftvis2.raytrace.LinearViewPath.View
 import swiftvis2.raytrace._
+import scala.collection.immutable.ArraySeq
 
 object SphereTextureTest extends JFXApp3 {
   def start(): Unit = {
@@ -16,7 +17,7 @@ object SphereTextureTest extends JFXApp3 {
 
         val banish = javax.imageio.ImageIO.read(new java.net.URL("http://www.cs.trinity.edu/~mlewis/banish.gif"))
         val texture = SphereTextureColorFunc(banish, swiftvis2.raytrace.Point(0,0,0))
-        val spheres = Array(
+        val spheres = ArraySeq(
             GeomSphere(swiftvis2.raytrace.Point(0, 0, 0), 1, texture, p => 0.0),
             GeomSphere(swiftvis2.raytrace.Point(0.5, -2, 0), 0.5, p => RTColor.White, p => 0.0),
             GeomSphere(swiftvis2.raytrace.Point(0, 0, 2), 0.5, p => RTColor.White, p => 0.0))

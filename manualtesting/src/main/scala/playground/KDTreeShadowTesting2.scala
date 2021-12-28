@@ -8,6 +8,7 @@ import swiftvis2.raytrace.LinearViewPath._
 import swiftvis2.raytrace._
 
 import scala.swing.{Alignment, Label, MainFrame, Swing}
+import scala.collection.immutable.ArraySeq
 
 class RTBufferedImage(img: BufferedImage) extends RTImage {
   def width: Int = img.getWidth
@@ -22,7 +23,7 @@ object KDTreeShadowTesting2 extends App {
   val rtImg = new RTBufferedImage(img)
 
   val size = 1e-5
-  val spheres = Array.fill(2000)(GeomSphere(swiftvis2.raytrace.Point(math.random() * size - size / 2, math.random() * size, util.Random.nextGaussian()), 1e-7, p => RTColor.White, p => 0.0))
+  val spheres = ArraySeq.fill(2000)(GeomSphere(swiftvis2.raytrace.Point(math.random() * size - size / 2, math.random() * size, util.Random.nextGaussian()), 1e-7, p => RTColor.White, p => 0.0))
   val tree = new KDTreeGeometry(spheres, 1)
   val path = LinearViewPath(
     List(

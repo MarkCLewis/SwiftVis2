@@ -73,7 +73,7 @@ final case class ScatterStyle(
         r.setColor(BlackARGB)
         r.drawLine(px, yConv(y - error), px, yConv(y + error))
       }
-      (lines, connectMap).zipped.foreach {
+      lines.lazyZip(connectMap).foreach {
         case (ScatterStyle.LineData(groupFunc, stroke), cm) =>
           val group = groupFunc(i)
           cm.get(group) match {
@@ -93,7 +93,7 @@ final case class ScatterStyle(
       }
       symbol.drawSymbol(px, py, pwidth, pheight, r)
     }
-    (lines, connectMap).zipped.foreach {
+    lines.lazyZip(connectMap).foreach {
       case (LineData(groupFunc, stroke), cm) =>
         for ((group, lst @ ((_, _, c) :: _)) <- cm) {
           r.setColor(c)

@@ -14,7 +14,7 @@ class OffsetGeometryTest extends AnyFlatSpec with should.Matchers {
   }
 
   it should "have proper intersect data for a large random test outside" in {
-    val spheres = Array.fill(2000)(GeomSphere(Point(math.random, math.random, math.random()), 0.01, p => RTColor.White, p => 0.0))
+    val spheres = IndexedSeq.fill(2000)(GeomSphere(Point(math.random(), math.random(), math.random()), 0.01, p => RTColor.White, p => 0.0))
     val offset = Vect(1, 1, 1)
     val olist = new OffsetGeometry(new ListScene(spheres:_*), offset)
     val list = new ListScene(spheres.map(gs => gs.copy(center = gs.center + offset)):_*)
@@ -27,7 +27,7 @@ class OffsetGeometryTest extends AnyFlatSpec with should.Matchers {
     
     // Random
     for(_ <- 1 to 100) {
-      val ray = Ray(Point(100, 0, 0), Point(math.random, math.random, math.random()))
+      val ray = Ray(Point(100, 0, 0), Point(math.random(), math.random(), math.random()))
       olist.intersect(ray) should be (list.intersect(ray))
     }
   }

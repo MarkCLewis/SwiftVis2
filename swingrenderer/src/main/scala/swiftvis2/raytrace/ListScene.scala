@@ -29,10 +29,10 @@ class ListScene(g:Geometry*) extends Geometry with Scene {
   }
   
   def boundingSphere : Sphere = {
-    (geom.head.boundingSphere /: geom)((s,g)=>BoundingSphere.mutualSphere(s,g.boundingSphere))
+    geom.foldLeft(geom.head.boundingSphere)((s,g)=>BoundingSphere.mutualSphere(s,g.boundingSphere))
   }
 
   def boundingBox : Box = {
-    (geom.head.boundingBox /: geom)((s,g)=>BoundingBox.mutualBox(s,g.boundingBox))
+    geom.foldLeft(geom.head.boundingBox)((s,g)=>BoundingBox.mutualBox(s,g.boundingBox))
   }
 }
