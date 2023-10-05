@@ -52,8 +52,16 @@ final case class HistogramStyle(
         val cy = valConv(value)
         if(binsOnX) {
           r.fillRectangle(sbin min ebin, clasty min cy, (ebin - sbin).abs, (clasty - cy).abs)
+          valSourceColor(j).borderColor.map { bc =>
+            r.setColor(bc)
+            r.drawRectangle(sbin min ebin, clasty min cy, (ebin - sbin).abs, (clasty - cy).abs)
+          }
         } else {
           r.fillRectangle(clasty min cy, sbin min ebin, (clasty - cy).abs, (sbin - ebin).abs)
+          valSourceColor(j).borderColor.map { bc =>
+            r.setColor(bc)
+            r.drawRectangle(clasty min cy, sbin min ebin, (clasty - cy).abs, (sbin - ebin).abs)
+          }
         }
         lastValue = value
       }
@@ -99,7 +107,7 @@ final case class HistogramStyle(
 }
 
 object HistogramStyle {
-  case class DataAndColor(data: PlotDoubleSeries, color: Int)
+  case class DataAndColor(data: PlotDoubleSeries, color: Int, borderColor: Option[Int] = None)
 
   /**
    * This method will build a Histogram from data given an arbitrary sorted set of bins.

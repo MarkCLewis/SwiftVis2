@@ -23,13 +23,14 @@ case class Vect(x: Double, y: Double, z: Double) {
     case 1 => y
     case 2 => z
   }
-  override def equals(that: Any): Boolean = that match {
-    case v: Vect => (x-v.x).abs < 1e-8 && (y-v.y).abs < 1e-8 && (z-v.z).abs < 1e-8
-    case _ => false
-  }
-  override def hashCode(): Int = {
-    println("Don't hash on Vects!")
-    Thread.dumpStack()
-    9802
-  }
+  // Spark needs hashing. Let's hope this doesn't break stuff.
+  // override def equals(that: Any): Boolean = that match {
+  //   case v: Vect => (x-v.x).abs < 1e-8 && (y-v.y).abs < 1e-8 && (z-v.z).abs < 1e-8
+  //   case _ => false
+  // }
+  // override def hashCode(): Int = {
+  //   println("Don't hash on Vects!")
+  //   Thread.dumpStack()
+  //   9802
+  // }
 }
